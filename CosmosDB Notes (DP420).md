@@ -6,12 +6,37 @@ Most of the notes is taken from [Microsoft learn](https://learn.microsoft.com/en
 
 ### Chapter 1. Introduction to Azure Cosmos DB for NoSQL
 
+NoSQL databases are not defined by a specific formal definition, rather they share common characteristics
+
+- A nonrelational data store.
+- Being designed to scale out.
+- Not enforcing a specific schema.
+
+Generally, NoSQL databases don't enforce relational constraints or put locks on data, making writes fast. Also, they're often designed to horizontally scale via sharding or partitioning, which allows them to maintain high-performance regardless of size.
+
+There are 4 broad categories of NoSQL databses:  
+a. Documents  
+b. Key-Value  
+c. Column-Family  
+d. Graph
+
+Some points regarding CosmosDB:
+
+- This database provides single digit millisecond response times and 99.999% availability.
+- A partition key has two components: partition key path and the partition key value.
+- The partition key should only have strings. numbers should be converted into string.
+- The partition key should have high cardinality.
+- Max size supported for partition values is 2048 bytes if large partition keys are enabled, other max size can be 101 bytes. During creation of the container, we get this option in the advanced tab.
+- Once you select your partition key, it isn't possible to change it in-place. If you need to change your partition key, you should move your data to a new container with your new desired partition key.
+
 ### Chapter 2. Try Azure Cosmos DB for NoSQL
 
 **JSON**:
 
 - JavaScript Object Notation (JSON) is an open standard file format, and data interchange format, that uses human-readable text to store and transmit data objects consisting of attribute–value pairs and array data types (or any other serializable value).
 - JSON is a language-independent data format with well-defined data types and near universal support across a diverse range of services and programing languages.  
+- JSON, a lightweight data format, is highly compatible with the object notation of JavaScript.
+- Azure Cosmos DB supports JSON natively, ensuring fast and predictable performance due to atomic write operations on JSON documents.
   
 Below is an example of JSON document.  
 
@@ -69,7 +94,6 @@ d. **Many items**:
 
 - An Azure Cosmos DB for NoSQL resource container is a schema-agnostic container of arbitrary user-generated JSON items.
 - The NoSQL API for Azure Cosmos DB stores individual documents in JSON format as items within the container.
-- Azure Cosmos DB for NoSQL natively supports JSON files and can provide fast and predictable performance because write operations on JSON documents are atomic.
 
 When creating a new account in the Azure portal, you must first select an API for your workload.  
 The API selection cannot be changed after the account is created.  
@@ -80,6 +104,8 @@ Below is the list of APIs available:
   d. Azure CosmosDB for Table  
   e. Azure CosmosDB for Apache Gremlin  
   f. Azure CosmosDB for PostGreSQL
+
+  **We can see RUs used in data explorer in query stat tab beside query result.**
 
 ## Section 2. Plan and implement Azure Cosmos DB for NoSQL
 

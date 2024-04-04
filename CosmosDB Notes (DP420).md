@@ -111,6 +111,29 @@ Below is the list of APIs available:
 
 ### Chapter 3. Plan Resource Requirements
 
+Each container is a unit of scalability for both throughput and storage.
+
+#### Throughput and Storage
+
+- When configuring Azure Cosmos DB, you can provision throughput at either or both the database and container levels.
+- Throuput measure is done using Rus (Request Units) which is combinaiton of memory, CPU and IOPS (Input Output Per second).
+- There can be mixedithroughput provisioning where some containers have dedicated RUs and rest containers in the database have shared RUs. once a container is defined as shared it cannot be changed to dedicated and vice versa.
+- Each request including Reads, Writes, Queries, Stored procedures take some RUs.
+- When you create a database or container in Azure Cosmos DB, you can provision request units in an increment of request units per second (or RU/s for short). You cannot provision less than 400 RU/s, and they are provisioned in increments of 100.
+- Storage is also billed per GB per month.
+- Azure Cosmos DB only charges for storage you directly consume in real time, and you don't have to pre-reserve storage in advance. In high-write scenarios, TTL values can be used to save on data storage costs in Azure Cosmos DB.
+
+#### TTL
+
+- Azure Cosmos DB allows you to set the length of time documents live in the database before being automatically purged.
+- It is called Time to Live and measured in seconds.
+- It is et at the container level and can be overriden on a per item basis.
+- The maximum TTL value is 2147483647.
+- TTL expiration is a background activity and consumes some RUs.
+- TTL for container is configured using `DefaultTimeToLive` property of container's JSON object.
+- If Item TTL is defined but container TTL is not defined then item will not expire.
+- Container TTL can be defined as -1, which means by default items will not expire. Now setting item TTL will work.
+  
 ### Chapter 4. Configure Azure Cosmos DB for NoSQL database and containers
 
 ### Chapter 5. Move data into and out of Azure Cosmos DB for NoSQL

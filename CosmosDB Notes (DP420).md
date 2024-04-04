@@ -136,7 +136,133 @@ Each container is a unit of scalability for both throughput and storage.
   
 ### Chapter 4. Configure Azure Cosmos DB for NoSQL database and containers
 
+#### Serverless vs. Provisioned Throughput
+
+**Provisioned Throughput**: Can be distributed to an unlimited number of Azure regions.  
+Allows for practically unlimited storage capacity.  
+**Serverless**: Limited to running in a single region.  
+Allows only up to 50 GB in a container.
+
+#### Autoscale vs. Standard (Manual) Throughput
+
+**Standard (Manual) Throughput**: Has a set provision of Request Units (RUs).  
+After reaching the set RUs, responses will be rate limited, causing delays.
+**Autoscale**: Will scale up to the maximum RUs and then reach rate limiting response.  
+Only requires setting the maximum RUs, with the minimum billed being 10% of the maximum when there are zero requests.  
+If the maximum throughput is less than 66% of hours per month, autoscale is more efficient.  
+Autoscale is better when usage cannot be predicted.  
+Has a minimum acceptable performance and maximum allowed spend.  
+Allows for migrating existing containers to and from autoscale, with the ability to change the assigned RUs value later during migration.
+
 ### Chapter 5. Move data into and out of Azure Cosmos DB for NoSQL
+
+- **Azure Data Factory (ADF):**
+- ADF is a native service to extract data, transform it, and load it across sinks and stores in an entirely serverless fashion. From a data integration perspective, this means you can marshal data from one datastore to another, regardless of the nuances of each, if you can reasonably transform the data between each data paradigm.
+- This database is available as a linked service within ADF both as a source of data ingest and as a target(sink) of data output.
+- This can be configured using Azure portal or using a Json object. Below is Json format:
+
+ ```json
+ {
+     "name": "<example-name-of-linked-service>",
+     "properties": {
+         "type": "CosmosDb",
+         "typeProperties": {
+             "connectionString": "AccountEndpoint=<cosmos-endpoint>;AccountKey=<cosmos-key>;Database=<cosmos-database>"
+         }
+     }
+ }
+ ```
+
+- The database can be configured using service principals and managed identities as well with ADF.
+- When reading we must configure database as source and during writing as sink.
+- During reading we must give SQL query to get the data and during writing we must give write behaviour.
+- **Source JSON configuration:**
+
+  ```json
+  {
+   "source": {
+    "type": "CosmosDbSqlApiSource",
+    "query": "SELECT id, categoryId, price, quantity, name FROM products WHERE price > 500",
+    "preferredRegions": [
+     "East US",
+     "West US"
+    ]        
+   }
+  }
+  ```
+
+- **Sink JSON configuration:**
+
+  ```json
+  "sink": {
+   "type": "CosmosDbSqlApiSink",
+   "writeBehavior": "upsert"
+  }
+  ```
+  
+- **Kafka connector:**
+- Apache Kafka is an open-source platform used to stream events in a distributed manner.
+- Kafka connect is used to stream data between Kafka and other data systems like Azure Cosmos DB.
+- The database can be used as a source or sink.
+- connection has 4 properties - Endpoint, MasterKey, DatabaseName, Containers.topicmap (This is using csv format a mapping between containers and Kafka topics)
+- Each container should be mapped to a topic. So, if the products container is to be mapped to the prodlistener topic and the customers container to the custlistener topic. In that case, CSV mapping string will be: prodlistener#products,custlistener#customers.
+- Write to the database commands:
+
+ ```shell
+ kafka-topics --create --zookeeper localhost:2181 --topic prodlistener --replication-factor 1 --partitions 1 
+ kafka-console-producer --broker-list localhost:9092 --topic prodlistener
+ {"id": "0ac8b014-c3f4-4db0-8a1f-434bab460938", "name": "handlebar", "categoryId": "78148556-4e84-44be-abae-9755dde9c9e3"}
+ {"id": "54ba00da-50cf-44d8-b122-1d18bd1db400", "name": "handlebar", "categoryId": "eb642a5e-0c6f-4c83-b96b-bb2903b85e59"}
+ {"id": "381dde84-e6c2-4583-b66c-e4a4116f7d6e", "name": "handlebar", "categoryId": "cf8ae707-6d74-4563-831a-06e15a70a0dc"}
+ ```
+
+- Read from the database, using below JSON it will be configured and then published to Kafka topic:
+
+ ```json
+ {
+   "name": "cosmosdb-source-connector",
+   "config": {
+     "connector.class": "com.azure.cosmos.kafka.connect.source.CosmosDBSourceConnector",
+     "tasks.max": "1",
+     "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+     "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+     "connect.cosmos.task.poll.interval": "100",
+     "connect.cosmos.connection.endpoint": "<cosmos-endpoint>",
+     "connect.cosmos.master.key": "<cosmos-key>",
+     "connect.cosmos.databasename": "<cosmos-database>",
+     "connect.cosmos.containers.topicmap": "<kafka-topic>#<cosmos-container>",
+     "connect.cosmos.offset.useLatest": false,
+     "value.converter.schemas.enable": "false",
+     "key.converter.schemas.enable": "false"
+   }
+ }
+ ```
+
+- **Using Azure Stream Analytics:**
+- Azure Stream Analytics is a real-time event-processing engine designed to process fast streaming data from multiple sources simultaneously. It can aggregate, analyse, transform, and even move data around to other data stores for more profound and further analysis.
+- Write now only supports Azure cosmos dB NoSQL.
+- Is configured as sink using Account Id(Endpoint), Account Key, Database, Container, Output Alias.
+- Container should be already existing.
+- To write to cosmos DB, Query results will be processed as JSON output, based on id field.
+- If id already exists, then data is updated else inserted.
+
+- **Using Spark Connector:**
+- With Azure Synapse Analytics and Azure Synapse Link for Azure Cosmos DB, you can create a cloud-native hybrid transactional and analytical processing (HTAP) to run analytics over your data in Azure Cosmos DB for NoSQL. This connection enables integration over your data pipeline on both ends of your data world, Azure Cosmos DB and Azure Synapse Analytics.
+- Using below command Synapse Link can be enabled on account level (or using Portal):
+
+ ```shell
+ az cosmosdb create --name <name> --resource-group <resource-group> --enable-analytical-storage true
+ ```
+
+- And then on container level also analytical storage should be enabled:
+
+ ```shell
+ az cosmosdb sql container create --resource-group <resource-group> --account <account> --database <database> --name <name> --partition-key-path <partition-key-path> --throughput <throughput> --analytical-storage-ttl -1
+ ```
+
+- These can be enabled using developer SDKs as well.
+- The commands work inside Azure Synapse Analytics workspace.
+- For reading from database: Python code can be used or Spark table pointing to database directly can be created.
 
 ## Section 3. Connect to Azure Cosmos DB for NoSQL with the SDK
 

@@ -583,7 +583,151 @@ Task.WhenAll(concurrentTasks);
 
 ### Chapter 11. Query the Azure Cosmos DB for NoSQL
 
+- In Cosmos DB SQL, we can use any name as a source and even use an alias. For example, `SELECT * FROM anything`.
+- The following query demonstrates how the result JSON can be converted as per the requirement:
+
+    ```sql
+    SELECT
+        p.name, 
+        p.categoryName AS category,
+        { "price": p.price } AS scannerData
+    FROM 
+        products p
+    WHERE
+        p.price >= 50 AND
+        p.price <= 100
+    ```
+
+- The keywords `WHERE`, `DISTINCT`, `AS`, `LOWER` work as expected. `CONCAT` works with the pipe (`|`).
+- To flatten JSON result into a list, the `VALUE` keyword is used like this: `SELECT VALUE p.name FROM c`.
+- To check if a particular property exists for the document or not, we can use `IS_DEFINED`. To check if the property is an array or not, we can use `IS_ARRAY`. To check if the property is NULL or not, we can use `IS_NULL`. Similarly, for `IS_STRING`, `IS_NUMBER`, `IS_BOOLEAN`, `IS_OBJECT`.
+- `GetCurrentDateTime()` returns the current datetime and can be used in the query.
+- To run a query in C#:
+
+```csharp
+QueryDefinition query = new QueryDefinition("SELECT * FROM products p");
+
+public class Product
+{
+    public string id { get; set; }
+    public string name { get; set; }
+    public string price { get; set; }
+}
+
+using (FeedIterator<Product> feedIterator = this.Container.GetItemQueryIterator<Product>(
+    query,
+    null,
+    new QueryRequestOptions() { }))
+{
+    while (feedIterator.HasMoreResults)
+    {
+        foreach(var item in await feedIterator.ReadNextAsync())
+        {
+            Console.WriteLine($"[{item.id}]\t{item.name,35}\t{item.price,15:C}");
+        }
+    }
+}
+```
+
 ### Chapter 12. Author complex queries with the Azure Cosmos DB for NoSQL
+
+- Join in this database joins different sections of the same item, unlike relational databases. It is called cross-product queries.
+
+For the given JSON:
+
+```json
+{
+    "id": "80D3630F-B661-4FD6-A296-CD03BB7A4A0C",
+    "categoryId": "629A8F3C-CFB0-4347-8DCC-505A4789876B",
+    "categoryName": "Clothing, Vests",
+    "sku": "VE-C304-L",
+    "name": "Classic Vest, L",
+    "description": "A worn brown classic vest that was a trade-in apparel item",
+    "price": 32.4,
+    "tags": [
+        {
+            "id": "2CE9DADE-DCAC-436C-9D69-B7C886A01B77",
+            "name": "apparel",
+            "class": "group"
+        },
+        {
+            "id": "CA170AAD-A5F6-42FF-B115-146FADD87298",
+            "name": "worn",
+            "class": "trade-in"
+        },
+        {
+            "id": "CA170AAD-A5F6-42FF-B115-146FADD87298",
+            "name": "no-damaged",
+            "class": "trade-in"
+        }
+    ]
+}
+```
+
+We can use:
+
+```sql
+SELECT 
+    p.id,
+    p.name,
+    t.name AS tag
+FROM 
+    products p
+JOIN
+    t IN p.tags
+```
+
+to get:
+
+```json
+[
+    {
+        "id": "80D3630F-B661-4FD6-A296-CD03BB7A4A0C",
+        "name": "Classic Vest, L",
+        "tag": "apparel"
+    },
+    {
+        "id": "80D3630F-B661-4FD6-A296-CD03BB7A4A0C",
+        "name": "Classic Vest, L",
+        "tag": "worn"
+    },
+    {
+        "id": "80D3630F-B661-4FD6-A296-CD03BB7A4A0C",
+        "name": "Classic Vest, L",
+        "tag": "no-damaged"
+    }
+]
+```
+
+- We can use a subquery to filter in the same way as we do in relational databases.
+- Variables can also be used in queries:
+
+```csharp
+string sql = "SELECT p.name, t.name AS tag FROM products p JOIN t IN p.tags WHERE p.price >= @lower AND p.price <= @upper"
+QueryDefinition query = new QueryDefinition(sql)
+    .WithParameter("@lower", 500)
+    .WithParameter("@upper", 1000);
+```
+
+- We can paginate the results using a feed generator. Below is a sample code:
+
+```csharp
+string sql = "SELECT * FROM products WHERE p.price > 500";
+QueryDefinition query = new QueryDefinition(sql);
+QueryRequestOptions options = new QueryRequestOptions
+{
+    MaxItemCount = 100
+};
+
+FeedIterator<Product> iterator = container.GetItemQueryIterator<Product>(query, requestOptions: options);
+while(iterator.HasMoreResults)
+{
+    foreach(Product product in await iterator.ReadNextAsync())
+    {
+        // Handle individual items
+    }
+}
+```
 
 ## Section 6. Define and implement an indexing strategy for Azure Cosmos DB for NoSQL
 

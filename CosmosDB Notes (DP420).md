@@ -322,7 +322,7 @@ Allows for migrating existing containers to and from autoscale, with the ability
   d. Will use default max retry count  
   e. will connect to data nodes for requests
 
-  We can also set ConnectionMode propertyy using CosmosClientOptions class. There are two connection modes: Direct and Gateway. By default it is set to Direct. 
+  We can also set ConnectionMode propertyy using CosmosClientOptions class. There are two connection modes: Direct and Gateway. By default it is set to Direct.
 
   ```C#
   CosmosClientOptions options = new CosmosClientOptions(); 
@@ -409,9 +409,175 @@ CosmosClient client = builder.Build();
 
 ### Chapter 8. Implement Azure Cosmos DB for NoSQL point operations
 
+- We can use the `container` class to create and manage items in the database.
+- to define a product class:
+
+```csharp
+public class Product
+{
+    public string id { get; set; }
+    public string name { get; set; }
+    public string categoryId { get; set; }
+    public double price { get; set; }
+    public string[] tags { get; set; }
+}
+```
+
+- We can also use a different name in C# class and still get correct JSON using below:
+
+```csharp
+[JsonProperty(PropertyName = "id")]
+public string InternalId { get; set; }
+```
+
+- We can create an item using:
+
+```csharp
+await container.CreateItemAsync<Product>(saddle);
+```
+
+Or, we can use the following to get metadata of operations like request units used:
+
+```csharp
+ItemResponse<Product> response = await container.CreateItemAsync<Product>(saddle);
+HttpStatusCode status = response.StatusCode;
+double requestUnits = response.RequestCharge;
+Product item = response.Resource;
+```
+
+| Code | Title | Reason |
+|------|-------|--------|
+| 400  | Bad Request | Something was wrong with the item in the body of the request |
+| 403  | Forbidden | Container was likely full |
+| 409  | Conflict | Item in the container likely already had a matching ID |
+| 413  | RequestEntityTooLarge | Item exceeds the max entity size |
+| 429  | TooManyRequests | Current request exceeds the maximum RU/s provisioned for the container |
+
+To catch an error:
+
+```csharp
+try
+{
+    await container.CreateItemAsync<Product>(saddle);
+}
+catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.Conflict)
+{
+    // Add logic to handle conflicting IDs
+}
+catch (CosmosException ex)
+{
+    // Add general exception handling logic
+}
+```
+
+- To read a product:
+
+```csharp
+string id = "027D0B9A-F9D9-4C96-8213-C8546C4AAE71";
+string categoryId = "26C74104-40BC-4541-8EF5-9892F7F03D72";
+PartitionKey partitionKey = new (categoryId);
+Product saddle = await container.ReadItemAsync<Product>(id, partitionKey);
+string formattedName = $"New Product [${saddle}]";
+Console.WriteLine(formattedName);
+```
+
+- To update an item:
+
+```csharp
+saddle.price = 35.00d;
+await container.UpsertItemAsync<Product>(saddle);
+saddle.tags = new string[] { "brown", "new", "crisp" };
+await container.UpsertItemAsync<Product>(saddle);
+```
+
+- To configure TTL for an individual item (only works if TTL is configured at the container level, TTL at the container level should not be NULL):
+
+```csharp
+[JsonProperty(PropertyName = "ttl", NullValueHandling = NullValueHandling.Ignore)]
+public int? ttl { get; set; }
+saddle.ttl = 1000;
+await container.UpsertItemAsync<Product>(saddle);
+```
+
+- To delete an item:
+
+```csharp
+await container.DeleteItemAsync<Product>(id, partitionKey);
+```
+
+So, all CRUD operations are happening on the container class.
+
 ### Chapter 9. Perform cross-document transactional operations with the Azure Cosmos DB for NoSQL
 
+### Notes on TransactionalBatch in Container Class
+
+The `CreateTransactionalBatch` method in the container class is used to create a `TransactionBatch` instance for batch operations. The following code snippet demonstrates adding two items:
+
+```csharp
+Product saddle = new Product("0120", "Worn Saddle", "accessories-used");
+Product handlebar = new Product("012A", "Rusty Handlebar", "accessories-used");
+PartitionKey partitionKey = new PartitionKey("accessories-used");
+TransactionalBatch batch = container.CreateTransactionalBatch(partitionKey)
+    .CreateItem<Product>(saddle)
+    .CreateItem<Product>(handlebar);
+using TransactionalBatchResponse response = await batch.ExecuteAsync();
+```
+
+- All items must have the same `partitionKey`; an error will be thrown if the partition key is different.
+- The response includes `StatusCode` and `IsSuccessStatusCode` (bool) properties if needed.
+
+### Handling Delay and Concurrent Writes
+
+There may be delays in reading and updating the database, especially when multiple users are writing to it. To address this, each item has an `ETag` (Entity Tag) value that updates whenever the item changes. The code snippet below illustrates this:
+
+```csharp
+string categoryId = "9603ca6c-9e28-4a02-9194-51cdb7fea816";
+PartitionKey partitionKey = new PartitionKey(categoryId);
+ItemResponse<Product> response = await container.ReadItemAsync<Product>("01AC0", partitionKey);
+Product product = response.Resource;
+string eTag = response.ETag;
+product.Price = 50d;
+ItemRequestOptions options = new ItemRequestOptions { IfMatchEtag = eTag };
+await container.UpsertItemAsync<Product>(product, partitionKey, requestOptions: options);
+```
+
+In this scenario, the price will only be updated if the value has not changed.
+
 ### Chapter 10. Process bulk data in Azure Cosmos DB for NoSQL
+
+- To enable bulk execution, the following code snippet is used:
+
+```csharp
+CosmosClientOptions options = new () 
+{ 
+    AllowBulkExecution = true 
+};
+```
+
+- For adding bulk products, the code below can be utilized:
+  
+```csharp
+List<Product> productsToInsert = GetOurProductsFromSomeWhere();
+
+List<Task> concurrentTasks = new List<Task>();
+
+foreach(Product product in productsToInsert)
+{
+    concurrentTasks.Add(
+        container.CreateItemAsync<Product>(
+            product, 
+            new PartitionKey(product.partitionKeyValue))
+    );
+}
+// Actual operations happen after this line
+Task.WhenAll(concurrentTasks);
+```
+
+- During bulk operations, more Request Units (RUs) will be consumed, resulting in latency. This method works better for smaller items due to the SDK's automatic creation of batches for optimization, with a maximum of 2 MB (or 100 operations). Larger documents have an inverse effect.
+
+- While some bulk operations can occur without providing a partition key, there will be additional overhead. To minimize this, it is advisable to provide the partition key.
+
+- It is recommended to avoid serialization and deserialization to reduce overhead. Instead, consider using stream variants of common item operations.
 
 ## Section 5. Execute queries in Azure Cosmos DB for NoSQL
 

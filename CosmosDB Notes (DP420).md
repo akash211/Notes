@@ -268,7 +268,142 @@ Allows for migrating existing containers to and from autoscale, with the ability
 
 ### Chapter 6. Use the Azure Cosmos DB for NoSQL SDK
 
+- Primary library is `Microsoft.Azure.Cosmos` for .NET and hosted at nuget.
+- It is open source.
+- `dotnet add package Microsoft.Azure.Cosmos` imports latest stable version while, `dotnet add package Microsoft.Azure.Cosmos --version 3.22.1` imports specific version.
+- Primary classes are:
+  1. Microsoft.Azure.Cosmos.CosmosClient
+  2. Microsoft.Azure.Cosmos.Database
+  3. Microsoft.Azure.Cosmos.Container  
+- First, we must initiate dotnet project using dotnet new console.
+- To run C# files using coderunner in VS Code, we must change executerMap of C# from scriptcs to dotnet run.
+- We must run dotnet build command.
+- To import we use `using Microsoft.Azure.Cosmos`;
+- To create CosmosClient class instance, we can use connection string or endpoint+key.
+  
+  ```C#
+  string connectionString = "AccountEndpoint=https­://dp420.documents.azure.com:443/;AccountKey=fDR2ci9QgkdkvERTQ==";
+  CosmosClient client = new (connectionString);
+  ```
+
+  ```C#
+  string endpoint = "https­://dp420.documents.azure.com:443/";
+  string key = "fDR2ci9QgkdkvERTQ==";
+  CosmosClient client = new (endpoint, key);
+  ```
+
+- Each instance of the CosmosClient class is thread-safe, efficiently manage connections, cache address when working in direct mode. So, it is best practice to use single instance for the entire lifecycle of the application otherwise new instance loses the benefit of caching and connection management. So, we must use async/await paradigm. Also, singleton instance is best wayt to manage connections.
+- To read properties of account we can use below:
+  
+  ```C#
+  AccountProperties account = await client.ReadAccountAsync();
+  ```
+
+  Now from account instance we can take Id(unique name of the account), ReadableRegions, WritableRegions, Consistency and others properties of account.
+
+- Some more code in C#
+
+```C#
+  // To connect to existing database
+  Database database = client.GetDatabase("databaseName");
+  // To create a  new database
+  Database database = await client.CreateDatabaseAsync("databaseName");
+  // To create new database only if it does not exist already
+  Database database = await client.CreateDatabaseIfNotExistsAsync("databaseName");
+
+  // Same for container
+  Container container = await database.CreateContainerIfNotExistsAsync("containerName", "/partitionKeyPath", throughput: 400);
+```
+
+- To configure the options for the client we can use `CosmosClientOptions` class. If we do not use this then default options will be used like:  
+  a. Connect to primary region  
+  b. Will use default consistency level  
+  c. Will use default throughput  
+  d. Will use default max retry count  
+  e. will connect to data nodes for requests
+
+  We can also set ConnectionMode propertyy using CosmosClientOptions class. There are two connection modes: Direct and Gateway. By default it is set to Direct. 
+
+  ```C#
+  CosmosClientOptions options = new CosmosClientOptions(); 
+  CosmosClient client = new (connectionString, options); // using connection string
+  CosmosClient client = new (endpoint, key, options); // using endpoint and key
+
+  // to connect in Gateway mode
+  CosmosClientOptions options = new ()
+  {
+      ConnectionMode = ConnectionMode.Gateway
+  };
+
+  // to change the consistency level
+  CosmosClientOptions options = new ()
+  {
+      ConsistencyLevel = ConsistencyLevel.Eventual
+  };
+
+  // to change the preferred regions 
+  CosmosClientOptions options = new ()
+  {
+      ApplicationPreferredRegions  = new List<string> {"East US", "West US"}
+  };
+ 
+  ```
+
 ### Chapter 7. Configure the Azure Cosmos DB for NoSQL SDK
+
+- We can use Emulator for offline testing. It is available for Windows, Linux and docker.
+- Emulator endpoint and key are static.
+- We can install emulator directly in Windows and must start the service.
+- The SDK has built-in logic to handle transient errors for read requests. For write requests, it does not retry itself but can be written in applications.
+- Transient errors are those which have an underlying reason and can resolve themselves.
+- Some common Transient errors:
+  - 429 – Too many requests
+  - 449 – Concurrency error
+  - 500 – Unexpected service error
+  - 503 – Service Unavailable
+- Some client-side errors should not be retried and fixed in apps:
+  - 400 – bad request
+  - 401 – not authorized
+  - 403 – forbidden
+  - 404 - not found
+- For better performance, built-in iterators work better than LINQ lists.
+- For configuration of query – `QueryRequestOptions` is used as below:
+
+```csharp
+QueryRequestOptions options = new ()
+{
+    MaxItemCount = 500,
+    MaxConcurrency = 5,
+    MaxBufferedItemCount = 5000
+};
+```
+
+- Default value for `MaxItemCount` is 100 and it means per page how many items will be returned.
+- `MaxConcurrency` default is 1 means serially executed. If it is -1 then SDK will manage this and we can specify the number based on physical partition.
+- `Microsoft.Azure.Cosmos.Fluent.CosmosClientBuilder` is a builder class that fluently configures a new client instance for injecting custom handlers.
+- It can be used for logging using a new class that inherits from `RequestHandler`.
+
+```csharp
+using Microsoft.Azure.Cosmos.Fluent;
+
+public class LogHandler : RequestHandler 
+{    
+    public override async Task<ResponseMessage> SendAsync(RequestMessage request, CancellationToken cancellationToken)
+    {
+        Console.WriteLine($"[{request.Method.Method}]\t{request.RequestUri}");
+
+        ResponseMessage response = await base.SendAsync(request, cancellationToken);
+        
+        Console.WriteLine($"[{Convert.ToInt32(response.StatusCode)}]\t{response.StatusCode}");
+        
+        return response;
+    }
+}
+
+CosmosClientBuilder builder = new (endpoint, key);
+builder.AddCustomHandlers(new LogHandler());
+CosmosClient client = builder.Build();
+```
 
 ## Section 4. Access and manage data with the Azure Cosmos DB for NoSQL SDKs
 

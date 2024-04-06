@@ -851,9 +851,207 @@ Below JSON adds "name" in ascending order and "price" in descending order:
 
 ### Chapter 15. Consume an Azure Cosmos DB for NoSQL change feed using the SDK
 
+- The .NET SDK includes a change feed processor with 4 components:
+    1. Monitored Container
+    2. Lease Container
+    3. Host (client app)
+    4. Delegate (Code in client app that implements business logic for changes)
+
+- **Delegate** is a variable that references a method with a specific parameter list and return type. It is of type ChangesHandler and includes two parameters: a read-only list of changes and a cancellation token.
+
+    ```csharpl̥
+    static async Task HandleChangesAsync(
+        IReadOnlyCollection<Product> changes,
+        CancellationToken cancellationToken
+    ) 
+    {
+        // Do something with the batch of changes
+    }
+    ChangesHandler<Product> changeHandlerDelegate = HandleChangesAsync;
+    ```
+
+    Using a loop and an anonymous function, it can be written as:
+
+    ```csharp
+    ChangesHandler<Product> changeHandlerDelegate = async (
+        IReadOnlyCollection<Product> changes,
+        CancellationToken cancellationToken
+    ) => {
+        foreach(Product product in changes)
+        {
+            await Console.Out.WriteLineAsync($"Detected Operation:\t[{product.id}]\t{product.name}");
+            // Do something with each change
+        }
+    };
+    ```
+
+- The change feed processor is created by:
+    1. Creating a processor builder from the monitored container variable.
+    2. Using the builder to build out the processor by specifying the delegate, processor name, lease container, and host instance name.
+    3. Starting the processor.
+
+- To create the source container and lease container instances, use the `ChangeFeedProcessorBuilder` method from the container instance:
+
+    ```csharp
+    Container sourceContainer = client.GetContainer("cosmicworks", "products");
+
+    Container leaseContainer = client.GetContainer("cosmicworks", "productslease");
+    var builder = sourceContainer.GetChangeFeedProcessorBuilder<Product>(
+        processorName: "productItemProcessor",
+        onChangesDelegate: changeHandlerDelegate
+    );
+    ChangeFeedProcessor processor = builder
+        .WithInstanceName("desktopApplication")
+        .WithLeaseContainer(leaseContainer)
+        .Build();
+    await processor.StartAsync();
+
+    // Wait while processor handles items
+
+    await processor.StopAsync();
+    ```
+
+    The `ChangeFeedProcessor` has many methods like `WithInstanceName`, `WithStartTime`, `WithLeaseContainer`, `WithErrorNotification`, `WithMaxItems`, `WithPollInterval`.
+
+- The **Change Feed Processor** functions as a time-based pointer. It moves forward in time across the change feed and sends batches of changes to the delegate.
+
+- The **Change Feed Processor** can be constrained by the resources of the host container. In such cases, scaling out can be done across multiple hosts, all reading from the change feed concurrently. Identifying scaling out requires an estimator. For the estimator, a delegate is required using `ChangesEstimationHandler`.
+
+    ```csharp
+    ChangesEstimationHandler changeEstimationDelegate = async (
+        long estimation, 
+        CancellationToken cancellationToken
+    ) => {
+        // Do something with the estimation
+    };
+    ChangeFeedProcessor estimator = sourceContainer.GetChangeFeedEstimatorBuilder(
+        processorName: "productItemEstimator",
+        estimationDelegate: changeEstimationDelegate)
+        .WithLeaseContainer(leaseContainer)
+        .Build();
+    ```
+
 ### Chapter 16. Handle events with Azure Functions and Azure Cosmos DB for NoSQL change feed
 
+- **Cosmos DB** supports Trigger, Input Binding, and Output Binding with Azure Functions.
+- To bind functions with Cosmos DB, first, an app setting is created in the function instance with the Cosmos DB connection string.
+
+## Trigger for Cosmos DB
+
+- Trigger for Cosmos DB requires the following code snippet:
+
+```json
+{
+  "type": "cosmosDBTrigger",
+  "name": "changes",
+  "direction": "in",
+  "connectionStringSetting": "cosmosdbsqlconnstr",
+  "databaseName": "cosmicworks",
+  "collectionName": "products",
+  "leaseCollectionName": "productslease",
+  "createLeaseCollectionIfNotExists": false
+}
+```
+
+- Input binding can be of two types: point and SQL query binding. Below are the code snippets for both types:
+- Point Binding
+
+```json
+{
+  "type": "cosmosDB",
+  "name": "item",
+  "direction": "in",
+  "connectionStringSetting": "cosmosdbsqlconnstr",
+  "databaseName": "cosmicworks",
+  "collectionName": "products",
+  "id": "91AA100C-D092-4190-92A7-7C02410F04EA",
+  "partitionKey": "F3FBB167-11D8-41E4-84B4-5AAA92B1E737"
+}
+```
+
+- SQL Query Binding
+
+```json
+{
+  "type": "cosmosDB",
+  "name": "items",
+  "direction": "in",
+  "connectionStringSetting": "cosmosdbsqlconnstr",
+  "databaseName": "cosmicworks",
+  "collectionName": "products",
+  "sqlQuery": "SELECT p.id, p.name, p.categoryId FROM products p WHERE p.price > 500"
+}
+```
+
+- Output binding code is as follows:
+
+```json
+{
+  "type": "cosmosDB",
+  "name": "output",
+  "direction": "out",
+  "connectionStringSetting": "cosmosdbsqlconnstr",
+  "databaseName": "cosmicworks",
+  "collectionName": "products"
+}
+```
+
 ### Chapter 17. Search Azure Cosmos DB for NoSQL data with Azure Cognitive Search
+
+- Azure Cognitive Search instance has **Indexes**, **Indexers**, and **Data Sources**. Indexes contain searchable JSON documents, Indexers crawl data from various sources and insert them into indexes.
+- Cosmos DB container can be configured as a data source. An SQL query can be used as an Indexer to get data.
+- Index contains a name, key, and optional features. Indexer contains a name and schedule.
+- Two policies, one for change detection and one for deletion, must be created.
+- Customizing Indexes:
+  - **Retrievable**: Configures the field to be projected in search result sets
+  - **Filterable**: Accepts OData-style filtering on the field
+  - **Sortable**: Enables sorting using the field
+  - **Facetable**: Allows the field to be dynamically aggregated and grouped
+  - **Searchable**: Allows search queries to match terms in the field
+- Stored procedures are scoped to a single partition.
+- All operations within a stored procedure should be completed within the server request timeout duration.
+- A helper Boolean value is returned to indicate if all operations were completed. If not, a pointer can be returned to start the next stored procedure from that point.
+- Example of a function:
+
+```javascript
+function createProduct(item) {
+    var context = getContext();
+    var container = context.getCollection();
+    var accepted = container.createDocument(
+        container.getSelfLink(),
+        item,
+        (error, newItem) => {
+            if (error) throw error;
+            context.getResponse().setBody(newItem);
+        }
+    );
+    if (!accepted) return;
+}
+```
+
+- In SDK, the **Scripts** class has all tools to create User-Defined Functions (UDFs), Triggers, and stored procedures.
+- Pre-triggers run before an operation and cannot have any input parameters. They are usually used for validating or filling missing properties.
+- Post-triggers run after an operation has completed and can have input parameters.
+- All items within a post-trigger should have the same logical partition key as the original item that was the source of the trigger.
+- Triggers are not automatically triggered but need to be specified for each operation.
+- **Consistency Models**: Strong, Bounded Staleness, Session, Consistent Prefix, Eventual
+  - **Session**: Within the SDK instance and uses a session token. Outside the instance, it changes to Consistent Prefix or Eventual.
+  - **Bounded Staleness**: Read can be some version or some time interval behind writes. In a region, it gives strong consistency.
+  - **Consistent Prefix**: There will be a delay, but the reads will be in write order.
+  - **Eventual**: Lowest write latency, highest availability, and highest read scalability.
+- Each Cosmos DB account has a default consistency of Session.
+- Using SDK, for each operation, consistency can be relaxed but cannot be made stronger.
+- Session token can be pulled from a client and used on another to preserve the session between multiple clients.
+- In a multi-region write case, strong consistency is not supported.
+- Last write wins in multi-region write Cosmos DB. It uses the `_ts` property, but it can be configured to use something else. This conflict resolution policy is set on new containers only.
+- To create a custom stored procedure for conflict resolution, we need:
+
+```javascript
+function <function-name>(incomingItem, existingItem, isTombstone, conflictingItems)
+```
+
+- Conflicts can be written to the conflicts feed if no stored procedure is created for conflict resolution.
+- By default, automatic failover to a different region is not enabled.
 
 ## Section 8. Implement a data modeling and partitioning strategy for Azure Cosmos DB for NoSQL
 

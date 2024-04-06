@@ -1131,19 +1131,215 @@ Note: By following these denormalization and data modeling best practices, devel
 
 ### Chapter 23. Customize an indexing policy in Azure Cosmos DB for NoSQL
 
+- **Indexing and Query Scans**:
+  - The query engine in Azure Cosmos DB can utilize three types of scans based on available filters and indexes:
+    1. **Index Seek**: Efficient for specific lookups based on indexed fields.
+    2. **Index Scan**: Useful for queries with range conditions.
+    3. **Full Scan**: Involves scanning all items in the container, and the RU charge depends on the volume of items.
+
+- **Indexes in Azure Cosmos DB**:
+  - There are two types of indexes:
+    - **Primary Indexes**: Mandatory and store the partition key along with essential fields for each item in the container.
+    - **Secondary Indexes**: Optional and used to enhance query performance. They can be created for any field except the partition key and are beneficial for range queries, equality queries, and full-text queries.
+
+- **Request Unit (RU) Charges**:
+  - The RU charge remains constant for Index Seek and Index Scan operations.
+  - For Full Scan operations, the RU charge depends on the number of items loaded in the entire container.
+
+Note: Understanding the different types of query scans, indexing options, and RU charges in Azure Cosmos DB can help optimize query performance and resource utilization.
+
 ### Chapter 24. Measure index performance in Azure Cosmos DB for NoSQL
 
+- **Enabling Indexing Metrics**:
+  - To enhance query performance and design more efficient indexes in Azure Cosmos DB, indexing metrics can be enabled.
+  - Use the following .NET code snippet to enable indexing metrics:
+
+    ```csharp
+    QueryRequestOptions options = new()
+    {
+        PopulateIndexMetrics = true
+    };
+    ```
+
+  - Incorporate the above code with `GetItemQueryIterator` method:
+
+    ```csharp
+    FeedIterator<Product> iterator = container.GetItemQueryIterator<Product>(query, requestOptions: options);
+    ```
+
+  - The response now includes IndexMetrics, which provides details on Utilized Single Indexes, Potential Single Indexes, Utilized Composite Indexes, and Potential Composite Indexes.
+
+- **RequestCharge Property**:
+  - In addition to indexing metrics, the response also contains the `RequestCharge` property.
+  - This property indicates the Request Units (RUs) consumed for the specific response.
+
+Note: By utilizing indexing metrics and monitoring the RequestCharge property in Azure Cosmos DB responses, developers can optimize query performance and resource consumption effectively.
+
 ### Chapter 25. Implement integrated cache in Azure Cosmos DB for NoSQL
+
+- **Enabling Cache**:
+  - To enable cache in Azure Cosmos DB, the Dedicated Gateway must be enabled in the Cosmos DB account settings.
+  - Configure the SKU (with vCPU and RAM) and specify the number of instances.
+  - In the Keys tab, a separate connection string will be provided for cache usage, replacing `documents.azure.com` with `sqlx.cosmos.azure.com`.
+
+- **Configuration Changes**:
+  - Update the `CosmosClientOptions` to use Gateway and set the `QueryRequestOptions` ConsistencyLevel to Eventual or Session.
+
+- **Cache Consumption**:
+  - Upon enabling cache, the initial query execution will consume Request Units (RUs), but subsequent queries for the same operation will not utilize any RUs.
+
+- **Staleness Window Configuration**:
+  - By default, the cache retains data for 5 minutes, known as the staleness window, which can be adjusted using the following .NET code snippets:
+
+    - For point operations:
+
+    ```csharp
+    ItemRequestOptions operationOptions = new()
+    {
+        ConsistencyLevel = ConsistencyLevel.Eventual,
+        DedicatedGatewayRequestOptions = new()
+        {
+            MaxIntegratedCacheStaleness = TimeSpan.FromMinutes(15)
+        }
+    };
+    ```
+
+    - For query operations:
+
+    ```csharp
+    QueryRequestOptions queryOptions = new()
+    {
+        ConsistencyLevel = ConsistencyLevel.Eventual,
+        DedicatedGatewayRequestOptions = new()
+        {
+            MaxIntegratedCacheStaleness = TimeSpan.FromSeconds(120)
+        }
+    };
+    ```
+
+Note: By configuring cache settings and staleness window in Azure Cosmos DB, developers can optimize query performance and reduce Request Unit consumption effectively.
 
 ## Section 11. Monitor and troubleshoot an Azure Cosmos DB for NoSQL solution
 
 ### Chapter 26. Measure performance in Azure Cosmos DB for NoSQL
 
+- **Azure Monitor Metrics Collection**:
+  - Azure Monitor automatically collects Cosmos DB metrics every minute by default and retains them for 30 days.
+  - The collected metrics include throughput, storage availability, latency, consistency, and system-level metrics.
+  - Metrics dimension names, such as container names, are case-insensitive.
+
+- **Telemetry Data and Logs**:
+  - Telemetries like events and traces are stored as logs in Azure Monitor.
+  - Queries can be executed against these logs to analyze the telemetry data effectively.
+
+- **System-Level Metrics and Alerting**:
+  - System-level metrics, available under the Metrics tab in the portal, are retained for 7 days by default.
+  - Through the Azure Monitor, alerts can be configured based on defined conditions, applicable to Logs, monitors, and activity logs.
+
+- **SDK-based Monitoring**:
+  - Using SDKs, developers can programmatically monitor metrics in Azure Cosmos DB.
+  - Collection-level metrics can be monitored using SDKs, while account-level metrics monitoring is not supported.
+
+- **Resource Logs and Diagnostic Settings**:
+  - To store resource logs, initially routing to a specific location via diagnostic settings is necessary.
+
+- **Error Handling and Status Codes**:
+  - When working with Cosmos DB, encountering a 429 status code error is possible.
+  - Reasons for this error may include a large Request Rate, incomplete requests due to a high rate of metadata requests, or incomplete requests due to transient service errors.
+
+Note: Leveraging Azure Monitor for metrics collection, telemetry data analysis, and alerting can provide valuable insights into the performance and health of Azure Cosmos DB deployments.
+
 ### Chapter 27. Monitor responses and events in Azure Cosmos DB for NoSQL
+
+Azure Cosmos DB utilizes various HTTP status codes in REST operations to provide insights into the current state of requests:
+
+| Status Code | Description                          |
+|-------------|--------------------------------------|
+| 200 OK      | The operation is successful.         |
+| 201 Created | The document was created.            |
+| 204 No Content | The delete operation was successful. |
+| 304 Not Modified | No change in document since the last specified ETag. |
+| 400 Bad Request | The request is malformed or syntactically incorrect. JSON is invalid. |
+| 401 Unauthorized | The request lacks necessary authorization. |
+| 403 Forbidden | The request is forbidden. |
+| 404 Not Found | The requested resource does not exist. |
+| 408 Timeout | The request timed out. |
+| 409 Conflict | The operation conflicts with the current resource state. |
+| 412 Precondition Failed | The specific pre-condition is not met. |
+| 413 Entity too Large | The document size exceeds the allowable limit. |
+| 429 Request rate too large | Request rate is limited. |
+| 500 Internal Server Error | An unexpected server error occurred. |
+| 503 Service Unavailable | The service is temporarily unavailable, often due to transient errors. |
+
+- **Handling 503 Service Unavailable**:
+  - This service status typically resolves itself and operations can be retried. If the issue persists, consider:
+    - Checking if ports are enabled (443 for Gateway connection over HTTPS, 10000-20000 range for Direct connection over TCP).
+    - Verifying Azure service status on the Azure status page.
+    - Handling client-side transient connectivity issues, such as request timeout error (408 status code).
+
+- **Metadata Requests and Error Handling**:
+  - For metadata requests, there is a system-reserved RU limit that cannot be increased. Crossing this limit may result in a 429 error.
+  - Hot partitions can also lead to 429 errors, which can be verified through Azure diagnostics logs using Kusto Query Language (KQL).
+
+- **Setting up Alerts with Azure Monitor**:
+  - Azure Monitor service allows setting up alerts that can trigger actions like sending emails or invoking Azure functions based on defined conditions.
+
+Note: Understanding and effectively handling HTTP status codes in Azure Cosmos DB operations is crucial for managing and troubleshooting database interactions.
 
 ### Chapter 28. Implement backup and restore for Azure Cosmos DB for NoSQL
 
+Azure Cosmos DB offers automatic backups to ensure data durability and recovery options. Here are some key points to consider regarding backup and restore processes:
+
+- **Backup Process**:
+  - Cosmos DB automatically performs backups, ensuring no RUs are wasted during the backup process.
+  - Default full backups are taken every 4 hours, with two backups stored. This interval and retention can be configured during account creation or later.
+  - Backup retention defaults to 8 hours (two backups) but can be extended up to 30 days. The minimum backup retention is twice the backup interval.
+  - Deleted containers and databases have backup snapshots retained for 30 days in Azure Blob storage.
+  - Backups do not impact performance or availability and are stored in the write region. In multi-write region setups, backups are stored in all write regions.
+  - Backup blob storage is initially set to GRS (geo-redundant) and can be changed to LRS or ZRS.
+
+- **Restore Process**:
+  - To restore data, a ticket must be raised with the Azure support team.
+  - Azure support can restore full or partial backups to a new Cosmos DB restore account.
+  - Backups can also be managed independently using Azure Data Factory and Change Feed.
+  - Once data is restored to a restore account, it can be moved back to the original account using tools like Azure Data Factory, Cosmos DB migration tool, Change Feed, or custom code. The restore account should be deleted to avoid additional charges.
+
+- **Backup Modes**:
+  - Periodic backup mode is the default, but continuous backup mode can also be enabled.
+  - In continuous backup mode, up to 7 days of backups are free, with charges applicable after that. Backup storage space and restore costs may also incur charges.
+  - Continuous mode uses LRS storage by default, but switches to ZRS if availability zones are enabled in a region.
+
+- **Point in Time Recovery and Limitations**:
+  - Complete and selective restores are possible, but certain components like network settings, regions, stored procedures, triggers, and user-defined functions are not restored.
+  - Consistency settings are always restored to session consistency.
+  - Continuous backups are retained for 30 days, and multi-region write accounts are not supported. Accounts with unique indexes are also not supported.
+  - Continuous backup mode cannot be enabled if Azure Synapse Link is active.
+  - Point in time recovery is possible within the 30-day backup retention period when continuous backup mode is enabled.
+
+Note: Understanding the backup and restore processes in Azure Cosmos DB is essential for data protection and recovery strategies.
+
 ### Chapter 29. Implement security in Azure Cosmos DB for NoSQL
+
+Azure Cosmos DB provides robust security features to protect data at rest and in transit. Here are some key security aspects to consider:
+
+- **Encryption**:
+  - Cosmos DB is encrypted at rest for databases, backups, and media, ensuring data security on non-volatile storage devices.
+  - Data is also encrypted during transit, with encryption enabled by default at no additional cost. AES-256 encryption is used for encryption.
+  - Encryption and decryption are handled using service-managed keys, but customers can configure customer-managed keys for additional control.
+
+- **Network Security**:
+  - Firewall configurations can be set up to secure the network layer, allowing only specified IPs or IP ranges to access the database.
+
+- **Storage**:
+  - The primary database is stored on SSDs for optimal performance, while media attachments and backups are stored in Azure Blob storage, typically on HDDs.
+
+- **Role-Based Access Control (RBAC)**:
+  - RBAC is used to grant or deny access to Azure Cosmos DB resources and operations.
+  - Roles can be assigned to Azure AD accounts, including users, groups, service principals, or managed instances.
+  - RBAC is set up through the Access Control (IAM) pane in the Azure portal, where built-in or custom roles can be assigned to individuals or groups.
+  - Role assignments are focused on controlling access at the control plane level and are not used for data plane operations.
+
+By leveraging these security features, Azure Cosmos DB provides a secure environment for storing and accessing data, ensuring data confidentiality and integrity across the platform.
 
 ## Section 12. Manage an Azure Cosmos DB for NoSQL solution using DevOps practices
 

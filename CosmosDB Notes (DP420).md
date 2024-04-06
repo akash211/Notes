@@ -733,7 +733,119 @@ while(iterator.HasMoreResults)
 
 ### Chapter 13. Define indexes in Azure Cosmos DB for NoSQL
 
+- By default, Cosmos DB automatically indexes all paths of items stored using the NoSQL API.
+
+- **Default Indexing Policy Settings:**
+    1. The inverted index is updated for all create, update, or delete operations.
+    2. All properties for every item are indexed.
+    3. Range indexes are used for all strings or numbers.
+
+- **Indexing Policy Components: Default Values**
+    1. Indexing Mode: Consistent
+    2. Automatic: Enabled
+    3. Included Paths: All (*)
+    4. Excluded Paths: _etag property path
+
+- **JSON Representation:**
+
+    ```json
+    {
+      "indexingMode": "consistent",
+      "automatic": true,
+      "includedPaths": [
+        {
+          "path": "/*"
+        }
+      ],
+      "excludedPaths": [
+        {
+          "path": "/\"_etag\"/?"
+        }
+      ]
+    }
+    ```
+
+- **Indexing Mode:**
+  - Consistent or None
+    - None disables indexing completely, useful for bulk operations. Indexing can be disabled for bulk operations and re-enabled later.
+
+- **Path Patterns:**
+  - *: Any property after
+  - []: Includes array
+  - ?: Scalar values
+  - Examples:
+    - /*: All properties
+    - ?name/?: Scalar value of the name property
+    - /category/*: All properties under the category property
+    - /tags/[]/name/?: All scalar names inside tags
+
+- **Path Conflict Resolution:**
+  - Most precise path takes precedence
+  - /* is the root path and must be part of included or excluded paths
+
 ### Chapter 14. Customize indexes in Azure Cosmos DB for NoSQL
+
+```csharp
+// Customize Indexing Policy for a Container
+IndexingPolicy policy = new IndexingPolicy()
+{
+    IndexingMode = IndexingMode.Consistent,
+    Automatic = true
+};
+policy.ExcludedPaths.Add(
+    new ExcludedPath { Path = "/*" }
+);
+policy.IncludedPaths.Add(
+    new IncludedPath { Path = "/name/?" }
+);
+policy.IncludedPaths.Add(
+    new IncludedPath { Path = "/categoryName/?" }
+);
+ContainerProperties options = new ContainerProperties()
+{
+    Id = "products",
+    PartitionKeyPath = "/categoryId",
+    IndexingPolicy = policy
+};
+Container container = await database.CreateContainerIfNotExistsAsync(options, throughput: 400);
+```
+
+- Index policy is set for containers.
+
+- If a query contains multiple filters, a composite index can be created to make it faster. This is beneficial for queries that order the results using multiple properties. The properties in the composite index should have the same order as the filter or order in the query. Multiple composite indexes can be defined.
+
+Below JSON adds "name" in ascending order and "price" in descending order:
+
+```json
+{
+  "indexingMode": "consistent",
+  "automatic": true,
+  "includedPaths": [
+    {
+      "path": "/*"
+    }
+  ],
+  "excludedPaths": [
+    {
+      "path": "/_etag/?"
+    }
+  ],
+  "compositeIndexes": [
+    [
+      {
+        "path": "/name",
+        "order": "ascending"
+      },
+      {
+        "path": "/price",
+        "order": "descending"
+      }
+    ]
+  ]
+}
+```
+
+- Usually, it is a better practice to include all paths and only exclude specific paths.
 
 ## Section 7. Integrate Azure Cosmos DB for NoSQL with Azure services
 

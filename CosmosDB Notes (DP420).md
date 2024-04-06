@@ -1057,7 +1057,67 @@ function <function-name>(incomingItem, existingItem, isTombstone, conflictingIte
 
 ### Chapter 18. Implement a non-relational data model
 
+- **Scalability**:
+  - Cosmos DB is horizontally scalable, adding more servers or nodes as required. These nodes are known as physical partitions in Cosmos DB.
+  - Data is routed and accessed using a partition key, which is a virtual partition. This allows the database to grow to an unlimited size without impacting response time.
+  - As partitions are added, more compute resources are also added to maintain performance.
+
+- **NoSQL Database Characteristics**:
+  - NoSQL databases lack foreign keys, constraints, and enforced relationships. Relational databases enforce ACID using locks and latches, impacting concurrency, latency, and availability.
+  - Today, with low storage and memory costs, optimization for storage efficiency is less critical. NoSQL databases are compute-efficient, denormalizing data and violating traditional relational database rules.
+
+- **Data Modeling**:
+  - **Embedding Data**:
+    - Combining related entity tables into a single table (container).
+    - Criteria for embedding data include related data that is frequently read or updated together and has a 1:1 or 1:Few relationship.
+
+  - **Referencing Data Separately**:
+    - Criteria for separate documents:
+      1. Data with properties accessed and updated at different frequencies.
+      2. Unbounded 1:Many or Many:Many relationships where document size exceeds 2 MB.
+
+- **Partitioning**:
+  - Cosmos DB uses partition keys to route data to physical partitions, with a maximum size of 50 GB and throughput of 10,000 RU/s per partition key.
+  - Logical partitions have a maximum size of 20 GB, with multiple logical partitions in a physical partition.
+  - To avoid hot partitions, select a partition key that evenly distributes data, especially in large containers with multiple physical partitions.
+
+- **Partition Key Selection**:
+  - For write-heavy databases, choose a partition key with high cardinality (many unique values).
+  - For read-heavy databases, use where filters to access only one or a few partitions.
+
+- **Cross-Partition Queries**:
+  - Queries using non-partition key filters scan all physical partitions, resulting in slower and costlier queries for large containers.
+
+- **Scalability Considerations**:
+  - Millions of logical partitions are manageable within Azure Cosmos DB.
+
+Note: Ensure proper partition key selection, data modeling, and partitioning strategies to optimize performance and scalability in Azure Cosmos DB.
+
 ### Chapter 19. Design a data partitioning strategy
+
+- **Denormalization**:
+  - Denormalizing data involves duplicating information in multiple containers to optimize query performance.
+  - For example, having category information duplicated in both the category and product containers reduces the Request Units (RU) required for queries that involve category names with products.
+
+- **Referential Integrity**:
+  - To maintain referential integrity in denormalized data, use the Change Feed feature.
+  - Change Feed is an API available in every container that streams data changes. It triggers events for changed data, allowing developers to respond accordingly.
+  - Each container requiring referential integrity will have its own Change Feed, ensuring data consistency across related entities.
+
+- **Data Storage in the Same Container**:
+  - Data from different entities can be stored in the same container if they share the same partition key.
+  - Use an additional 'type' property to differentiate between the types of data stored in the container.
+
+- **De-normalized Aggregates**:
+  - De-normalized aggregates involve storing aggregated data in the same container with the raw data.
+  - This optimization is beneficial for frequently accessed aggregates that are derived from multiple entities.
+  - Aggregates can be updated using stored procedures or transactional batches, ensuring consistency and efficiency.
+
+- **Limitations**:
+  - Joins do not work across different documents like categories and orders in Azure Cosmos DB.
+  - To address this limitation, consider de-normalizing aggregates and storing related data together based on the partition key.
+
+Note: By following these denormalization and data modeling best practices, developers can optimize query performance and maintain data consistency in Azure Cosmos DB.
 
 ## Section 9. Design and implement a replication strategy for Azure Cosmos DB for NoSQL
 

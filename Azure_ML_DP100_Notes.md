@@ -196,18 +196,250 @@ Then to create resource we can use:
 az ml compute create --file compute.yaml
 ```
 
-
 ### Chapter 7. Make data available in Azure Machine Learning
+
+Uniform Resource Identifiers(URIs) are used to access the data in Azure ML. URIs references location of the data. There are 3 protocols used for connecting:
+
+- `http(s)` : used for data in azure blob or to get public available http(s) location. http is also used for private container but then authentication is required.
+- `abfs(s)` : used for data stored in Azure Data lake gen2
+- `azureml` : for data stored in datastore, data is somewhere else but connection and authentication information is saved here so authentication is not required every time.
+
+Datastore gives abstraction for cloud data resources. They provide easy to use URIs to the actual data, securely stores connection information without exposing keys or secrets. There are two method to authenticate a storage account to a datastore:
+
+1. Credential based:
+   - `storage_account_key` : uses account key based authentication
+   - `storage_account_sas` : uses sas based authentication
+2. Identity based: authentication usually using Microsoft Entra identity
+
+There are 4 built in datastores where two connect with azure blob an two with azure fileshares. But usually we work with datastore of our own. Datstore can be created using GUI, SDK or CLI.
+
+```python
+# To create a datastore to connect to blob storage using account key:
+blob_datastore = AzureBlobDatastore(
+       name = "blob_example",
+       description = "Datastore pointing to a blob container",
+       account_name = "mytestblobstore",
+       container_name = "data-container",
+       credentials = AccountKeyCredentials(
+           account_key="XXXxxxXXXxXXXXxxXXX"
+       ),
+)
+ml_client.create_or_update(blob_datastore)
+
+blob_datastore = AzureBlobDatastore(
+    name="blob_sas_example",
+    description="Datastore pointing to a blob container",
+    account_name="mytestblobstore",
+    container_name="data-container",
+    credentials=SasTokenCredentials(
+        sas_token="?xx=XXXX-XX-XX&xx=xxxx&xxx=xxx&xx=xxxxxxxxxxx&xx=XXXX-XX-XXXXX:XX:XXX&xx=XXXX-XX-XXXXX:XX:XXX&xxx=xxxxx&xxx=XXxXXXxxxxxXXXXXXXxXxxxXXXXXxxXXXXXxXXXXxXXXxXXxXX"
+    ),
+)
+ml_client.create_or_update(blob_datastore)
+```
+
+We can create data assets to get access to data in datastores, Azure storage services, public URLs, or data stored on your local device. The advantages are that we can version the metadata of the data asset, can share and reuse and do not have to care about connection string and data paths.
+
+There are 3 types of data assets:
+
+1. `URI file`: which points to a file.
+
+    ```python
+    # To create a URI file data asset:
+    from azure.ai.ml.entities import Data
+    from azure.ai.ml.constants import AssetTypes
+    my_path = '<supported-path>'
+    my_data = Data(
+        path=my_path,
+        type=AssetTypes.URI_FILE,
+        description="<description>",
+        name="<name>",
+        version="<version>"
+    )
+    ml_client.data.create_or_update(my_data)
+
+    # to read data:
+    import argparse
+    import pandas as pd
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--input_data", type=str)
+    args = parser.parse_args()
+    df = pd.read_csv(args.input_data)
+    ```
+
+2. `URI folder`: which points to a folder. Python SDK code is also quite similar.
+3. `MLTable`: which can point to folder or file and includes a schema to read as tabular data. So even if data schema changes it will not affect when we are reading since MLTable already has a schema and it will use same. To define the schema we include a MLTable file in the same folder as the data we want to read.
+
+    ```yml
+    type: mltable
+
+    paths:
+    - pattern: ./*.txt
+    transformations:
+    - read_delimited:
+        delimiter: ','
+        encoding: ascii
+        header: all_files_same_headers
+    ````
 
 ### Chapter 8. Work with compute targets in Azure Machine Learning
 
+Types of compute in Azure ML:
+
+1. `Compute instance`: Behaves similarly to a virtual machine and is primarily used to run notebooks. It's ideal for experimentation. It can not handle parallel tasks and at one time can be used by one user only.
+2. `Compute clusters`: Multi-node clusters of virtual machines that automatically scale up or down to meet demand. A cost-effective way to run scripts that need to process large volumes of data. Clusters also allow you to use parallel processing to distribute the workload and reduce the time it takes to run a script.
+3. `Kubernetes clusters`: Cluster based on Kubernetes technology, giving you more control over how the compute is configured and managed. You can attach your self-managed Azure Kubernetes (AKS) cluster for cloud compute, or an Arc Kubernetes cluster for on-premises workloads.
+4. `Attached compute`: Allows you to attach existing compute like Azure virtual machines or Azure Databricks clusters to your workspace.
+5. `Serverless compute`: A fully managed, on-demand compute you can use for training jobs.
+
+```python
+    # To create a compute instance:
+    from azure.ai.ml.entities import ComputeInstance
+
+    ci_basic_name = "basic-ci-12345"
+    ci_basic = ComputeInstance(
+        name=ci_basic_name, 
+        size="STANDARD_DS3_v2"
+    )
+    ml_client.begin_create_or_update(ci_basic).result()
+
+    # To create a compute cluster:
+    from azure.ai.ml.entities import AmlCompute
+
+    cluster_basic = AmlCompute(
+        name="cpu-cluster",
+        type="amlcompute",
+        size="STANDARD_DS3_v2",
+        location="westus",
+        min_instances=0,
+        max_instances=2,
+        idle_time_before_scale_down=120,
+        tier="low_priority",
+    )
+    ml_client.begin_create_or_update(cluster_basic).result()
+```
+
 ### Chapter 9. Work with environments in Azure Machine Learning
+
+A lot of curated environment are already available in our workspaces. They use Prefix AzureML.
+
+```python
+    # To check all the environments available:
+    envs = ml_client.environments.list()
+    for env in envs:
+        print(env.name)
+
+    # To check details of a specific environment:
+    env = ml_client.environments.get(name="<name>", version="<version>")
+    print(env)
+```
+
+When running a job we can specify name of environment to be used.  
+We can define an environment from a Docker image, a Docker build context, and a conda specification with Docker image.
 
 ## Section 3. Experiment with Azure Machine Learning
 
 ### Chapter 10. Find the best classification model with Automated Machine Learning
 
+```python
+# To use MLTable datasset as input for Automated Machine Learning
+    from azure.ai.ml.constants import AssetTypes
+    from azure.ai.ml import Input
+
+    my_training_data_input = Input(type=AssetTypes.MLTABLE, path="azureml:input-data-automl:1")
+```
+
+We can also configure optional featurization which can include:
+
+- Missing value imputation
+- Categorical encoding
+- Numerical normalization
+- Feature selection or Dropping high-cardinality features
+- Feature engineering (like extracting date from datetime features)
+
+We can turn them off if we want. After AutoML experiment we can also check what all scaling or normalization was applied and if AutoML detected any issue with the data. Usually there are three status Passed, Done (where AutoML made some changes, we should review that) and Alerted (where AutoML detected some issue with the data but could not fix it, we should review).
+
+
+AutoML requires MLTable data asset as input.
+
+```python
+    from azure.ai.ml import automl
+
+    # configure the classification job
+    classification_job = automl.classification(
+        compute="aml-cluster",
+        experiment_name="auto-ml-class-dev",
+        training_data=my_training_data_input,
+        target_column_name="Diabetic",
+        primary_metric="accuracy",
+        n_cross_validations=5,
+        enable_model_explainability=True
+    )
+```
+
+By default AutoML runs all the algorithms for the particular type of ML for example classification. But we can customize and restrict this based on our needs. Also we need to provide the primary metric based on which AutoML will choose the best model. All the metrics with details are listed [here](https://learn.microsoft.com/en-us/azure/machine-learning/how-to-understand-automated-ml?view=azureml-api-2). Using SDK to check all the metrics available under classification, we can use:
+
+```python
+    from azure.ai.ml.automl import ClassificationPrimaryMetrics
+    list(ClassificationPrimaryMetrics)
+```
+
+To set limits on cost and time we can use :
+
+```python
+    classification_job.set_limits(
+        timeout_minutes=60, 
+        trial_timeout_minutes=20, 
+        max_trials=5,
+        enable_early_termination=True,
+    )
+```
+
+We can also set max_concurrent_trials which should be equal to or less than total number of nodes in compute cluster.  
+To monitor job:
+
+```python
+    # submit the AutoML job
+    returned_job = ml_client.jobs.create_or_update(
+        classification_job
+    ) 
+    aml_url = returned_job.studio_url
+    print("Monitor your job at", aml_url)
+```
+
 ### Chapter 11. Track model training in Jupyter notebooks with MLflow
+
+MLflow is an open-source library for tracking and managing your machine learning experiments. In particular, MLflow Tracking is a component of MLflow that logs everything about the model you're training, such as parameters, metrics, and artifacts. The azureml-mlflow package contains the integration code of Azure Machine Learning with MLflow. To use these:
+
+```python
+    pip show mlflow
+    pip show azureml-mlflow
+```
+
+To group model training results, we use experiments. To track model metrics with MLflow when training a model in a notebook, we can use MLflow's logging capabilities. MLFlow supports both autologging and custom logging.
+
+```python
+    # To create an experiment
+    import mlflow
+    mlflow.set_experiment(experiment_name="heart-condition-classifier")
+
+    # To enable autolog for xgboost
+    from xgboost import XGBClassifier
+    with mlflow.start_run():
+        mlflow.xgboost.autolog()
+        model = XGBClassifier(use_label_encoder=False, eval_metric="logloss")
+        model.fit(X_train, y_train, eval_set=[(X_test, y_test)], verbose=False)
+
+    # For custom logging
+    from xgboost import XGBClassifier
+    from sklearn.metrics import accuracy_score
+    with mlflow.start_run():
+        model = XGBClassifier(use_label_encoder=False, eval_metric="logloss")
+        model.fit(X_train, y_train, eval_set=[(X_test, y_test)], verbose=False)
+        y_pred = model.predict(X_test)
+        accuracy = accuracy_score(y_test, y_pred)
+        mlflow.log_metric("accuracy", accuracy) # We can use log_param, log_metric, log_artifact also
+```
 
 ## Section 4. Optimize model training with Azure Machine Learning
 

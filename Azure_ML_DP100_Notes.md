@@ -445,7 +445,62 @@ To group model training results, we use experiments. To track model metrics with
 
 ### Chapter 12. Run a training script as a command job in Azure Machine Learning
 
+MLflow is an open-source platform, designed to manage the complete machine learning lifecycle.  
+There are two options to track machine learning jobs with MLflow:
+
+- Enable autologging using `mlflow.autolog`
+- Use logging functions to track custom metrics using `mlflow.log_*`
+
+To setup the invironment which includes MLflow, `mlflow` and `azureml-flow` packages needs to be installed.
+
+```yml
+    name: mlflow-env
+    channels:
+    - conda-forge
+    dependencies:
+    - python=3.8
+    - pip
+    - pip:
+        - numpy
+        - pandas
+        - scikit-learn
+        - matplotlib
+        - mlflow
+        - azureml-mlflow
+```
+
+Now for aulogging we can use `mlflow.autolog`. Autologging is supported for most popular machine learning libraries.
+For custom metric we can use `mlflow.log_*`. For example - `mlflow.log_metric("accuracy", accuracy)`, mlflow.log_param("regularization rate", reg_rate) or mlflow.log_artifact("model.pkl")
+
+When we run jobs, all the metrics and artifacts will be tracked. We can use ML studio or we can retrieve metrics related to job run using Mlflow.
+
+```python
+    # Using MLflow getting run metrics
+    # To get details of active experiments
+    experiments = mlflow.search_experiments(max_results=2)
+    for exp in experiments:
+        print(exp.name)
+    # If we want even archived experiments
+    from mlflow.entities import ViewType
+    experiments = mlflow.search_experiments(view_type=ViewType.ALL)
+    for exp in experiments:
+        print(exp.name)
+    # To retrive a specific experiment
+    exp = mlflow.get_experiment_by_name(experiment_name)
+    print(exp)
+    # To know metrics of a specifc run
+    mlflow.search_runs(exp.experiment_id)
+    # To show only the last two results by start time
+    mlflow.search_runs(exp.experiment_id, order_by=["start_time DESC"], max_results=2)
+    # We can also filter the results by hyperparameters
+    mlflow.search_runs(
+        exp.experiment_id, filter_string="params.num_boost_round='100'", max_results=2
+    )
+```
+
 ### Chapter 13. Track model training with MLflow in jobs
+
+
 
 ### Chapter 14. Perform hyperparameter tuning with Azure Machine Learning
 

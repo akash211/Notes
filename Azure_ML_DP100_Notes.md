@@ -3,9 +3,9 @@
 Most of the notes are taken from [Microsoft learn](https://learn.microsoft.com/en-us/training/courses/dp-100t01).
 Except section 7 which is taken from [Microsoft learn challenge](https://learn.microsoft.com/en-in/collections/67pkuoq3xp58?WT.mc_id=cloudskillschallenge_764de7ca-8b6d-4b3a-a491-1942af389d8c).
 
-## Section 1. Design a machine learning solution
+## <span style="color: red;"> Section 1. Design a machine learning solution</span>
 
-### Chapter 1. Design a data ingestion strategy for machine learning projects
+### <span style="color: green;"> Chapter 1. Design a data ingestion strategy for machine learning projects</span>
 
 To train a machine learning model there are 6 steps and it is iterative process:
 
@@ -27,7 +27,7 @@ This image shows all types of services used on Azure for storing data.
 
 For creating data ingestion pipelines usually Azure Databricks and Azure Synapse Analytics are used. Azure ML is also an option to create data ingestion pipeline but they do not scale well.
 
-### Chapter 2. Design a machine learning model training solution
+### <span style="color: green;"> Chapter 2. Design a machine learning model training solution</span>
 
 Some common Machine Learning tasks are:
 
@@ -61,22 +61,22 @@ To find which virtual machine/compute best fits again there is general guideline
 2. VM sizes - It can be a. general puspose where CPU to memory ratio is balanced, usually good for testing and development or b. memory optimized where memory is high.
 3. Spark - Synapse and databricks both have Spark compute option. Spark compute/cluster can have same configuration but it distribute the workloads. Spark cluster has driver node and worker nodes. Initially code written in Scala, SQL, RSpark or PySpark  communicatw with the driver node which distribute the work between worker nodes and worker nodes execute workloads which reduces processing time. Finally work is summarised and driver node sends back the final result. If we use Python here, then only driver node will be used and worker nodes will be unused. During creation of SPark cluster we can select GPU or CPU and also size of the cluster.
 
-### Chapter 3. Design a model deployment solution
+### <span style="color: green;"> Chapter 3. Design a model deployment solution</span>
 
 We can deploy a model to an endpoint to generate predictions for either real-time or batch.  
 An ednpoint is a web address that the app can call to get a message back.  
 For real-time predictions, compute should be always available. For this Azure Container Instance (ACI) or Azure Kubernetes Service (AKS) is used.  
 For batch predictions we can use computer cluster with multiple nodes. This is triggered when required and after use it is scaled down to 0 nodes.
 
-### Chapter 4. Design a machine learning operations solution
+### <span style="color: green;"> Chapter 4. Design a machine learning operations solution</span>
 
 MLOps help is scaling a model from proof of concept or pilot project to production. This is similar to DevOps. Here monitoring and Retraining is very important.  
 Retraining is done either based on schedule or based on some metrics.  
 MLOps automation is usually done using Azure Devops and Github Actions. For that scripts works best compared to notebooks. Also Azure CLI works better than Azure ML Python SDK.
 
-## Section 2. Explore and configure the Azure Machine Learning workspace
+## <span style="color: red;"> Section 2. Explore and configure the Azure Machine Learning workspace</span>
 
-### Chapter 5. Explore Azure Machine Learning workspace resources and assets
+### <span style="color: green;"> Chapter 5. Explore Azure Machine Learning workspace resources and assets</span>
 
 Azure ML workspace can be created by:
 
@@ -144,7 +144,7 @@ To train model we can use:
 - `Jupyter notebooks`: These are saved in dile share of Azure storage. They use compute instance and we can edit and run them in Notebook page of the ML studio. We can even work with them in VS code.
 - `Scripts as job`: For production ready jobs, scripts are mostly used. There are many types of jobs like Command(for single script), Sweep(for single scripts with hyperparameters tuning) and Pipleine(For running pipeline with multiple scripts and components).
 
-### Chapter 6. Explore developer tools for workspace interaction
+### <span style="color: green;"> Chapter 6. Explore developer tools for workspace interaction</span>
 
 Usually ML Studio is ideal for quick experimentation or exploring past jobs. But for repetitive work or to automate tasks Azure CL or Python SDK are more ideal. Any time a script or pipeline is run, it will create a job in Azure Machine Learning.
 `1. Python SDK` :
@@ -196,7 +196,7 @@ Then to create resource we can use:
 az ml compute create --file compute.yaml
 ```
 
-### Chapter 7. Make data available in Azure Machine Learning
+### <span style="color: green;"> Chapter 7. Make data available in Azure Machine Learning</span>
 
 Uniform Resource Identifiers(URIs) are used to access the data in Azure ML. URIs references location of the data. There are 3 protocols used for connecting:
 
@@ -282,7 +282,7 @@ There are 3 types of data assets:
         header: all_files_same_headers
     ````
 
-### Chapter 8. Work with compute targets in Azure Machine Learning
+### <span style="color: green;"> Chapter 8. Work with compute targets in Azure Machine Learning</span>
 
 Types of compute in Azure ML:
 
@@ -319,7 +319,7 @@ Types of compute in Azure ML:
     ml_client.begin_create_or_update(cluster_basic).result()
 ```
 
-### Chapter 9. Work with environments in Azure Machine Learning
+### <span style="color: green;"> Chapter 9. Work with environments in Azure Machine Learning</span>
 
 A lot of curated environment are already available in our workspaces. They use Prefix AzureML.
 
@@ -337,9 +337,9 @@ A lot of curated environment are already available in our workspaces. They use P
 When running a job we can specify name of environment to be used.  
 We can define an environment from a Docker image, a Docker build context, and a conda specification with Docker image.
 
-## Section 3. Experiment with Azure Machine Learning
+## <span style="color: red;"> Section 3. Experiment with Azure Machine Learning</span>
 
-### Chapter 10. Find the best classification model with Automated Machine Learning
+### <span style="color: green;"> Chapter 10. Find the best classification model with Automated Machine Learning</span>
 
 ```python
 # To use MLTable datasset as input for Automated Machine Learning
@@ -358,7 +358,6 @@ We can also configure optional featurization which can include:
 - Feature engineering (like extracting date from datetime features)
 
 We can turn them off if we want. After AutoML experiment we can also check what all scaling or normalization was applied and if AutoML detected any issue with the data. Usually there are three status Passed, Done (where AutoML made some changes, we should review that) and Alerted (where AutoML detected some issue with the data but could not fix it, we should review).
-
 
 AutoML requires MLTable data asset as input.
 
@@ -407,7 +406,7 @@ To monitor job:
     print("Monitor your job at", aml_url)
 ```
 
-### Chapter 11. Track model training in Jupyter notebooks with MLflow
+### <span style="color: green;"> Chapter 11. Track model training in Jupyter notebooks with MLflow</span>
 
 MLflow is an open-source library for tracking and managing your machine learning experiments. In particular, MLflow Tracking is a component of MLflow that logs everything about the model you're training, such as parameters, metrics, and artifacts. The azureml-mlflow package contains the integration code of Azure Machine Learning with MLflow. To use these:
 
@@ -441,9 +440,30 @@ To group model training results, we use experiments. To track model metrics with
         mlflow.log_metric("accuracy", accuracy) # We can use log_param, log_metric, log_artifact also
 ```
 
-## Section 4. Optimize model training with Azure Machine Learning
+## <span style="color: red;"> Section 4. Optimize model training with Azure Machine Learning</span>
 
-### Chapter 12. Run a training script as a command job in Azure Machine Learning
+### <span style="color: green;"> Chapter 12. Run a training script as a command job in Azure Machine Learning</span>
+
+To run a script as a command job, we need to specify some paramters:
+
+- code: path to the script
+- command: python script.py
+- environment: name of the environment
+- compute: name of the compute cluster
+- display_name: name of the job
+- experiment_name: name of the experiment the job belongs to
+
+```python
+    # to create job
+    from azure.ai.ml import command
+    job = command(code="./src", command="python script.py", environment="AzureML-sklearn-0.24-ubuntu18.04-py37-cpu:1", compute="cpu-cluster", display_name="train-model, experiment_name="my-experiment")
+    # to connect to and submit job
+    returned_job = ml_client.jobs.create_or_update(job)
+```
+
+We can also use argparse to pass arguments to the script. In the command we use `python script.py --arg1 value1 --arg2 value2` to pass arguments to the job.
+
+### <span style="color: green;"> Chapter 13. Track model training with MLflow in jobs</span>
 
 MLflow is an open-source platform, designed to manage the complete machine learning lifecycle.  
 There are two options to track machine learning jobs with MLflow:
@@ -498,32 +518,105 @@ When we run jobs, all the metrics and artifacts will be tracked. We can use ML s
     )
 ```
 
-### Chapter 13. Track model training with MLflow in jobs
+### <span style="color: green;"> Chapter 14. Perform hyperparameter tuning with Azure Machine Learning</span>
 
 
 
-### Chapter 14. Perform hyperparameter tuning with Azure Machine Learning
+### <span style="color: green;"> Chapter 15. Run pipelines in Azure Machine Learning</span>
 
-### Chapter 15. Run pipelines in Azure Machine Learning
+Components are reusable parts of code that can be used in multiple projects. We can write components and specify name, version, code and environment needed to run the code. Usually used in pipelines. They consist of 3 parts:
 
-## Section 5. Manage and review models in Azure Machine Learning
+- `Metadata`: Name, Version, Description
+- `Interface`: Includes input paramaters and output metrics and artifacts
+- `Command, Code and Environment`: Specifies how to run the code
 
-### Chapter 16. Register an MLflow model in Azure Machine Learning
+To create a component two files are required:
 
-### Chapter 17. Create and explore the Responsible AI dashboard for a model in Azure Machine Learning
+- A script that contains the workflow to execute
+- A YAML file which defines metadata, interface, command, script with workflow code, environment of the component. (2nd option is to use command_component() decorator)
 
-## Section 6. Deploy and consume models with Azure Machine Learning
+```python
+    # To create a component 
+    from azure.ai.ml import load_component
+    loaded_component_prep = load_component(source="./prep.yml")
 
-### Chapter 18. Deploy a model to a managed online endpoint
+    # To register a component in a pipeline
+    prep = ml_client.components.create_or_update(loaded_component_prep)
+```
 
-### Chapter 19. Deploy a model to a batch endpoint
+In Azure ML, a pipeline is a workflow of machine learning tasks in which each task is defined as a component. Components can be arranged sequentially or in parallel. Each component can run on different compute targets.  
+We can define pipeline in YAML file or use`@pipeline()` decorator.
 
-## Section 7. Other topics from challanges
+```python
+    from azure.ai.ml.dsl import pipeline
+    from azure.ai.ml import Input
+    from azure.ai.ml.constants import AssetTypes
 
-### Chapter 20. Understand the Transformer architecture and explore large language models in Azure Machine Learning
+    # To create a pipeline
+    @pipeline()
+    def pipeline_function_name(pipeline_job_input):
+        prep_data = loaded_component_prep(input_data=pipeline_job_input)
+        train_model = loaded_component_train(training_data=prep_data.outputs.output_data)
 
-### Chapter 21. Fine-tune a foundation model with Azure Machine Learning
+        return {
+            "pipeline_job_transformed_data": prep_data.outputs.output_data,
+            "pipeline_job_trained_model": train_model.outputs.model_output,
+        }
+    # To register a pipeline
+    pipeline_job = pipeline_function_name(
+        Input(type=AssetTypes.URI_FILE, 
+        path="azureml:data:1"
+    ))
+    # The output of this pipeline is in YAML file and can be retrieved using
+    print(pipeline_job)
+    # To run a pipeline
+    pipeline_job = ml_client.jobs.create_or_update(pipeline_job, experiment_name="pipeline_job")
+```
 
-### Chapter 22. Get started with prompt flow to develop Large Language Model (LLM) apps
+This pipeline_job will be parent joba nd there will be child job for this. We can also schedule the pipeline job.
 
-### Chapter 23. Train a model and debug it with Responsible AI dashboard
+```python
+    # Create a schedule
+    from azure.ai.ml.entities import RecurrenceTrigger
+    schedule_name = "run_every_minute"
+    recurrence_trigger = RecurrenceTrigger(
+        frequency="minute",
+        interval=1,
+    )
+    # Schedule the pipeline according to created schedule
+    from azure.ai.ml.entities import JobSchedule
+    job_schedule = JobSchedule(
+        name=schedule_name, trigger=recurrence_trigger, create_job=pipeline_job
+    )
+    job_schedule = ml_client.schedules.begin_create_or_update(
+        schedule=job_schedule
+    ).result()
+
+    # For deleting a schedule, we need to first disable it:
+    ml_client.schedules.begin_disable(name=schedule_name).result()
+    ml_client.schedules.begin_delete(name=schedule_name).result()
+```
+
+## <span style="color: red;"> Section 5. Manage and review models in Azure Machine Learning</span>
+
+### <span style="color: green;"> Chapter 16. Register an MLflow model in Azure Machine Learning</span>
+
+### <span style="color: green;"> Chapter 17. Create and explore the Responsible AI dashboard for a model in Azure Machine Learning</span>
+
+## <span style="color: red;"> Section 6. Deploy and consume models with Azure Machine Learning</span>
+
+### <span style="color: green;"> Chapter 18. Deploy a model to a managed online endpoint</span>
+
+### <span style="color: green;"> Chapter 19. Deploy a model to a batch endpoint</span>
+
+## <span style="color: red;"> Section 7. Other topics from challanges</span>
+
+### <span style="color: green;"> Chapter 20. Understand the Transformer architecture and explore large language models in Azure Machine Learning</span>
+
+### <span style="color: green;"> Chapter 21. Fine-tune a foundation model with Azure Machine Learning</span>
+
+### <span style="color: green;"> Chapter 22. Get started with prompt flow to develop Large Language Model (LLM) apps</span>
+
+### <span style="color: green;"> Chapter 23. Train a model and debug it with Responsible AI dashboard</span>
+
+Appendices: <https://learn.microsoft.com/en-us/training/paths/introduction-machine-learn-operations/>

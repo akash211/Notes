@@ -520,6 +520,186 @@ When we run jobs, all the metrics and artifacts will be tracked. We can use ML s
 
 ### <span style="color: green;"> Chapter 14. Perform hyperparameter tuning with Azure Machine Learning</span>
 
+1. Hyperparameters are parameters that can be tuned during the training process. Like regularization rate or number of trees in a random forest. It is used to configure training behaviour and not derived from the data. This greatly affects the performance of the model.
+2. Hyperparamter tuning  is done by training the multiple models which uses the same algorithm and training data but different hyperparamter values. Then by checking performance metrics we can choose the best model.
+3. In Azure ML, to tune hyperparameters we use a script called `sweep job`.
+4. The set of hyperparameters values tried is called `search space`. In this discrete hyperparamters are selected using `choice` function from a fixed number of choices. In continuous hyperparameters the values can be anything on a scale and uses Uniform(), Normal(), LogNormal(), etc like functions.
+
+```python
+    # To define a search space
+    from azure.ai.ml.sweep import Choice, Normal
+
+    command_job_for_sweep = job(batch_size=Choice(values=[16, 32, 64]), learning_rate=Normal(mu=10, sigma=3))
+    # batch_size is discrete hyperparameter while learning_rate is continuous
+```
+
+There are different sampling methods for using the values from search space.
+
+```python
+    # 1. Grid Sampling which tries every possible combinations
+    # It can only be used if all the hyperparameters are discrete
+    from azure.ai.ml.sweep import Choice
+
+    command_job_for_sweep = command_job(
+        batch_size=Choice(values=[16, 32, 64]),
+        learning_rate=Choice(values=[0.01, 0.1, 1.0]),
+    )
+
+    sweep_job = command_job_for_sweep.sweep(
+        sampling_algorithm = "grid",
+        ...
+    )
+
+    # 2. Random Sampling which randomly select the values 
+    # In this caseyperparameters can be discrete and continuous both
+    from azure.ai.ml.sweep import Normal, Uniform
+
+    command_job_for_sweep = command_job(
+        batch_size=Choice(values=[16, 32, 64]),   
+        learning_rate=Normal(mu=10, sigma=3),
+    )
+
+    sweep_job = command_job_for_sweep.sweep(
+        sampling_algorithm = "random",
+        ...
+    )
+
+    # 2A. Sobol is a type of random sampling but it has seed parameter used to reproduce the random samples
+    from azure.ai.ml.sweep import RandomSamplingAlgorithm
+
+    sweep_job = command_job_for_sweep.sweep(
+        sampling_algorithm = RandomSamplingAlgorithm(seed=123, rule="sobol"),
+        ...
+    )
+
+    # 3. Bayesian Sampling which uses bayesian optimization algorithms
+    # It tries to use the combinations that should result in improved performance from the previous selection
+    # Bayesian sampling is used only with choice, uniform and quniform
+    from azure.ai.ml.sweep import Uniform, Choice
+
+    command_job_for_sweep = job(
+        batch_size=Choice(values=[16, 32, 64]),    
+        learning_rate=Uniform(min_value=0.05, max_value=0.1),
+    )
+
+    sweep_job = command_job_for_sweep.sweep(
+        sampling_algorithm = "bayesian",
+        ...
+    )
+```
+
+We can also use the `early_termination_policy` to stop the search after a certain number of iterations. Usually this is used in case of continuous hyperparameters as they can have infinite number of options.  
+There are two parameters used for early termination policy:
+
+- `evaluation_interval`: Number of iterations between each evaluation
+- `delay_evaluation`: Number of iterations to wait before starting evaluation
+
+Evaluation here means whenever the pimary metric is logged for a trial.
+
+```python
+# There are 3 methods to apply early termination policy
+    from azure.ai.ml.sweep import TruncationSelectionPolicy
+    from azure.ai.ml.sweep import MedianStoppingPolicy
+    from azure.ai.ml.sweep import BanditPolicy
+
+    # In Bandit policy we can provide a slack_factor(relative) or slack_amount(absolute) and it checks if new model is performing better than the slack range of the best performing model.
+    # For example, the following code applies a bandit policy with a delay of five trials, evaluates the policy at every interval, and allows an absolute slack amount of 0.2. If accuracy is the primary metric, and the accuracy of best model so far is 0.8 then till the accuracy of new model is more than 0.8 - 0.2 = 0.6, the new model is allowed. If accuracy decreases below 0.6, the job will be terminated.
+    sweep_job.early_termination = BanditPolicy(
+        slack_amount = 0.2, 
+        delay_evaluation = 5, 
+        evaluation_interval = 1
+    )
+
+    # In Median stopping policy we can early terminate if the new model metric is not better than the median of previous models.
+    # For example if the metric is accuracy and median of first 6 models is 0.7 and the new model is 0.6, the job will be terminated.
+    sweep_job.early_termination = MedianStoppingPolicy(
+        delay_evaluation = 5, 
+        evaluation_interval = 1
+    )
+
+    # In Truncation selection policy we can early terminate if the new model metric is worst then a % of the models. 
+    # For example if the metric is accuracy and 5 evaluations has happened then for 20% truncation percentage it will be 1 evaluation. So, till new model is not the worst one, the job will continue. After 10 evaluations if the new model is not better than 2 then job will be terminated.
+    sweep_job.early_termination = TruncationSelectionPolicy(
+        evaluation_interval=1, 
+        truncation_percentage=20, 
+        delay_evaluation=4 
+    )
+```
+
+To run a sweep job, we need to include an argument for each hyperparameter and log the target performance metric with MLflow. So logged metric helps in finding best models. Below is the code for the same:
+
+```python
+    # This is ML script to train a logistic regression model
+    import argparse
+    import pandas as pd
+    import numpy as np
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LogisticRegression
+    import mlflow
+
+    # get regularization hyperparameter
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--regularization', type=float, dest='reg_rate', default=0.01) # hyperparameter
+    args = parser.parse_args()
+    reg = args.reg_rate
+
+    # load the training dataset
+    data = pd.read_csv("data.csv")
+
+    # separate features and labels, and split for training/validatiom
+    X = data[['feature1','feature2','feature3','feature4']].values
+    y = data['label'].values
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.30)
+
+    # train a logistic regression model with the reg hyperparameter
+    model = LogisticRegression(C=1/reg, solver="liblinear").fit(X_train, y_train)
+
+    # calculate and log accuracy
+    y_hat = model.predict(X_test)
+    acc = np.average(y_hat == y_test)
+    mlflow.log_metric("Accuracy", acc)
+```
+
+```python
+    from azure.ai.ml import command
+    from azure.ai.ml.sweep import Choice
+    from azure.ai.ml import MLClient
+
+    # To prepare sweep job
+    # configure command job as base
+    job = command(
+        code="./src",
+        command="python train.py --regularization ${{inputs.reg_rate}}",
+        inputs={
+            "reg_rate": 0.01,
+        },
+        environment="AzureML-sklearn-0.24-ubuntu18.04-py37-cpu@latest",
+        compute="aml-cluster",
+        )
+
+    # To override input parameter with search space
+    command_job_for_sweep = job(
+        reg_rate=Choice(values=[0.01, 0.1, 1]),
+    )
+
+    # apply the sweep parameter to obtain the sweep_job
+    sweep_job = command_job_for_sweep.sweep(
+        compute="aml-cluster",
+        sampling_algorithm="grid",
+        primary_metric="Accuracy",
+        goal="Maximize",
+    )
+
+    # set the name of the sweep job experiment
+    sweep_job.experiment_name="sweep-example"
+
+    # define the limits for this sweep
+    sweep_job.set_limits(max_total_trials=4, max_concurrent_trials=2, timeout=7200)
+
+    # submit the sweep
+    returned_sweep_job = ml_client.create_or_update(sweep_job)
+
+```
 
 
 ### <span style="color: green;"> Chapter 15. Run pipelines in Azure Machine Learning</span>

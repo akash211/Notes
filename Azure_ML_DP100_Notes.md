@@ -701,7 +701,6 @@ To run a sweep job, we need to include an argument for each hyperparameter and l
 
 ```
 
-
 ### <span style="color: green;"> Chapter 15. Run pipelines in Azure Machine Learning</span>
 
 Components are reusable parts of code that can be used in multiple projects. We can write components and specify name, version, code and environment needed to run the code. Usually used in pipelines. They consist of 3 parts:
@@ -781,7 +780,110 @@ This pipeline_job will be parent joba nd there will be child job for this. We ca
 
 ### <span style="color: green;"> Chapter 16. Register an MLflow model in Azure Machine Learning</span>
 
+
+
 ### <span style="color: green;"> Chapter 17. Create and explore the Responsible AI dashboard for a model in Azure Machine Learning</span>
+
+Microsoft classify Responsible AI principles into 5 groups:
+
+1. Fairness and Inclusiveness
+2. Accountability
+3. Reliability and Safety
+4. Transparency
+5. Privacy and Security
+
+Responsible AI dashboard can be cusomized with different insights as per our need.  
+The dasboard can be created using Python SDK or Azure CLI or Azure ML Studio.
+To create responsible AI dashboard, we need to create a pipeline using the built in components listed below:
+
+- Start with `RAI Insights dashboard constructor`
+- Include one of the `RAI tool components`
+- End with `Gather RAI Insights dashboard` to collect all insights into one dashboard
+- Optionally we can also add `Gather RAI Insights score card` at the end of the pipeline
+
+RAI tool components:
+
+- `Add Explanation to RAI Insights dashboard`: Interpret models by generating explanations. Explanations show how much features influence the prediction.
+- `Add Causal to RAI Insights dashboard`: Use historical data to view the causal effects of features on outcomes.
+- `Add Counterfactuals to RAI Insights dashboard`: Explore how a change in input would change the model's output.
+- `Add Error Analysis to RAI Insights dashboard`: Explore the distribution of your data and identify erroneous subgroups of data.
+
+For creating dashboard following steps are performed:
+
+- Register the training and test datasets as MLtable data assets
+- Register the model
+- Retrieve the built-in components to use
+- Create a pipeline
+- Register the pipeline
+- Run the pipeline
+
+```python
+    # To retrieve the built-in components
+    rai_constructor_component = ml_client_registry.components.get(
+        name="microsoft_azureml_rai_tabular_insight_constructor", label="latest"
+    )
+
+    # To add available insights
+    rai_explanation_component = ml_client_registry.components.get(
+        name="microsoft_azureml_rai_tabular_explanation", label="latest"
+    )
+
+    # Final component
+    rai_gather_component = ml_client_registry.components.get(
+        name="microsoft_azureml_rai_tabular_insight_gather", label="latest"
+    )
+
+    # Now pipeline can be created
+    from azure.ai.ml import Input, dsl
+    from azure.ai.ml.constants import AssetTypes
+
+    @dsl.pipeline(
+        compute="aml-cluster",
+        experiment_name="Create RAI Dashboard",
+    )
+    def rai_decision_pipeline(
+        target_column_name, train_data, test_data
+    ):
+        # Initiate the RAIInsights
+        create_rai_job = rai_constructor_component(
+            title="RAI dashboard diabetes",
+            task_type="classification",
+            model_info=expected_model_id,
+            model_input=Input(type=AssetTypes.MLFLOW_MODEL, path=azureml_model_id),
+            train_dataset=train_data,
+            test_dataset=test_data,
+            target_column_name="Predictions",
+        )
+        create_rai_job.set_limits(timeout=30)
+
+        # Add explanations
+        explanation_job = rai_explanation_component(
+            rai_insights_dashboard=create_rai_job.outputs.rai_insights_dashboard,
+            comment="add explanation", 
+        )
+        explanation_job.set_limits(timeout=10)
+
+        # Combine everything
+        rai_gather_job = rai_gather_component(
+            constructor=create_rai_job.outputs.rai_insights_dashboard,
+            insight=explanation_job.outputs.explanation,
+        )
+        rai_gather_job.set_limits(timeout=10)
+
+        rai_gather_job.outputs.dashboard.mode = "upload"
+
+        return {
+            "dashboard": rai_gather_job.outputs.dashboard,
+        }
+```
+
+After running the pipeline, we can see it from pipeline overview. We can also see the dashboard in the Responsible AI tab of the registered model.  
+The dashboard exploration also uses a compute instance. The  dashboard may have four components:
+
+- Error Analysis -  It has Error tree map and Error heat map.
+- Explanations - It gives feature importance details. We can get overall feature importance and per result feature importance.
+- Causal Analysis - Shows the average effcts of feature on a desired prediction. It tells how and what to change to get better result.
+- Counterfactuals - We can change inputs to see how output changes with the change in input.
 
 ## <span style="color: red;"> Section 6. Deploy and consume models with Azure Machine Learning</span>
 
@@ -798,5 +900,14 @@ This pipeline_job will be parent joba nd there will be child job for this. We ca
 ### <span style="color: green;"> Chapter 22. Get started with prompt flow to develop Large Language Model (LLM) apps</span>
 
 ### <span style="color: green;"> Chapter 23. Train a model and debug it with Responsible AI dashboard</span>
+
+Responsible AI dashboard has many tools:
+
+- Data Analysis
+- Model overview and fairness assessment
+- Error Analysis
+- Model Interpretability
+- Counterfactual what-ifs
+- Causal Analysis
 
 Appendices: <https://learn.microsoft.com/en-us/training/paths/introduction-machine-learn-operations/>

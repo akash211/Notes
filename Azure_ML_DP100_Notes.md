@@ -780,6 +780,128 @@ This pipeline_job will be parent joba nd there will be child job for this. We ca
 
 ### <span style="color: green;"> Chapter 16. Register an MLflow model in Azure Machine Learning</span>
 
+- When we train a model we can register the model with `MLflow`. `MLflow` standardizes the packaging of models, which means that an `MLflow` model can easily be imported or exported across different workflows. For example a model in development can be moved to production using `MLflow`. When we register the model, an `MLmodel` file gets created in the model artifact directory and this `MLmodel` file contains the models's metadata.
+- We can register models with `MLflow` by enabling `autologging` or by using `custom logging`.  
+- A model can be used as model or as an artifact. When we log a model as artifact then model is treated as a file while when we log model as a model, then registered model will have additional information which helps in moving models directly in pipelines or deployments.
+- The schema of the expected inputs and outputs are defined as the signature in the `Mlmodel` file. When we deploy model and the inputs do not match the defined schema in the signature then there may be errors. The signature is stored in json format in the `MLmodel` file. The model signature can be inferred from datasets or can be created manually.
+
+```python
+    # To infer signature from datasets
+    import pandas as pd
+    from sklearn import datasets
+    from sklearn.ensemble import RandomForestClassifier
+    import mlflow
+    import mlflow.sklearn
+    from mlflow.models.signature import infer_signature
+
+    iris = datasets.load_iris()
+    iris_train = pd.DataFrame(iris.data, columns=iris.feature_names)
+    clf = RandomForestClassifier(max_depth=7, random_state=0)
+    clf.fit(iris_train, iris.target)
+    # Infer the signature from the training dataset and model's predictions
+    signature = infer_signature(iris_train, clf.predict(iris_train))
+    # Log the scikit-learn model with the custom signature
+    mlflow.sklearn.log_model(clf, "iris_rf", signature=signature)
+
+    # TO create signature manually
+    from mlflow.models.signature import ModelSignature
+    from mlflow.types.schema import Schema, ColSpec
+
+    # Define the schema for the input data
+    input_schema = Schema([
+    ColSpec("double", "sepal length (cm)"),
+    ColSpec("double", "sepal width (cm)"),
+    ColSpec("double", "petal length (cm)"),
+    ColSpec("double", "petal width (cm)"),
+    ])
+    # Define the schema for the output data
+    output_schema = Schema([ColSpec("long")])
+    # Create the signature object
+    signature = ModelSignature(inputs=input_schema, outputs=output_schema)
+```
+
+The `MLmodel` file can include:
+
+- artifact_path : this is the path where logging happens
+- flavor : ML library used to create the model
+- model_uuid : Unique identifier for the model
+- run_id : Unique identifier for the job run during which the model was created
+- signature : It has two parts Inputs and Outputs. Inputs keeps valid inputs and outputs keep model output like predictions.
+  
+Below is example yml file which was created using fastai.
+
+```yml
+    artifact_path: classifier
+    flavors:
+        fastai:
+            data: model.fastai
+            fastai_version: 2.4.1
+        python_function:
+            data: model.fastai
+            env: conda.yaml
+            loader_module: mlflow.fastai
+            python_version: 3.8.12
+    model_uuid: e694c68eba484299976b06ab9058f636
+    run_id: e13da8ac-b1e6-45d4-a9b2-6a0a5cfac537
+    signature:
+        inputs: '[{"type": "tensor",
+                    "tensor-spec": 
+                        {"dtype": "uint8", "shape": [-1, 300, 300, 3]}
+                }]'
+        outputs: '[{"type": "tensor", 
+                    "tensor-spec": 
+                        {"dtype": "float32", "shape": [-1,2]}
+                    }]'
+```
+
+We can see most complex to setup are flavors and signatures. There are two types of signature - 
+
+- Column based : which are tabular and uses pandas dataframe as inputs
+- Tensor based : Usually used for unstructured data like images or text. Used or n-dimensional arrays or tensors with numpy ndarrays as inputs.
+
+In case of autologging signature is inferred but if we have to change the signature then will have to custom logging.
+
+- To manage the models we can store a model in the Azure ML model registry.
+- The model registry makes it easy to organise and keep track of trained models.
+- When we register a model, we store and version the model in the workspace. So registered model can be identified by name and version. Whenever we register a model with the same name its version is incremented.
+- We can add more metadata tags to easily search for a specific model (addition to name and version).
+- Even models trained outside Azure can be registered by providing local path to the model's artifact.
+- There are 3 types of models to register:
+
+1. MLflow : Models trained and logged using Mlflow, and recommended way on Azure
+2. Xgboost : Models trained with a custom standard currently not supported by Azure ML
+3. Fastai : Deep learning models. Used mostly for Tensorflow and PyTorch models.
+
+```python
+from azure.ai.ml import command
+from azure.ai.ml.entities import Model
+from azure.ai.ml.constants import AssetTypes
+
+job = command(
+    code="./src",
+    command="python train-model-signature.py --training_data diabetes.csv",
+    environment="AzureML-sklearn-0.24-ubuntu18.04-py37-cpu@latest",
+    compute="aml-cluster",
+    display_name="diabetes-train-signature",
+    experiment_name="diabetes-training"
+    )
+
+# submit job
+returned_job = ml_client.create_or_update(job)
+aml_url = returned_job.studio_url
+print("Monitor your job at", aml_url)
+
+job_name = returned_job.name
+
+run_model = Model(
+    path=f"azureml://jobs/{job_name}/outputs/artifacts/paths/model/",
+    name="mlflow-diabetes",
+    description="Model created from run.",
+    type=AssetTypes.MLFLOW_MODEL,
+)
+# This will register model
+ml_client.models.create_or_update(run_model)
+```
 
 
 ### <span style="color: green;"> Chapter 17. Create and explore the Responsible AI dashboard for a model in Azure Machine Learning</span>
@@ -902,12 +1024,16 @@ The dashboard exploration also uses a compute instance. The  dashboard may have 
 ### <span style="color: green;"> Chapter 23. Train a model and debug it with Responsible AI dashboard</span>
 
 Responsible AI dashboard has many tools:
+  
+| Tool | Description |
+| --- | --- |
+| Data analysis | To understand and explore your dataset distributions and statistics. |
+| Model overview and fairness assessment | To evaluate the performance of your model and evaluate your model's group fairness issues (how your model's predictions affect diverse groups of people) |
+| Error analysis | To view and understand how errors are distributed in your dataset. |
+| Model interpretability (importance values for aggregate and individual features) | To understand your model's predictions and how those overall and individual predictions are made. |
+| Counterfactual what-if | To observe how feature perturbations would affect your model predictions while providing the closest data points with opposing or different model predictions. For example: Taylor would have obtained a loan approval from the AI system if they earned $10,000 more in annual income and had two fewer credit cards open. |
+| Causal analysis | To estimate how a real-world outcome changes in the presence of an intervention. It also helps construct promising interventions by simulating feature responses to various interventions and creating rules to determine which population cohorts would benefit from a particular intervention. Collectively, these functionalities allow you to apply new policies and effect real-world change. For example, how would providing promotional values to certain customers affect revenue? The capabilities of the causal analysis tool come from the EconML package, which estimates heterogeneous treatment effects from observational data via machine learning.|
 
-- Data Analysis
-- Model overview and fairness assessment
-- Error Analysis
-- Model Interpretability
-- Counterfactual what-ifs
-- Causal Analysis
+Ouf of these Causal analysis and counterfactuals are used for business decision making while rest are used for model debugging.
 
 Appendices: <https://learn.microsoft.com/en-us/training/paths/introduction-machine-learn-operations/>

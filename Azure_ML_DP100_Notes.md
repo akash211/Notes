@@ -1011,7 +1011,303 @@ The dashboard exploration also uses a compute instance. The  dashboard may have 
 
 ### <span style="color: green;"> Chapter 18. Deploy a model to a managed online endpoint</span>
 
+- An endpoint is an HTTPS endpoint that can be used to send data and which will return a response immediately. The data send works as input for the model and scoring script loads the trained model to predict the label for the new input data. This is called inferencing. The label returned is part of response from the endpoint.
+- We can use `online endpoint` to deploy the model. In Azure ML there can be `Managed online endpoints` and `Kubernetes Online endpoints`.
+- After creating endpoint, model can be deployed there. For that below things are required:
+
+  - A registered model in Azure ML workspace or model pickle file
+  - Scoring script that loads the model
+  - Environment which lists all the necessary packages that need to be installed
+  - Compute configuration like compute size, scale settings
+  
+- If we are deploying MLflow model, scoring script and environment are automatically generated.
+
+One endpoint can have multiple deployments. One of the approach used here is blue/green deployment.
+In this the first version of model deployed is blude version. When we get new data and model get retrained it will be green version. Now 90% of the traffic initially can go to first version and rest 10% to green version. Later if green version is confirmed to be working good, traffic gradually or mostly can be moved there. In case green does not perform better, it can be rolled back and traffic can be redirected to blue.
+
+```python
+# To create an endpoint
+from azure.ai.ml.entities import ManagedOnlineEndpoint
+
+# create an online endpoint
+endpoint = ManagedOnlineEndpoint(
+    name="endpoint-example",
+    description="Online endpoint",
+    auth_mode="key",
+)
+
+ml_client.begin_create_or_update(endpoint).result()
+```
+
+Easient way to deploy a model is to use MLflow model and deploy it as an managedonline endpoint.
+
+```python
+from azure.ai.ml.entities import Model, ManagedOnlineDeployment
+from azure.ai.ml.constants import AssetTypes
+
+# create a blue deployment
+model = Model(
+    path="./model",
+    type=AssetTypes.MLFLOW_MODEL,
+    description="my sample mlflow model",
+)
+
+blue_deployment = ManagedOnlineDeployment(
+    name="blue",
+    endpoint_name="endpoint-example",
+    model=model,
+    instance_type="Standard_F4s_v2",
+    instance_count=1,
+)
+
+ml_client.online_deployments.begin_create_or_update(blue_deployment).result()
+
+# Since there is only one model right now so 100% traffic will be used but to change
+# blue deployment takes 100 traffic
+endpoint.traffic = {"blue": 100}
+ml_client.begin_create_or_update(endpoint).result()
+
+# To delete the endpoint and associated deployments:
+ml_client.online_endpoints.begin_delete(name="endpoint-example")
+```
+
+We can also use managed online endpoint for models not using MLflow format. For thsi we need to create scoring script and define environment.
+
+to define environment, we need to create environment yaml file called conda.yml.
+
+```yml
+    name: basic-env-cpu
+    channels:
+    - conda-forge
+    dependencies:
+    - python=3.7
+    - scikit-learn
+    - pandas
+    - numpy
+    - matplotlib
+
+```
+
+```python
+    # To create scoring script
+    import json
+    import joblib
+    import numpy as np
+    import os
+
+    # called when the deployment is created or updated
+    def init():
+        global model
+        # get the path to the registered model file and load it
+        model_path = os.path.join(os.getenv('AZUREML_MODEL_DIR'), 'model.pkl')
+        model = joblib.load(model_path)
+
+    # called when a request is received
+    def run(raw_data):
+        # get the input data as a numpy array
+        data = np.array(json.loads(raw_data)['data'])
+        # get a prediction from the model
+        predictions = model.predict(data)
+        # return the predictions as any JSON serializable format
+        return predictions.tolist()
+
+    # To create environment
+    from azure.ai.ml.entities import Environment
+
+    env = Environment(
+        image="mcr.microsoft.com/azureml/openmpi3.1.2-ubuntu18.04",
+        conda_file="./src/conda.yml",
+        name="deployment-environment",
+        description="Environment created from a Docker image plus Conda environment.",
+    )
+    ml_client.environments.create_or_update(env)
+
+    # To create deployment
+    from azure.ai.ml.entities import ManagedOnlineDeployment, CodeConfiguration
+
+    model = Model(path="./model",
+
+    blue_deployment = ManagedOnlineDeployment(
+        name="blue",
+        endpoint_name="endpoint-example",
+        model=model,
+        environment="deployment-environment",
+        code_configuration=CodeConfiguration(
+            code="./src", scoring_script="score.py"
+        ),
+        instance_type="Standard_DS2_v2",
+        instance_count=1,
+    )
+
+    ml_client.online_deployments.begin_create_or_update(blue_deployment).result()
+```
+
+We can test the endpoint using Azure ML, endpoints tab and by giving sample input data. We can also use python SDK for the same.
+
+```python
+# test the blue deployment with some sample data
+response = ml_client.online_endpoints.invoke(
+    endpoint_name=online_endpoint_name,
+    deployment_name="blue",
+    request_file="sample-data.json",
+)
+
+if response[1]=='1':
+    print("Yes")
+else:
+    print ("No")
+```
+
 ### <span style="color: green;"> Chapter 19. Deploy a model to a batch endpoint</span>
+
+Batch endpoint is used in cases where the model runs longer and the results are saved in a file or database.
+In this case endpoint is used to trigger a batch scroring job. The trigger can be achived even by Azure Synapse or Azure Databricks.
+
+```python
+    # create a batch endpoint
+    endpoint = BatchEndpoint(
+        name="endpoint-example",
+        description="A batch endpoint",
+    )
+
+    ml_client.batch_endpoints.begin_create_or_update(endpoint)
+
+    # Batch endpoint uses compute cluster
+    from azure.ai.ml.entities import AmlCompute
+
+    cpu_cluster = AmlCompute(
+        name="aml-cluster",
+        type="amlcompute",
+        size="STANDARD_DS11_V2",
+        min_instances=0,
+        max_instances=4,
+        idle_time_before_scale_down=120,
+        tier="Dedicated",
+    )
+
+    cpu_cluster = ml_client.compute.begin_create_or_update(cpu_cluster)
+```
+
+```python
+# If we use MLflow model in batch endpoint case
+# To register the model
+from azure.ai.ml.entities import Model
+from azure.ai.ml.constants import AssetTypes
+
+model_name = 'mlflow-model'
+model = ml_client.models.create_or_update(
+    Model(name=model_name, path='./model', type=AssetTypes.MLFLOW_MODEL)
+)
+
+# To deploy a batch endpoint
+from azure.ai.ml.entities import BatchDeployment, BatchRetrySettings
+from azure.ai.ml.constants import BatchDeploymentOutputAction
+
+deployment = BatchDeployment(
+    name="forecast-mlflow",
+    description="A sales forecaster",
+    endpoint_name=endpoint.name,
+    model=model,
+    compute="aml-cluster",
+    instance_count=2,
+    max_concurrency_per_instance=2,
+    mini_batch_size=2,
+    output_action=BatchDeploymentOutputAction.APPEND_ROW,
+    output_file_name="predictions.csv",
+    retry_settings=BatchRetrySettings(max_retries=3, timeout=300),
+    logging_level="info",
+)
+ml_client.batch_deployments.begin_create_or_update(deployment)
+```
+
+Here also we can deploy custom model.
+
+```yml
+    name: basic-env-cpu
+    channels:
+    - conda-forge
+    dependencies:
+    - python=3.8
+    - pandas
+    - pip
+    - pip:
+        - azureml-core
+        - mlflow
+```
+
+```python
+    # To create scoring script  
+    import os
+    import mlflow
+    import pandas as pd
+
+
+    def init():
+        global model
+
+        # get the path to the registered model file and load it
+        model_path = os.path.join(os.environ["AZUREML_MODEL_DIR"], "model")
+        model = mlflow.pyfunc.load(model_path)
+
+
+    def run(mini_batch):
+        print(f"run method start: {__file__}, run({len(mini_batch)} files)")
+        resultList = []
+
+        for file_path in mini_batch:
+            data = pd.read_csv(file_path)
+            pred = model.predict(data)
+
+            df = pd.DataFrame(pred, columns=["predictions"])
+            df["file"] = os.path.basename(file_path)
+            resultList.extend(df.values)
+
+        return resultList
+
+    # Create environment using yml file defined above
+    from azure.ai.ml.entities import Environment
+
+    env = Environment(
+        image="mcr.microsoft.com/azureml/openmpi3.1.2-ubuntu18.04",
+        conda_file="./src/conda-env.yml",
+        name="deployment-environment",
+        description="Environment created from a Docker image plus Conda environment.",
+    )
+    ml_client.environments.create_or_update(env)
+
+    # To create deployment
+    from azure.ai.ml.entities import BatchDeployment, BatchRetrySettings
+    from azure.ai.ml.constants import BatchDeploymentOutputAction
+
+    deployment = BatchDeployment(
+        name="forecast-mlflow",
+        description="A sales forecaster",
+        endpoint_name=endpoint.name,
+        model=model,
+        compute="aml-cluster",
+        code_path="./code",
+        scoring_script="score.py",
+        environment=env,
+        instance_count=2,
+        max_concurrency_per_instance=2,
+        mini_batch_size=2,
+        output_action=BatchDeploymentOutputAction.APPEND_ROW,
+        output_file_name="predictions.csv",
+        retry_settings=BatchRetrySettings(max_retries=3, timeout=300),
+        logging_level="info",
+    )
+    ml_client.batch_deployments.begin_create_or_update(deployment)
+
+    # Now to trigger the endpoint
+    from azure.ai.ml import Input
+    from azure.ai.ml.constants import AssetTypes
+
+    input = Input(type=AssetTypes.URI_FOLDER, path="azureml:new-data:1")
+
+    job = ml_client.batch_endpoints.invoke(
+        endpoint_name=endpoint.name, 
+        input=input)
+```
 
 ## <span style="color: red;"> Section 7. Other topics from challanges</span>
 

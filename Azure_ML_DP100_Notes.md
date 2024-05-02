@@ -1313,6 +1313,38 @@ Here also we can deploy custom model.
 
 ### <span style="color: green;"> Chapter 20. Understand the Transformer architecture and explore large language models in Azure Machine Learning</span>
 
+Tokens are strings with a known meaning, usually representing a word. Tokenization is turning words into tokens, which are then converted to numbers. A statistical approach to tokenization is by using a pipeline:
+
+- Tokenize
+- Split
+- Stemming
+- Stop word removal
+- Assigning a numeric value to each token
+
+Two popular statistical techniques for NLP:
+
+- Naive Bayes: This technique finds which group of words only occurs in one type of document and not in the other. The group of words is often referred to as bag-of-words features. Here only presence of a word is considered not position.
+- TF-IDF (Term Frequency - Inverse Document Frequency): This technique finds how common a word is in a document. Useful for search engines in understanding a document's relevance to a search query.
+
+NLP using Deep learning: 
+
+1. Word embeddings represent words in a vector space, so that the relationship between words can be easily described and calculated. Word embeddings are created during self-supervised learning. During the training process, the model analyzes the cooccurrence patterns of words in sentences and learns to represent them as vectors. The vectors represent the words with coordinates in a multidimensional space. The distance between words can then be calculated by determining the distance between the relative vectors, describing the semantic relationship between words.
+2. RNN: Recurrent neural network, consist of multiple sequential steps. Each step takes an input and a hidden state. Imagine the input at each step to be a new word. Each step also produces an output. The hidden state can serve as a memory of the network, storing the output of the previous step and passing it as input to the next step. RNNs allow for context to be included when deciphering the meaning of a word in relation to the complete sentence. However, as the hidden state of an RNN is updated with each token, the actual relevant information, or signal, may be lost.
+3. Transformer:
+    - The Transformer architecture is a type of neural network that's commonly used for Natural Language Processing (NLP) tasks.
+    - It's called the "Transformer" architecture because it transforms input data into a different representation.
+    - The Transformer architecture is composed of two main components: the Encoder and the Decoder.
+    - The Encoder is a stack of identical layers that process the input data sequentially.
+    - Each layer in the Encoder is a self-attention mechanism that applies attention to the input data.
+    - Self-attention is a way of computing a weighted sum of the input data, where the weights are learned during training.
+    - The output of the Encoder is a sequence of vectors, each representing the input data in a different way.
+    - The Decoder is also a stack of identical layers that process the output of the Encoder sequentially.
+    - Each layer in the Decoder is a self-attention mechanism that applies attention to the output of the Encoder.
+    - The output of the Decoder is a sequence of vectors, each representing the output data in a different way.
+    - Attention is a way of computing a weighted sum of the input data, where the weights are learned during training.
+    - The output of the self-attention mechanism is a weighted sum of the value vectors, where the weights are learned during training.
+
+
 ### <span style="color: green;"> Chapter 21. Fine-tune a foundation model with Azure Machine Learning</span>
 
 ### <span style="color: green;"> Chapter 22. Get started with prompt flow to develop Large Language Model (LLM) apps</span>

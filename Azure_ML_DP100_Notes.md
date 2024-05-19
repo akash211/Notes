@@ -854,7 +854,7 @@ Below is example yml file which was created using fastai.
                     }]'
 ```
 
-We can see most complex to setup are flavors and signatures. There are two types of signature - 
+We can see most complex to setup are flavors and signatures. There are two types of signature -
 
 - Column based : which are tabular and uses pandas dataframe as inputs
 - Tensor based : Usually used for unstructured data like images or text. Used or n-dimensional arrays or tensors with numpy ndarrays as inputs.
@@ -902,7 +902,6 @@ run_model = Model(
 # This will register model
 ml_client.models.create_or_update(run_model)
 ```
-
 
 ### <span style="color: green;"> Chapter 17. Create and explore the Responsible AI dashboard for a model in Azure Machine Learning</span>
 
@@ -1326,7 +1325,7 @@ Two popular statistical techniques for NLP:
 - Naive Bayes: This technique finds which group of words only occurs in one type of document and not in the other. The group of words is often referred to as bag-of-words features. Here only presence of a word is considered not position.
 - TF-IDF (Term Frequency - Inverse Document Frequency): This technique finds how common a word is in a document. Useful for search engines in understanding a document's relevance to a search query.
 
-NLP using Deep learning: 
+NLP using Deep learning:
 
 1. Word embeddings represent words in a vector space, so that the relationship between words can be easily described and calculated. Word embeddings are created during self-supervised learning. During the training process, the model analyzes the cooccurrence patterns of words in sentences and learns to represent them as vectors. The vectors represent the words with coordinates in a multidimensional space. The distance between words can then be calculated by determining the distance between the relative vectors, describing the semantic relationship between words.
 2. RNN: Recurrent neural network, consist of multiple sequential steps. Each step takes an input and a hidden state. Imagine the input at each step to be a new word. Each step also produces an output. The hidden state can serve as a memory of the network, storing the output of the previous step and passing it as input to the next step. RNNs allow for context to be included when deciphering the meaning of a word in relation to the complete sentence. However, as the hidden state of an RNN is updated with each token, the actual relevant information, or signal, may be lost.
@@ -1344,10 +1343,58 @@ NLP using Deep learning:
     - Attention is a way of computing a weighted sum of the input data, where the weights are learned during training.
     - The output of the self-attention mechanism is a weighted sum of the value vectors, where the weights are learned during training.
 
-
 ### <span style="color: green;"> Chapter 21. Fine-tune a foundation model with Azure Machine Learning</span>
 
+To fine tune a foundation model, we need to prepare training data and create a GPU compute cluster. This data can be json, csv or tsv. Based on kind of tasks the data requirements change.
+
+| `Task`                | `Dataset Requirements`                                  |
+|----------------------|-------------------------------------------------------|
+| Text Classification  | Two columns: Sentence (string) and Label (integer/string) |
+| Token Classification | Two columns: Token (string) and Tag (string)          |
+| Question Answering   | Five columns: Question (string), Context (string), Answers (string), Answers_start (int), and Answers_text (string) |
+| Summarization        | Two columns: Document (string) and Summary (string)   |
+| Translation          | Two columns: Source_language (string) and Target_language (string) |
+
+Here when we submit the job, pipeline will be created. We can use MLflow for all kind of metric details. In Studio we can get run details. We can evaluate the model using outputs and fine tuned model. This model can be deployed as Real time or batch or as web service depending upon the requirements. This will give us endpoint to test the result. To use the model we have to register it in Azure ML studio.
+
 ### <span style="color: green;"> Chapter 22. Get started with prompt flow to develop Large Language Model (LLM) apps</span>
+
+To develop, test, tune, and deploy LLM applications, we can use prompt flow, accessible in the Azure Machine Learning studio and the Azure AI studio. Prompt flow allows you to create flows, which refers to the sequence of actions or steps that are taken to achieve a specific task or functionality. A flow represents the overall process or pipeline that incorporates the interaction with the LLM to address a particular use case. The flow encapsulates the entire journey from receiving input to generating output or performing a desired action.
+
+The development lifecycle consists of the LLM stages:
+
+- Initialization: Define the use case and design the solution.
+- Experimentation: Develop a flow and test with a small dataset.
+- Evaluation and refinement: Assess the flow with a larger dataset.
+- Production: Deploy and monitor the flow and application.
+
+Prompt flow in Azure ML has three parts:
+
+**Inputs:** Represent data passed into the flow. Can be different data types like strings, integers, or boolean.  
+**Nodes:** Represent tools that perform data processing, task execution, or algorithmic operations. Here we can choose python tool, LLM tool or prompt tool. Can also create custom tools.  
+**Outputs:** Represent the data produced by the flow.
+
+The flow solution can be standard which solves multiple problems or chat flow or evaluation flow.
+
+To create an LLM application, we need `connectors` and `runtime`. By setting up connections, we can easily reuse external services necessary for tools in their flows. To run the flow, we need compute, which is offered through prompt flow runtimes. Runtimes are a combination of a `compute instance` providing the necessary `compute resources`, and an `environment` specifying the necessary packages and libraries that need to be installed before being able to run the flow.
+
+| `Connector type`   | `Built-in tools`       |
+|--------------------|-----------------------|
+| Azure Open AI      | LLM or Python         |
+| Open AI            | LLM or Python         |
+| Cognitive Search   | Vector DB Lookup or Python |
+| Serp              | Serp API or Python    |
+| Custom            | Python                |
+
+After the LLM application is created, we can optimize our flow by using variants, we can deploy our flow to an endpoint, and we can monitor our flow by evaluating key metrics.
+
+Main Key Metrics used are:
+
+- `Groundedness`: Measures alignment of the LLM application's output with the input source or database.
+- `Relevance`: Assesses how pertinent the LLM application's output is to the given input.
+- `Coherence`: Evaluates the logical flow and readability of the LLM application's text.
+- `Fluency`: Assesses the grammatical and linguistic accuracy of the LLM application's output.
+- `Similarity`: Quantifies the contextual and semantic match between the LLM application's output and the ground truth.
 
 ### <span style="color: green;"> Chapter 23. Train a model and debug it with Responsible AI dashboard</span>
 

@@ -88,18 +88,31 @@ Azure ML workspace can be created by:
 To create using python SDK, below is the code:
 
 ```python
-from azure.ai.ml import MLClient
-from azure.ai.ml.entities import Workspace
+    from azure.ai.ml import MLClient
+    from azure.ai.ml.entities import Workspace
+    from azure.identity import DefaultAzureCredential
 
-workspace_name = "mlw-example"
+    # Replace with your subscription ID and resource group name
+    subscription_id = "your-subscription-id"
+    resource_group = "your-resource-group"
 
-ws_basic = Workspace(
-    name=workspace_name,
-    location="eastus",
-    display_name="Basic workspace-example",
-    description="This example shows how to create a basic workspace",
-)
-ml_client.workspaces.begin_create(ws_basic)
+    # Initialize MLClient with DefaultAzureCredential
+    credential = DefaultAzureCredential()
+
+    ml_client = MLClient(
+        credential=credential,
+        subscription_id=subscription_id,
+        resource_group_name=resource_group,
+    )
+    workspace_name = "mlw-example"
+
+    ws_basic = Workspace(
+        name=workspace_name,
+        location="eastus",
+        display_name="Basic workspace-example",
+        description="This example shows how to create a basic workspace",
+    )
+    ml_client.workspaces.begin_create(ws_basic)
 ```
 
 When Azure ML serice is created some Azure resources are automatically created:

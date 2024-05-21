@@ -88,6 +88,7 @@ Azure ML workspace can be created by:
 To create using python SDK, below is the code:
 
 ```python
+from azure.ai.ml import MLClient
 from azure.ai.ml.entities import Workspace
 
 workspace_name = "mlw-example"

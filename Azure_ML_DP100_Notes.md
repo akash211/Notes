@@ -115,7 +115,7 @@ To create using python SDK, below is the code:
     ml_client.workspaces.begin_create(ws_basic)
 ```
 
-When Azure ML serice is created some Azure resources are automatically created:
+When Azure ML service is created some Azure resources are automatically created:
 
 - A storage account
 - A key vault
@@ -130,7 +130,7 @@ There are some built-in roles as well (And custom roles can be created):
 
 Loosely There are 3 types of resources in Azure ML workspace:
 
-- `Workspace`: Top level resource where traning tracking, deploying happens. This will have logs, metrics, outputs, models, snapshots of code etc.
+- `Workspace`: Top level resource where training tracking, deploying happens. This will have logs, metrics, outputs, models, snapshots of code etc.
 - `Compute` : Usually handled by administrator because they cost a lot and used for training or deploying a model. There are 5 types of compute:
   - a. `Compute instances` : Like VM, usually used for development in Jupyter notebooks
   - b. `Compute clusters` : On demnd cluster of CPU/GPU nodes. Used for production
@@ -147,9 +147,9 @@ We can also create datastores to connect to other Azure data services like Azure
 
 Data scientist usually work with variaous assets which are listed below:
 
-- `Models`: This is end product of training a model. These are stored as pickle format or MLModel format. Python code is used ot convert to pickle while MLflow is used to store in MLModel format. Models are saves with name and version information.
+- `Models`: This is end product of training a model. These are stored as pickle format or MLModel format. Python code is used to convert to pickle while MLflow is used to store in MLModel format. Models are saved with name and version information.
 - `Environments`: Environment also have name and version and they specify software packages, environment variables, software settings to run scripts. It is saved as image in the Azure Container registry. When we run a script we specify environment and then compute uses this info to install everything and change settings accordingly which will make code reusable cross compute targets.
-- `Data`: Data assests are specific file or folder. Using them we can access data every time without authentication eevry single time. He we specify the path to point to the file or folder and the name and version.
+- `Data`: Data assests are specific file/folder. Using them we can access data every time without authentication every single time. Here we specify the path to point to the file/folder and the name and version.
 - `Components`: There are reusable parts of code that can be used in multiple projects. We can write components and specify name, version, code and environment needed to run the code. Usually used in pipelines.
 
 To train model we can use:

@@ -1,10 +1,13 @@
+
 # [Designing Data-Intensive Applications](https://www.oreilly.com/library/view/designing-data-intensive-applications/9781491903063/)
+
+# [References](https://github.com/ept/ddia-references)
 
 - [Chapter 1. Reliable, scalable, and maintainable applications](#reliable-scalable-and-maintainable-applications)
   - [Reliability](#reliability)
   - [Scalability](#scalability)
   - [Maintainability](#maintainability)
-- [Chapter 2Data models and query language](#data-models-and-query-language)
+- [Chapter 2. Data models and query language](#data-models-and-query-language)
   - [Relational model vs document model](#relational-model-vs-document-model)
   - [Query languages for data](#query-languages-for-data)
   - [Graph-like data models](#graph-like-data-models)

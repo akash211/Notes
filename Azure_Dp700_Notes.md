@@ -170,6 +170,35 @@
 
 ## Organize a Fabric lakehouse using medallion architecture design
 
+### Overview of Medallion Architecture
+- **Medallion architecture** is a recommended data design pattern for organizing data in a lakehouse logically. Built on the **Delta Lake format**, it natively supports **ACID (Atomicity, Consistency, Isolation, Durability)** transactions. It aims to improve data quality as it moves through different layers.
+- Typically consists of three layers: **Bronze (Raw)**, **Silver (Validated)**, and **Gold (Enriched)**. Also referred to as a "multi-hop" architecture, allowing data to move between layers as needed.
+- Flexible design: Use the same lakehouse for multiple medallion architectures or different lakehouses across workspaces based on use cases.
+
+### Bronze Layer: Raw Data
+- The **bronze layer** is the landing zone for all data, whether structured, semi-structured, or unstructured. Data is stored in its original format without any modifications.
+- Tools used: **Pipelines**, **Dataflows**, **Notebooks**.
+
+### Silver Layer: Validated Data
+- The **silver layer** is where data is validated and refined. Activities include combining and merging data, enforcing data validation rules (e.g., removing nulls, deduplication).
+- Acts as a central repository for consistent data accessible by multiple teams.
+- Tools used: **Dataflows**, **Notebooks**.
+
+### Gold Layer: Enriched Data
+- The **gold layer** is where data is further refined to meet specific business and analytics needs. Activities include aggregating data to specific granularities (e.g., daily, hourly) and enriching data with external information.
+- Data in the gold layer is ready for use by downstream teams, including analytics, data science, and MLOps. Recommended to model the gold layer in a **star schema**.
+- Tools used: **SQL Analytics Endpoint**, **Semantic Model**.
+
+### Customizing the Medallion Architecture
+- The medallion architecture is flexible and can be tailored to meet specific organizational needs. Examples of customization:
+  - Adding a "raw" layer for landing data in a specific format before transforming it into the bronze layer.
+  - Adding a "platinum" layer for further refined and enriched data for specific use cases.
+- Regardless of the number of layers, the architecture can adapt to your organization's requirements.
+
+### Querying Data in the Medallion Architecture
+- Use either the **SQL Analytics Endpoint** or **Power BI Semantic Model** in **Direct Lake Mode** to query data.
+- **SQL Analytics Endpoint** works in read-only mode.
+- **Semantic Model** is created automatically when a lakehouse is created. It provides metrics on top of lakehouse data and connects to data using **Direct Lake Mode**, which caches frequently used data, refreshes data as required, and combines the speed of a semantic model with up-to-date lakehouse data.
 
 ## Use Apache Spark in Microsoft Fabric
 

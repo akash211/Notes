@@ -23,6 +23,7 @@
 19. [Secure data access in Microsoft Fabric](#secure-data-access-in-microsoft-fabric)
 20. [Implement continuous integration and continuous delivery (CI/CD) in Microsoft Fabric](#implement-continuous-integration-and-continuous-delivery-cicd-in-microsoft-fabric)
 21. [Administer a Microsoft Fabric environment](#administer-a-microsoft-fabric-environment)
+22. [PySpark/SparkSQL Cheatsheet](#pysparksparksql-cheatsheet)
 
 ---
 
@@ -202,6 +203,58 @@
 
 ## Use Apache Spark in Microsoft Fabric
 
+### Overview of Apache Spark
+- **Apache Spark** is a distributed data processing framework that enables large-scale data analytics by coordinating work across multiple processing nodes in a cluster, known in Microsoft Fabric as a **Spark pool**.
+- Spark supports multiple programming languages, including:
+  - **Java**
+  - **Scala** (a Java-based scripting language)
+  - **Spark R**
+  - **Spark SQL**
+  - **PySpark** (a Spark-specific variant of Python).
+
+### Spark Pool Architecture
+- A **Spark pool** contains two types of nodes:
+  - **Head Node:** Coordinates distributed processes through a driver program.
+  - **Worker Nodes:** Perform actual data processing tasks through executor processes.
+- Microsoft Fabric provides a **starter pool** in each workspace, enabling quick setup and execution of Spark jobs with minimal configuration.
+
+### Configuring Spark Pools
+- Key configuration settings for Spark pools include:
+  - **Node Family:** Type of virtual machines used for the Spark cluster nodes (e.g., memory-optimized nodes for better performance).
+  - **Autoscale:** Automatically provisions nodes as needed, with options to set initial and maximum node counts.
+  - **Dynamic Allocation:** Dynamically allocates executor processes on worker nodes based on data volumes.
+- Multiple pools can be created, and one can be configured as the default.
+
+### Spark Runtime and Libraries
+- The **Spark runtime** determines the versions of Apache Spark, Delta Lake, Python, and other core components installed.
+- The current default runtime version is **1.3**.
+- Within a runtime, you can install and use a wide selection of libraries for common or specialized tasks.
+- Custom environments can be created in a Fabric workspace to use specific Spark runtimes, libraries, and configurations for different operations.
+
+### Native Execution Engine
+- The **native execution engine** in Microsoft Fabric is a vectorized processing engine that runs Spark operations directly on lakehouse infrastructure.
+- Benefits of the native execution engine:
+  - Significantly improves query performance for large datasets in **Parquet** or **Delta** file formats.
+- To enable the native execution engine, set the following Spark properties:
+  - `spark.native.enabled: true`
+  - `spark.shuffle.manager: org.apache.spark.shuffle.sort.ColumnarShuffleManager`
+
+### Optimizing Spark Sessions
+- When running Spark code in Microsoft Fabric, a **Spark session** is initiated.
+- **High Concurrency Mode:**
+  - Shares Spark sessions across multiple concurrent users or processes.
+  - Ensures isolation of code to avoid variable conflicts between notebooks.
+  - Can also be enabled for Spark jobs to optimize non-interactive script execution.
+
+### Machine Learning with MLFlow
+- **MLFlow** is an open-source library used to manage machine learning training and model deployment.
+- Key capabilities of MLFlow in Microsoft Fabric:
+  - Implicitly logs machine learning experiment activity without requiring explicit code.
+  - This functionality can be disabled in workspace settings if needed.
+
+### Schema Management
+- While Spark can infer schemas, explicitly providing schemas improves performance.
+
 ## Work with Delta Lake tables in Microsoft Fabric
 
 ## Ingest Data with Dataflows Gen2 in Microsoft Fabric
@@ -236,5 +289,91 @@
 
 ## Administer a Microsoft Fabric environment
 
+## PySpark/SparkSQL Cheatsheet
+
+### PySpark Basics
+- **Create a SparkSession:**
+  ```python
+  from pyspark.sql import SparkSession
+  spark = SparkSession.builder.appName("AppName").getOrCreate()
+  ```
+- **Read a DataFrame:**
+  ```python
+  df = spark.read.csv("path/to/file.csv", header=True, inferSchema=True)
+  ```
+- **Show DataFrame:**
+  ```python
+  df.show()
+  ```
+- **Write a DataFrame:**
+  ```python
+  df.write.csv("path/to/output.csv", header=True)
+  ```
+
+### Common DataFrame Operations
+- **Select Columns:**
+  ```python
+  df.select("column1", "column2").show()
+  ```
+- **Filter Rows:**
+  ```python
+  df.filter(df["column"] > 10).show()
+  ```
+- **Group By and Aggregate:**
+  ```python
+  df.groupBy("column").agg({"column2": "sum"}).show()
+  ```
+- **Add a New Column:**
+  ```python
+  from pyspark.sql.functions import col
+  df = df.withColumn("new_column", col("existing_column") * 2)
+  ```
+- **Drop a Column:**
+  ```python
+  df = df.drop("column_to_drop")
+  ```
+
+### SparkSQL Basics
+- **Create a Temporary View:**
+  ```python
+  df.createOrReplaceTempView("table_name")
+  ```
+- **Run SQL Queries:**
+  ```python
+  result = spark.sql("SELECT * FROM table_name WHERE column > 10")
+  result.show()
+  ```
+
+### Advanced PySpark Operations
+- **Join DataFrames:**
+  ```python
+  df1.join(df2, df1["key"] == df2["key"], "inner").show()
+  ```
+- **Window Functions:**
+  ```python
+  from pyspark.sql.window import Window
+  from pyspark.sql.functions import row_number
+  windowSpec = Window.partitionBy("column").orderBy("column2")
+  df = df.withColumn("row_number", row_number().over(windowSpec))
+  ```
+- **Pivot Table:**
+  ```python
+  df.groupBy("column1").pivot("column2").sum("value_column").show()
+  ```
+
+### Performance Tips
+- **Cache DataFrame:**
+  ```python
+  df.cache()
+  ```
+- **Repartition DataFrame:**
+  ```python
+  df = df.repartition(4)
+  ```
+- **Broadcast Join:**
+  ```python
+  from pyspark.sql.functions import broadcast
+  df1.join(broadcast(df2), "key").show()
+  ```
 
 

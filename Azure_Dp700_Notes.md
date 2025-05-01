@@ -257,6 +257,52 @@
 
 ## Work with Delta Lake tables in Microsoft Fabric
 
+### Overview of Delta Lake Tables
+- Tables in a Microsoft Fabric lakehouse are based on the **Linux Foundation Delta Lake table format**, commonly used in Apache Spark.
+- **Delta Lake** is an open-source storage layer that adds relational database semantics to Spark-based data lake processing.
+- The underlying data for Delta tables is stored in **Parquet format**.
+
+### Table Types in Delta Lake
+- **Managed Table:** Fully managed by the lakehouse.
+- **External Table:** Created by specifying a path to external storage.
+- **Metadata-Only Table:** Created using `DeltaTableBuilder` to define table metadata without data.
+
+### File Management and Optimization
+- **Parquet Files:**
+  - Parquet files are immutable, so updates create new files, leading to the **small file problem**, which impacts performance.
+- **OptimizeWrite:**
+  - Enabled by default in Fabric to reduce the number of files written.
+  - Consolidates small files into fewer, larger files for better performance.
+- **Optimize Feature:**
+  - Can be run under maintenance in **Lakehouse Explorer** to further consolidate files.
+
+### V-Order Optimization
+- **V-Order** (enabled by default in Fabric):
+  - Enables lightning-fast reads with in-memory-like data access times.
+  - Improves cost efficiency by reducing network, disk, and CPU resources during reads.
+  - Adds ~15% overhead during writes but significantly speeds up reads.
+- **Microsoft Verti-Scan Technology:**
+  - Used by Power BI and SQL engines to fully leverage V-Order optimization for faster reads.
+  - Spark and other engines benefit from V-Order optimization with ~10% faster reads, sometimes up to 50%.
+- **How V-Order Works:**
+  - Applies special sorting, row group distribution, dictionary encoding, and compression on Parquet files.
+
+### Maintenance with VACUUM
+- The **VACUUM** command removes old Parquet data files but retains transaction logs.
+- **Time Travel:**
+  - Old Parquet files are retained to enable time travel.
+  - Running VACUUM prevents time travel earlier than the retention period.
+- Example Command:
+  ```sql
+  DESCRIBE HISTORY products
+  ```
+  - Shows the history of the `products` table.
+
+### Streaming Data with Delta Lake
+- **Spark Structured Streaming:**
+  - Native support for streaming data through an API based on a boundless DataFrame.
+  - Captures streaming data for processing efficiently.
+
 ## Ingest Data with Dataflows Gen2 in Microsoft Fabric
 
 ## Orchestrate processes and data movement with Microsoft Fabric

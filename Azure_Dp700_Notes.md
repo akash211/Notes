@@ -305,9 +305,103 @@
 
 ## Ingest Data with Dataflows Gen2 in Microsoft Fabric
 
+In the Azure_Dp700_Notes.md, I have to write notes under section "Ingest Data with Dataflows Gen2 in Microsoft Fabric", please make the below notes better like the previous sections:
+
+Dataflows are a type of cloud-based ETL (Extract, Transform, Load) tool for building and executing scalable data transformation processes. Dataflows Gen2 allow you to extract data from various sources, transform it using a wide range of transformation operations, and load it into a destination. Using Power Query Online also allows for a visual interface to perform these tasks.
+In Microsoft Fabric, you can create a Dataflow Gen2 in the Data Factory workload or Power BI workspace, or directly in the lakehouse.
+Dataflow Gen2 does not support row level security.
+
+Data pipelines are a common concept in data engineering and offer a wide variety of activities to orchestrate. Some common activities include:
+
+Copy data
+Incorporate Dataflow
+Add Notebook
+Get metadata
+Execute a script or stored procedure
+Pipelines provide a visual way to complete activities in a specific order
+
+Pipelines can also be scheduled or activated by a trigger to run your dataflow.
+
 ## Orchestrate processes and data movement with Microsoft Fabric
 
 ## Get started with data warehouses in Microsoft Fabric
+
+### Overview of Data Warehouses
+- Fabric's data warehouse contains **tables** to store data for analytics, organized in schemas optimized for **multidimensional modeling**.
+- Tables are structured into:
+  - **Fact Tables:** Contain numerical data for analysis (e.g., total sales amount).
+  - **Dimension Tables:** Contain descriptive information to provide context for fact tables (e.g., customer details).
+
+### Keys in Dimension Tables
+- **Surrogate Key:** A unique identifier for each row in the dimension table, often an auto-generated integer.
+- **Alternate Key:** A natural or business key (e.g., product code) that identifies specific entities in the source system.
+- Both keys are essential for maintaining consistency and traceability between the data warehouse and source systems.
+
+### Special Types of Dimensions
+- **Time Dimensions:** Provide temporal context (e.g., year, quarter, month) for aggregating data.
+- **Slowly Changing Dimensions:** Track changes to attributes over time (e.g., customer address changes).
+
+### Schema Design
+- **Star Schema:** Fact tables are directly related to dimension tables, enabling grouping and aggregation.
+- **Snowflake Schema:** Used when there are many levels or shared information across dimensions.
+
+### Transition from Lakehouse to Data Warehouse
+- Fabric's **Lakehouse** acts as a database over a data lake, supporting big data processing with Spark and SQL engines.
+- The **data warehouse experience** enables:
+  - Modeling data using tables and views.
+  - Running T-SQL queries across the data warehouse and Lakehouse.
+  - Performing DML operations and serving reporting layers like Power BI.
+
+### Data Ingestion Methods
+- **Pipelines:** Automate data workflows.
+- **Dataflows:** Import and transform data visually.
+- **Cross-Database Querying:** Query data across databases.
+- **COPY INTO Command:** Load data efficiently into tables.
+
+### Table Clones
+- **Zero-Copy Clones:** Create replicas of tables by copying metadata without duplicating data files.
+- **Use Cases:**
+  - Development and testing.
+  - Data recovery.
+  - Historical reporting.
+- **Command Example:**
+  ```sql
+  CREATE TABLE new_table AS CLONE OF existing_table;
+  ```
+
+### Data Warehouse Load Process
+1. **Ingest Data:** Load new data into a data lake with pre-load cleansing.
+2. **Load Staging Tables:** Transfer data into staging tables in the warehouse.
+3. **Load Dimension Tables:** Update or insert rows, generating surrogate keys as needed.
+4. **Load Fact Tables:** Populate fact tables, looking up surrogate keys for dimensions.
+5. **Post-Load Optimization:** Update indexes and table distribution statistics.
+
+### Cross-Database Querying
+- Query data in the Lakehouse directly from the data warehouse without copying it.
+- **Query Tools:**
+  - **Visual Query Editor:** Drag-and-drop interface for no-code queries.
+  - **SQL Query Editor:** Write T-SQL queries for advanced operations.
+
+### SQL Analytics Endpoint
+- Connect to the data warehouse from any tool using the **SQL analytics endpoint**.
+
+### Semantic Models in Power BI
+- **Semantic Models:** Define relationships, calculations, and structure in data for meaningful analysis.
+- **Default Model:** Auto-created with a Fabric data warehouse and updates with new tables.
+- **Features:**
+  - Create relationships between tables.
+  - Hide fields to simplify views.
+  - Use DAX for calculated measures.
+- Enable easy creation and sharing of visual reports in Power BI.
+
+
+
+### Dynamic Management Views (DMVs)
+- **Available DMVs:**
+  - `sys.dm_exec_connections`: Information about connections.
+  - `sys.dm_exec_sessions`: Information about authenticated sessions.
+  - `sys.dm_exec_requests`: Information about active requests.
+- **KILL Command:** Terminate sessions with long-running queries (requires Workspace Admin role).
 
 ## Load data into a Microsoft Fabric data warehouse
 

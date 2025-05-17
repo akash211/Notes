@@ -305,8 +305,6 @@
 
 ## Ingest Data with Dataflows Gen2 in Microsoft Fabric
 
-In the Azure_Dp700_Notes.md, I have to write notes under section "Ingest Data with Dataflows Gen2 in Microsoft Fabric", please make the below notes better like the previous sections:
-
 Dataflows are a type of cloud-based ETL (Extract, Transform, Load) tool for building and executing scalable data transformation processes. Dataflows Gen2 allow you to extract data from various sources, transform it using a wide range of transformation operations, and load it into a destination. Using Power Query Online also allows for a visual interface to perform these tasks.
 In Microsoft Fabric, you can create a Dataflow Gen2 in the Data Factory workload or Power BI workspace, or directly in the lakehouse.
 Dataflow Gen2 does not support row level security.
@@ -394,8 +392,6 @@ Pipelines can also be scheduled or activated by a trigger to run your dataflow.
   - Use DAX for calculated measures.
 - Enable easy creation and sharing of visual reports in Power BI.
 
-
-
 ### Dynamic Management Views (DMVs)
 - **Available DMVs:**
   - `sys.dm_exec_connections`: Information about connections.
@@ -405,7 +401,106 @@ Pipelines can also be scheduled or activated by a trigger to run your dataflow.
 
 ## Load data into a Microsoft Fabric data warehouse
 
+### Overview of Microsoft Fabric Data Warehouse
+- A **Microsoft Fabric Data Warehouse** is a unified platform for data, analytics, and AI, designed to store, organize, and manage large volumes of structured and semi-structured data.
+- Powered by **Synapse Analytics**, it offers advanced query processing and supports full transactional T-SQL capabilities, similar to an enterprise data warehouse.
+- Unlike dedicated SQL pools in Synapse Analytics, Fabric warehouses are built around a single data lake, with all data stored in **Parquet** file format in **Microsoft OneLake**.
+- Data is automatically stored in **Delta Parquet format** for both warehouses and lakehouses, enabling seamless integration and analytics.
+
+### Data Ingestion and Loading Concepts
+- **Data Ingestion/Extract:** Moving raw data from various sources into a central repository (staging area).
+- **Data Loading:** Transferring transformed or processed data into the final storage destination (warehouse tables) for analysis and reporting.
+- **Staging Area:**
+  - Acts as an abstraction layer to simplify and buffer the load operation.
+  - Minimizes performance impact on the main warehouse during data loads.
+
+### Keys and Dimension Management
+- **Surrogate Key:**
+  - System-generated unique identifier (usually integer or GUID) for each record in a warehouse table.
+  - No business meaning; used for internal data integration and consistency.
+- **Business Key (Natural Key):**
+  - Identifier from the source system with business meaning (e.g., customer ID).
+  - Used to uniquely identify records in the source and for data integration.
+- Both key types are essential for effective data warehousing and integration.
+
+### Slowly Changing Dimensions (SCD)
+- **Slowly Changing Dimensions** track attribute changes over time. Common SCD types:
+  - **Type 0:** Attributes never change.
+  - **Type 1:** Overwrites existing data; no history kept.
+  - **Type 2:** Adds new records for changes, keeping full history (active/inactive flags).
+  - **Type 3:** Adds new columns for previous values (limited history).
+  - **Type 4:** Uses a separate historical dimension table.
+  - **Type 5:** Mini-dimension for large dimensions with changing attributes.
+  - **Type 6:** Combines Type 2 and Type 3.
+- SCD management is crucial for accurate historical analysis.
+
+### Change Detection and Data Tracking
+- Mechanisms for detecting changes in source systems include:
+  - **Change Data Capture (CDC)**
+  - **Change Tracking**
+  - **Database Triggers**
+- These features help identify inserts, updates, and deletes for accurate data synchronization.
+
+### Data Pipelines and Integration
+- **Data Pipelines:**
+  - Cloud-based service for data integration, enabling creation of workflows for data movement and transformation at scale.
+  - Supports complex ETL/ELT processes, scheduling, and orchestration.
+  - Most pipeline functionality in Fabric is based on **Azure Data Factory**.
+- **Pipeline Creation Options:**
+  1. **Add pipeline activity:** Launches the editor to build custom pipelines.
+  2. **Copy data:** Wizard to copy data from various sources; generates a preconfigured Copy Data task.
+  3. **Choose a task to start:** Use predefined templates for common scenarios.
+- **Scheduling:** Configure pipeline schedules in the pipeline editor's settings.
+- **Recommendation:** Use pipelines for code-free or low-code data workflows, especially for scheduled or multi-source integration.
+
+### Data Loading with the COPY Statement
+- The **COPY** statement is the primary method for importing data into a Fabric warehouse.
+- Key features:
+  - Efficiently ingests data from external Azure storage accounts.
+  - Supports specifying file format, error file location, skipping headers, and more.
+  - Allows wildcards and multiple file paths for bulk loading (must be from the same storage account/container).
+  - Rejected rows can be stored separately for data quality control (ERRORFILE applies to CSV only).
+  - Supports authentication via Shared Access Signature (SAS) or Storage Account Key (SAK).
+- **Example:**
+  ```sql
+  COPY INTO my_table
+  FROM 'https://myaccount.blob.core.windows.net/myblobcontainer/folder0/*.csv, 
+      https://myaccount.blob.core.windows.net/myblobcontainer/folder1/'
+  WITH (
+      FILE_TYPE = 'CSV',
+      CREDENTIAL=(IDENTITY= 'Shared Access Signature', SECRET='<Your_SAS_Token>'),
+      FIELDTERMINATOR = '|'
+  )
+  ```
+- The option to use a different storage account for the error file location (REJECTED_ROW_LOCATION) improves error handling and debugging.
+
+### Loading Data from Workspace Assets
+- Data can be loaded from other warehouses and lakehouses within the same workspace.
+- **Three-part naming** is used to reference data assets accurately.
+
+### Dataflow Gen2 for Data Loading
+- **Dataflow Gen2** provides a modern Power Query experience for importing and transforming data.
+- Simplifies the process of creating dataflows and reduces the number of steps.
+- Dataflows can be used in pipelines to ingest data into lakehouses or warehouses, or to define datasets for Power BI reports.
+
+---
+
 ## Query a data warehouse in Microsoft Fabric
+
+### Querying Tools
+- **SQL Query Editor:** Write and execute T-SQL queries directly in the Fabric portal.
+- **Visual Query Editor:** Design queries using a graphical interface; SQL code is generated automatically.
+- **SQL Server Management Studio (SSMS):** Connect using Microsoft Entra ID user principals, user identities, or service principals. SQL authentication is not supported.
+- **Other Tools:** Any tool that supports SQL connection strings using ODBC or OLE DB drivers with Microsoft Entra ID can be used to connect and query the data warehouse.
+
+### Query Functions
+- **APPROX_COUNT_DISTINCT:**
+  - Uses the HyperLogLog algorithm to retrieve an approximate count of distinct values.
+  - The result is guaranteed to have a maximum error rate of 2% with 97% probability.
+
+### Additional Notes
+- Visual Query Editor provides a no-code, drag-and-drop experience for building queries, making it accessible for users who prefer not to write SQL manually.
+- SSMS connections require Microsoft Entra ID authentication; SQL authentication is not available for Fabric data warehouses.
 
 ## Monitor a Microsoft Fabric data warehouse
 

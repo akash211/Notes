@@ -8,22 +8,24 @@
 4. [Use Apache Spark in Microsoft Fabric](#use-apache-spark-in-microsoft-fabric)
 5. [Work with Delta Lake tables in Microsoft Fabric](#work-with-delta-lake-tables-in-microsoft-fabric)
 6. [Ingest Data with Dataflows Gen2 in Microsoft Fabric](#ingest-data-with-dataflows-gen2-in-microsoft-fabric)
-7. [Orchestrate processes and data movement with Microsoft Fabric](#orchestrate-processes-and-data-movement-with-microsoft-fabric)
+7. [Govern data in Microsoft Fabric with Purview](#Govern-data-in-Microsoft-Fabric-with-Purview)
 8. [Get started with data warehouses in Microsoft Fabric](#get-started-with-data-warehouses-in-microsoft-fabric)
-9. [Load data into a Microsoft Fabric data warehouse](#load-data-into-a-microsoft-fabric-data-warehouse)
-10. [Query a data warehouse in Microsoft Fabric](#query-a-data-warehouse-in-microsoft-fabric)
-11. [Monitor a Microsoft Fabric data warehouse](#monitor-a-microsoft-fabric-data-warehouse)
-12. [Secure a Microsoft Fabric data warehouse](#secure-a-microsoft-fabric-data-warehouse)
-13. [Get started with data science in Microsoft Fabric](#get-started-with-data-science-in-microsoft-fabric)
-14. [Get started with Real-Time Intelligence in Microsoft Fabric](#get-started-with-real-time-intelligence-in-microsoft-fabric)
-15. [Use real-time eventstreams in Microsoft Fabric](#use-real-time-eventstreams-in-microsoft-fabric)
-16. [Work with real-time data in a Microsoft Fabric eventhouse](#work-with-real-time-data-in-a-microsoft-fabric-eventhouse)
-17. [Create Real-Time Dashboards with Microsoft Fabric](#create-real-time-dashboards-with-microsoft-fabric)
-18. [Monitor activities in Microsoft Fabric](#monitor-activities-in-microsoft-fabric)
-19. [Secure data access in Microsoft Fabric](#secure-data-access-in-microsoft-fabric)
-20. [Implement continuous integration and continuous delivery (CI/CD) in Microsoft Fabric](#implement-continuous-integration-and-continuous-delivery-cicd-in-microsoft-fabric)
-21. [Administer a Microsoft Fabric environment](#administer-a-microsoft-fabric-environment)
-22. [PySpark/SparkSQL Cheatsheet](#pysparksparksql-cheatsheet)
+9. [Get started with SQL Database in Microsoft Fabric](#get-started-with-sql-database-in-microsoft-fabric)
+10. [Load data into a Microsoft Fabric data warehouse](#load-data-into-a-microsoft-fabric-data-warehouse)
+11. [Query a data warehouse in Microsoft Fabric](#query-a-data-warehouse-in-microsoft-fabric)
+12. [Monitor a Microsoft Fabric data warehouse](#monitor-a-microsoft-fabric-data-warehouse)
+13. [Secure a Microsoft Fabric data warehouse](#secure-a-microsoft-fabric-data-warehouse)
+14. [Get started with data science in Microsoft Fabric](#get-started-with-data-science-in-microsoft-fabric)
+15. [Get started with Real-Time Intelligence in Microsoft Fabric](#get-started-with-real-time-intelligence-in-microsoft-fabric)
+16. [Use real-time eventstreams in Microsoft Fabric](#use-real-time-eventstreams-in-microsoft-fabric)
+17. [Work with real-time data in a Microsoft Fabric eventhouse](#work-with-real-time-data-in-a-microsoft-fabric-eventhouse)
+18. [Create Real-Time Dashboards with Microsoft Fabric](#create-real-time-dashboards-with-microsoft-fabric)
+19. [Monitor activities in Microsoft Fabric](#monitor-activities-in-microsoft-fabric)
+20. [Secure data access in Microsoft Fabric](#secure-data-access-in-microsoft-fabric)
+21. [Implement continuous integration and continuous delivery (CI/CD) in Microsoft Fabric](#implement-continuous-integration-and-continuous-delivery-cicd-in-microsoft-fabric)
+22. [Govern data in Microsoft Fabric with Purview](#govern-data-in-microsoft-fabric-with-purview)
+23. [Administer a Microsoft Fabric environment](#administer-a-microsoft-fabric-environment)
+24. [PySpark/SparkSQL Cheatsheet](#pysparksparksql-cheatsheet)
 
 ---
 
@@ -320,7 +322,7 @@ Pipelines provide a visual way to complete activities in a specific order
 
 Pipelines can also be scheduled or activated by a trigger to run your dataflow.
 
-## Orchestrate processes and data movement with Microsoft Fabric
+## Govern data in Microsoft Fabric with Purview
 
 ## Get started with data warehouses in Microsoft Fabric
 
@@ -504,9 +506,164 @@ Pipelines can also be scheduled or activated by a trigger to run your dataflow.
 
 ## Monitor a Microsoft Fabric data warehouse
 
+### Capacity and Cost Monitoring
+- **Capacity Units (CUs):**
+  - Microsoft Fabric resources are provisioned based on the license purchased, which determines the available capacity (pool of resources).
+  - The cost of using Fabric is based on **capacity units (CUs)**. Every action in a Fabric resource (such as data reads/writes, queries, and file operations) consumes CUs.
+  - Monitoring CU consumption is essential for cost management and planning, especially for data warehouse workloads where queries and file operations to OneLake are significant cost drivers.
+
+- **Fabric Capacity Metrics App:**
+  - An administrator can install the **Microsoft Fabric Capacity Metrics app** to monitor capacity utilization in the Fabric environment.
+  - The app provides:
+    - Trends in capacity usage.
+    - Insights into which processes are consuming CUs.
+    - Detection of throttling events (when resource limits are reached).
+  - Use these insights to optimize workloads and manage costs effectively.
+
+### Monitoring Data Warehouse Activity
+- **Dynamic Management Views (DMVs):**
+  - DMVs provide real-time information about the current state of the data warehouse.
+  - Common DMVs include:
+    - `sys.dm_exec_connections`: Returns information about data warehouse connections.
+    - `sys.dm_exec_sessions`: Returns information about authenticated sessions.
+    - `sys.dm_exec_requests`: Returns information about active requests.
+  - Use DMVs to monitor connections, sessions, and running queries for troubleshooting and performance analysis.
+
+### Query Insights and Performance Tuning
+- **Query Insights Feature:**
+  - Microsoft Fabric data warehouses include a **query insights** feature that provides historical and aggregated information about executed queries.
+  - Enables identification of:
+    - Frequently used queries.
+    - Long-running queries.
+    - Query performance trends for tuning and optimization.
+
+- **Query Insights Views:**
+  - `queryinsights.exec_requests_history`: Details of each completed SQL query.
+  - `queryinsights.long_running_queries`: Details of query execution times for long-running queries.
+  - `queryinsights.frequently_run_queries`: Details of frequently executed queries.
+  - Use these views to analyze workload patterns and optimize query performance.
+
+---
+
 ## Secure a Microsoft Fabric data warehouse
 
+### Role-Based Access Control (RBAC) and Permissions
+- **Roles:**
+  - Security in Microsoft Fabric data warehouses is managed through built-in roles: **Admin**, **Member**, **Contributor**, and **Viewer**.
+  - Each role has specific permissions for managing, editing, or viewing data and resources.
+- **Item-Level Permissions:**
+  - Granular access can be set at the item level (e.g., specific tables, views, or reports) to restrict or allow access based on business needs.
+- **Other Data Protection:**
+  - Additional security features include workspace-level settings, integration with Microsoft Entra ID (Azure AD), and audit logging.
+
+### Dynamic Data Masking (DDM)
+- **Purpose:**
+  - DDM limits data exposure by masking sensitive information in query results for nonprivileged users, without altering the underlying data.
+- **Implementation:**
+  - Masking is applied at the column level and is easy to configure—no complex coding required.
+  - Masking rules are enforced in real time when queries are executed.
+- **Masking Types:**
+  | Masking Type | Description | Use Case | Limitations | Masking Rule |
+  |--------------|-------------|----------|-------------|--------------|
+  | Default      | Full masking based on data type | Completely hide data | No information visible | `default()` |
+  | Email        | Shows first letter and '.com' | Indicate email field without revealing address | Only for email fields | `email()` |
+  | Custom Text  | Shows first/last n chars, pads middle | Partially hide data | Not for numeric/date/time | `partial(prefix, pad, suffix)` |
+  | Random       | Replaces numeric/binary with random value | Hide numeric/binary data | Only for numeric/binary | `random(low, high)` |
+- **Example:**
+  ```sql
+  ALTER TABLE Customers
+  ALTER COLUMN CreditCardNumber ADD MASKED WITH (FUNCTION = 'partial(0,"XXXX-XXXX-XXXX-",4)');
+  ```
+- **Benefits:**
+  - Data remains intact and secure; only query results are masked for nonprivileged users.
+
+### Row-Level Security (RLS)
+- **Purpose:**
+  - RLS restricts access to rows in a table based on user identity, group membership, or execution context.
+- **How It Works:**
+  - A security predicate (function) is associated with a table. It returns true/false to determine row visibility.
+  - Enforced automatically by SQL Server, transparent to users.
+- **Implementation Steps:**
+  1. **Filter Predicate:** Inline table-valued function filters rows for SELECT, UPDATE, DELETE.
+  2. **Security Policy:** Associates the predicate with the table.
+  - Example: Disabling a policy with `WITH (STATE = OFF)` exposes all rows.
+- **Security Considerations:**
+  - Be aware of side-channel attacks (e.g., using divide-by-zero errors in WHERE clauses to infer data).
+- **Best Practices:**
+  - Use a separate schema for predicate functions and policies.
+  - Avoid type conversions and excessive joins/recursion in predicates for performance.
+
+### Column-Level Security (CLS) and Views
+- **Column-Level Security (CLS):**
+  - Restricts access to specific columns, providing granular protection for sensitive data.
+  - Permissions are tied to columns and adapt automatically to table changes.
+- **Views:**
+  - Restrict access by exposing only selected columns or rows.
+  - Can provide both column- and row-level security, and transform data (e.g., calculated columns).
+- **Comparison Table:**
+  | Aspect | Column-Level Security | Views |
+  |--------|----------------------|-------|
+  | Granularity | Fine-grained, per column | Requires separate views per permission set |
+  | Maintenance | Adapts to table changes | Views must be updated if table changes |
+  | Performance | Efficient, direct on table | May add overhead for complex/large tables |
+  | Transparency | Transparent to user | User queries a different object |
+  | Flexibility | Less flexible | Highly flexible, supports transformations |
+
+### Permissions and Dynamic SQL
+- **Permissions:**
+  - Use `GRANT`, `DENY`, `ALTER`, and `GRANT` statements to manage access to tables, columns, functions, and stored procedures.
+- **Dynamic SQL:**
+  - Allows programmatic construction and execution of SQL statements within stored procedures.
+  - Example:
+    ```sql
+    CREATE PROCEDURE sp_TopTenRows @tableName NVARCHAR(128)
+    AS
+    BEGIN
+        DECLARE @query NVARCHAR(MAX);
+        SET @query = N'SELECT TOP 10 * FROM ' + QUOTENAME(@tableName);
+        EXEC sp_executesql @query;
+    END;
+    ```
+  - Use `QUOTENAME` to prevent SQL injection and `sp_executesql` to execute dynamic queries securely.
+
+---
+
 ## Get started with data science in Microsoft Fabric
+
+### Data Exploration with Data Wrangler
+
+Microsoft Fabric provides the **Data Wrangler**—an intuitive tool to help you explore and transform your data efficiently.  
+- **Descriptive Overview:** Instantly view summary statistics and visualizations of your dataset.
+- **Data Quality:** Quickly identify issues such as missing values or outliers.
+- **Transformation:** Apply common data cleaning and transformation steps with a user-friendly interface.
+
+### Experiment Tracking
+
+When training machine learning models in notebooks, you can **track your work using experiments** in Microsoft Fabric.
+- **Experiment:** A logical container for tracking related model training runs.
+- **Run:** Each execution (e.g., training a model with a specific dataset or parameters) is recorded as a separate run within an experiment.
+- **Comparison:** Easily compare runs to evaluate which model or configuration performs best.
+
+**Example:**  
+If you're building a sales forecasting model, you might try different algorithms or datasets. Each attempt is a new run under the same experiment, allowing you to compare results side by side.
+
+### Model Management and Versioning
+
+After training, you typically want to use your model for predictions (scoring).  
+- **MLflow Integration:** When you track models with MLflow, all relevant artifacts (model files, metadata) are stored with the experiment run.
+- **Model Registration:** Save your trained model as a registered model in Microsoft Fabric for easy management.
+- **Versioning:** Each time you save a model with the same name, a new version is created, enabling robust model lifecycle management.
+
+### Generating Predictions
+
+To use a trained model for batch predictions:
+- **PREDICT Function:** Microsoft Fabric provides the `PREDICT` function, which seamlessly integrates with MLflow models.
+- **Batch Scoring:** Apply your registered model to new data to generate predictions or insights at scale.
+
+**Key Benefits:**
+- Centralized tracking and comparison of experiments.
+- Simple model registration and versioning.
+- Streamlined batch prediction workflows.
 
 ## Get started with Real-Time Intelligence in Microsoft Fabric
 
@@ -518,11 +675,184 @@ Pipelines can also be scheduled or activated by a trigger to run your dataflow.
 
 ## Monitor activities in Microsoft Fabric
 
+Monitoring activities in Microsoft Fabric is essential to ensure data delivery, reliability, and performance across your analytics solutions. Below are key activities and tools to monitor, along with best practices and important concepts.
+
+### 1. Data Pipeline Activity
+- **Data pipelines** are collections of activities that perform data ingestion, transformation, and loading (ETL) as a unified process.
+- **Monitoring Tips:**
+  - Track the **success or failure** of jobs and individual pipeline activities.
+  - Review **job history** to compare current and past performance, helping to identify when errors were introduced.
+  - Investigate errors and failures promptly to maintain data quality and reliability.
+
+### 2. Dataflows
+- **Dataflows** provide a low-code interface for ingesting, loading, and transforming data.
+- Can be run **manually, on a schedule, or as part of pipeline orchestration**.
+- **Monitoring Tips:**
+  - Monitor **start/end times, status, duration, and table load activities**.
+  - Drill down into specific activities to view error details and troubleshoot issues.
+
+### 3. Semantic Model Refreshes
+- A **semantic model** is a visual, ready-for-reporting data model containing transformations, calculations, and relationships.
+- **Refreshes** are required when the underlying data or model changes.
+- **Monitoring Tips:**
+  - Track **refresh status, retries, and failures** to identify transient or persistent issues.
+  - Use pipeline-triggered refresh activities for automation and monitoring.
+
+### 4. Spark Jobs, Notebooks, and Lakehouses
+- **Notebooks** are used to develop and execute Apache Spark jobs for data loading and transformation in lakehouses.
+- **Monitoring Tips:**
+  - Monitor **job progress, task execution, resource usage, and Spark logs**.
+  - Review logs for errors, bottlenecks, and performance optimization opportunities.
+
+### 5. Microsoft Fabric Eventstreams
+- **Eventstreams** ingest and process real-time or streaming data for analytics and routing to destinations.
+- **Monitoring Tips:**
+  - Track **streaming data ingestion status and performance**.
+  - Monitor for data lags, dropped events, or ingestion bottlenecks.
+
+### 6. Monitor Hub
+- The **Monitor hub** is the central visualization tool for monitoring activities in Microsoft Fabric.
+- **Key Features:**
+  - Aggregates data from multiple Fabric items and processes into a single interface.
+  - Allows you to view the **status, start/end time, duration, and statistics** for each activity.
+  - Supports actions such as **opening activities, retrying, viewing details, and historical runs**.
+- **Best Practice:** Use Monitor hub to gain a holistic view of your data integration, transformation, movement, and analysis activities.
+
+### 7. Real-Time Intelligence and Activator
+- **Activator** is a tool for triggering actions on streaming data in real time.
+- **How It Works:**
+  - Define **rules** based on event properties, thresholds, patterns, or Kusto Query Language (KQL) queries.
+  - When a rule condition is met, Activator can **alert users, execute Fabric jobs (like pipelines), or trigger Power Automate workflows**.
+- **Core Concepts:**
+  - **Events:** Each record in a data stream, representing an occurrence at a specific time.
+  - **Objects:** Business entities represented by event data (e.g., sales order, sensor).
+  - **Properties:** Fields in event data mapped to object attributes (e.g., temperature, total_amount).
+  - **Rules:** Conditions that trigger actions based on property values (e.g., send alert if temperature exceeds threshold).
+
+**Summary:**
+- Proactive monitoring of these activities ensures data reliability, timely delivery, and rapid troubleshooting in Microsoft Fabric.
+- Leverage the Monitor hub and built-in monitoring features to maintain operational excellence across your analytics environment.
+
 ## Secure data access in Microsoft Fabric
+
+Securing data access in Microsoft Fabric involves multiple layers and granular controls to ensure only authorized users can access sensitive data. Below is a structured overview of the security model and best practices.
+
+### Security Levels in Fabric
+Microsoft Fabric evaluates access through **three sequential security levels**:
+
+1. **Microsoft Entra ID Authentication**
+   - Verifies if the user can authenticate with Azure's identity and access management service (**Microsoft Entra ID**).
+2. **Fabric Access**
+   - Checks if the user has access to the Fabric environment itself.
+3. **Data Security**
+   - Determines if the user can perform the requested action (e.g., read, write) on a specific table or file.
+
+> **All three levels must be satisfied for access to be granted.**
+
+### Data Security Building Blocks
+The third level, **data security**, is highly configurable and consists of several building blocks that can be used individually or together:
+
+#### 1. Workspace Roles
+- Assign users to roles (Admin, Member, Contributor, Viewer) that define their access within a workspace.
+- Controls broad access to all items within the workspace.
+
+#### 2. Item Permissions
+- Permissions can be inherited from workspace roles or set individually by sharing specific items (lakehouses, warehouses, semantic models, etc.).
+- Use item permissions to restrict access when workspace roles are too permissive.
+
+#### 3. Compute or Granular Permissions
+- Apply fine-grained permissions within a specific compute engine (e.g., SQL Endpoint, semantic model).
+- Examples: **Read**, **ReadData**, **ReadAll** permissions on tables or views.
+
+#### 4. OneLake Data Access Controls (Preview)
+- Restrict access to specific files or folders in OneLake using **role-based access control (RBAC)**.
+- Enables secure, granular access to data at the storage layer.
+
+### Applying Granular Security
+When workspace roles or item permissions are not sufficient, use granular security controls such as:
+- **Table and Row-Level Security:** Enforce access at the table or row level using SQL analytics endpoints or warehouse features.
+- **File and Folder Access:** Restrict access to specific files/folders in OneLake using data access roles (preview).
+- **Semantic Model Security:** Apply security at the semantic model level for Power BI and analytics scenarios.
+
+### Summary Table: Access Control Mechanisms
+| Security Layer         | Example Controls                | Where Applied                |
+|-----------------------|---------------------------------|------------------------------|
+| Workspace Roles       | Admin, Member, Contributor      | Workspace                    |
+| Item Permissions      | Share, View, Edit               | Individual Fabric items      |
+| Granular Permissions  | Read, ReadData, Row-level       | SQL Endpoint, Warehouse      |
+| OneLake Data Access   | RBAC for files/folders (preview)| OneLake storage              |
+
+### Best Practices
+- **Principle of Least Privilege:** Always grant users the minimum permissions required for their role.
+- **Review Inheritance:** Be aware of inherited permissions from workspace roles and override with item permissions as needed.
+- **Combine Controls:** Use a combination of workspace, item, and granular permissions to meet complex security requirements.
+- **Monitor and Audit:** Regularly review access logs and permissions to ensure compliance and detect unauthorized access.
+
+**In summary:** Microsoft Fabric provides a layered, flexible approach to securing data access, allowing organizations to tailor security to their specific needs—from broad workspace roles to granular file, table, and row-level controls.
 
 ## Implement continuous integration and continuous delivery (CI/CD) in Microsoft Fabric
 
 ## Administer a Microsoft Fabric environment
+
+### OneLake and Fabric Hierarchy
+
+- **OneLake** is the unified storage layer for all data in Fabric, built on Azure Data Lake Storage (ADLS) Gen2.
+  - **Single OneLake per tenant:** Provides a global, hierarchical namespace across users, regions, and clouds.
+  - **Tenant:** The top-level organizational boundary, mapped to Microsoft Entra ID, and aligns with the root of OneLake.
+  - **Capacity:** Dedicated compute resources assigned to a tenant. Multiple capacities can be associated with a tenant, and are managed via Fabric SKUs or trials.
+  - **Domain:** Logical grouping of workspaces (e.g., Sales, Marketing, Finance) for easier management and access control.
+  - **Workspace:** A container for Fabric items (data warehouses, pipelines, datasets, reports, dashboards) and access management.
+  - **Items:** The core objects you create and manage in Fabric.
+
+### Administrative Roles
+
+- **Fabric Admin (formerly Power BI Admin):** Central role for managing Fabric settings and configurations.
+- **Microsoft 365 Admin, Power Platform Admin, Capacity Admin:** Also play key roles in administration.
+- **Role-based access:** Controls who can manage, configure, and monitor Fabric resources.
+
+### Admin Portal
+
+- **Web-based portal** for centralized management of Fabric.
+  - Manage tenant and capacity settings.
+  - Control user, admin, and group access.
+  - Access audit logs and monitor usage/performance.
+  - **Fabric On/Off Switch:** Enable or disable Fabric at the tenant or capacity level.
+
+### Automation and APIs
+
+- **PowerShell Cmdlets:** Automate common admin tasks (e.g., group management, data source configuration, monitoring).
+- **Admin APIs & SDKs:** Programmatically interact with Fabric for automation and integration with other systems.
+  - **API:** Set of protocols for communication between applications.
+  - **SDK:** Tools and libraries for building integrations and automations.
+
+### Monitoring and Insights
+
+- **Admin Monitoring Workspace:** Provides access to usage and performance insights.
+  - Share workspace or specific items with others.
+  - Includes the Feature Usage and Adoption dataset/report for analytics.
+
+### License Management
+
+- **User licenses** determine access and functionality within Fabric.
+  - Admins allocate and monitor licenses via the Microsoft 365 admin center.
+  - Efficient license management helps control costs and ensures compliance.
+
+### Content Sharing and Security
+
+- **Workspace Apps:** Preferred method for distributing content (read-only access).
+- **Workspace Access:** For collaboration and development.
+- **Least Privilege Principle:** Grant only necessary permissions to users.
+
+### Governance and Endorsement
+
+- **Endorsement:** Mark items as Promoted (workspace-level) or Certified (org-wide, after review).
+  - **Promoted:** Visible badge, can be set by workspace contributors/admins.
+  - **Certified:** Requires formal review, managed by admins.
+- **Scanner API:** Scan Fabric items (warehouses, pipelines, datasets, reports, dashboards) for sensitive data.
+- **Metadata Scanning:** Catalog and report on all metadata for governance.
+- **Data Lineage:** Track data flow and transformations for impact analysis and compliance.
+  - **Lineage View:** Visualize data movement and dependencies in workspaces.
+  - **Microsoft Purview Hub (preview):** Centralized governance for Fabric data estate.
 
 ## PySpark/SparkSQL Cheatsheet
 

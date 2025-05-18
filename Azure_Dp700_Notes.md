@@ -324,6 +324,76 @@ Pipelines can also be scheduled or activated by a trigger to run your dataflow.
 
 ## Govern data in Microsoft Fabric with Purview
 
+Microsoft Fabric brings together features from Power BI, Azure Synapse Analytics, and Azure Data Factory, along with new capabilities, to deliver a unified platform for data governance and management. Below is a structured overview of how governance is achieved in Fabric, with a focus on Microsoft Purview integration.
+
+### Key Data Experiences in Fabric
+- **Data Factory:** Ingest, prepare, and transform data from diverse sources using a wide range of connectors.
+- **Synapse Data Engineering:** Use Spark for large-scale data collection, storage, processing, and analysis via jobs and notebooks.
+- **Synapse Data Warehouse:** Separate compute from storage, scale independently, and store data in Data Lake format for high-performance SQL analytics.
+- **Synapse Data Science:** Train, deploy, and use machine learning models.
+- **Real-Time Intelligence:** Manage event-driven data such as telemetry, logs, and streaming data.
+- **Power BI:** Visualize, analyze, and share insights to support decision-making.
+- **Data Activator:** Automate actions (emails, workflows) triggered by data conditions—no code required.
+
+### Unified Storage and Data Lake
+- All data in Fabric is stored in **OneLake**, built on Azure Data Lake Storage (ADLS) Gen2.
+- **OneLake** supports both structured and unstructured data, eliminating silos and reducing costs.
+- Universal policies and security are applied across all data assets.
+
+### Built-in Data Governance Tools
+- **No extra subscription required:** Many governance features are available out-of-the-box in Fabric.
+- **Fabric Admin Portal:** Centralized control for tenant settings, capacities, domains, and more (admin access required).
+- **Tenants, Domains, and Workspaces:**
+  - **Tenants:** Organization-wide boundary for governance.
+  - **Domains:** Group data by business area or subject.
+  - **Workspaces:** Organize Fabric items for teams or departments.
+- **Capacities:** Limit compute resource usage for all workloads.
+- **Metadata Scanning:** Extracts metadata (names, identities, sensitivities, endorsements, etc.) from data lakes to support governance and policy enforcement.
+
+### Microsoft Purview Integration
+- **Microsoft Purview** is a comprehensive data governance and compliance platform for managing and protecting data assets.
+- **Key Capabilities:**
+  - **Data Discovery, Classification, and Cataloging:** Automates identification of sensitive data and centralizes metadata.
+  - **Compliance & Risk Management:** Monitors regulatory adherence and assesses vulnerabilities.
+  - **Information Protection:**
+    - Classify, label, and protect sensitive data with customizable sensitivity labels.
+    - Policies define access controls and enforce encryption.
+    - Labels persist with data across emails, documents, and cloud storage.
+    - Integrates with Data Loss Prevention (DLP) to prevent unauthorized sharing.
+  - **Data Loss Prevention (DLP):**
+    - Automatically detect, monitor, and control sharing/movement of sensitive data.
+    - Customizable rules to block, restrict, or alert on sensitive data transfers.
+    - Currently, DLP policies are only supported for Power BI semantic models.
+  - **Audit Logging:**
+    - User activities (file creation, item access) are logged and available in the Purview audit log.
+
+### Connecting Purview to Fabric
+- Register your Fabric tenant in Purview to enable discovery and management of all Fabric items.
+- Once connected, the **Microsoft Purview hub** appears in Fabric, providing rich analysis and reporting.
+- **Cross-Tenant Considerations:**
+  - If Fabric and Purview are in different tenants, all features are supported except live view for Fabric items.
+  - Manual entry of tenant ID is required; managed identity authentication is not supported for cross-tenant connections (use service principal or delegated authentication).
+
+### Microsoft Purview Hub in Fabric
+- The main section is **Microsoft Fabric data**, with two displays: **Items** and **Sensitivity**.
+- **Open full report** for detailed analysis, including:
+  - **Overview Report:** Summary of endorsements, labels, and workspaces for a broad view of data usage.
+  - **Endorsement Report:** Analyze item endorsements and user confidence in data quality.
+  - **Sensitivity Report:** Review sensitivity label usage and ensure correct application for compliance.
+  - **Inventory Report:** Drill down by date, item type, and other filters to identify specific items.
+  - **Items Page:** Insights into item distribution and endorsement coverage across the organization.
+  - **Sensitivity Page:** Analyze sensitivity labeling by department and geography to identify gaps or best practices.
+
+### Best Practices for Data Governance in Fabric
+- **Centralize governance** using the Fabric Admin portal and Purview integration.
+- **Classify and label** sensitive data with Information Protection and sensitivity labels.
+- **Monitor and audit** user activities and data movement with Purview audit logs.
+- **Leverage reports** in the Purview hub to identify gaps in endorsements, labeling, and compliance.
+- **Apply DLP policies** where supported to prevent data leaks and unauthorized sharing.
+
+**Summary:**
+Microsoft Fabric, with Microsoft Purview, provides a robust, unified approach to data governance—enabling organizations to discover, classify, protect, and monitor their data estate efficiently and securely.
+
 ## Get started with data warehouses in Microsoft Fabric
 
 ### Overview of Data Warehouses

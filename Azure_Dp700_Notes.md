@@ -862,6 +862,57 @@ When workspace roles or item permissions are not sufficient, use granular securi
 
 ## Implement continuous integration and continuous delivery (CI/CD) in Microsoft Fabric
 
+Implementing **CI/CD** in Microsoft Fabric ensures that your analytics solutions are robust, reliable, and delivered efficiently. Below is a structured overview of CI/CD concepts and their application in Fabric.
+
+### What is CI/CD?
+- **Continuous Integration (CI):**
+  - Developers frequently commit code to a shared branch in a version control system (e.g., Git).
+  - Each commit triggers automated builds and tests, catching bugs and integration issues early.
+  - **Benefits:** Early conflict detection, faster bug resolution, and improved code quality.
+- **Continuous Delivery (CD):**
+  - After CI, code is automatically deployed to a staging environment for further automated testing.
+  - Ensures that code is always in a deployable state.
+- **Continuous Deployment:**
+  - Extends CD by automatically releasing updates to production after passing all tests.
+  - Enables rapid, reliable delivery of new features and fixes.
+
+### CI/CD in Microsoft Fabric
+Managing the lifecycle of Fabric items with CI/CD involves two main parts:
+
+#### 1. Integration (Source Control with Git)
+- **Git Integration:**
+  - Fabric supports integration with **GitHub** and **Azure DevOps** at the workspace level.
+  - Teams collaborate using branches, manage incremental changes, and track code history.
+  - When a workspace is connected to Git, you can sync items with a repository branch and view their sync status directly in Fabric.
+
+#### 2. Deployment (Deployment Pipelines)
+- **Deployment Pipelines:**
+  - Automate the promotion of content through **development**, **test**, and **production** environments.
+  - Pipelines ensure content is updated, tested, and regularly refreshed.
+  - Can be used in conjunction with Git branches to promote content between environments, even when each environment uses different repositories or branches.
+
+#### 3. Automation (Fabric REST APIs)
+- **Fabric REST APIs:**
+  - Enable programmatic management and automation of CI/CD processes.
+  - APIs are available for both deployment pipelines and Git integration.
+  - Use these APIs to automate repetitive tasks, trigger deployments, or integrate with external systems.
+
+### Supported Version Control Systems
+- **GitHub**
+- **Azure DevOps**
+
+> **Note:** Version control integration is at the workspace level. You can version and manage all items developed within a workspace.
+
+### Best Practices for CI/CD in Fabric
+- **Use branches** for feature development and bug fixes to isolate changes.
+- **Automate builds and tests** to catch issues early and ensure code quality.
+- **Promote content** through deployment pipelines to maintain environment consistency.
+- **Monitor sync status** in Fabric to ensure your workspace is up-to-date with the remote repository.
+- **Leverage REST APIs** for advanced automation and integration with other tools.
+
+**Summary:**
+Microsoft Fabric's CI/CD capabilities—powered by Git integration, deployment pipelines, and REST APIs—enable teams to deliver high-quality analytics solutions efficiently, with confidence in code quality and deployment reliability.
+
 ## Administer a Microsoft Fabric environment
 
 ### OneLake and Fabric Hierarchy

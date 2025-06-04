@@ -736,12 +736,295 @@ To use a trained model for batch predictions:
 - Streamlined batch prediction workflows.
 
 ## Get started with Real-Time Intelligence in Microsoft Fabric
+Real-Time Intelligence in Microsoft Fabric enables organizations to capture, analyze, and act on streaming data as it arrives. This capability is essential for scenarios where immediate insights or automated actions are required.
+
+### Goals of Real-Time Analytics
+- **Continuous Analysis:** Monitor data streams to detect issues or trends as they emerge.
+- **Behavioral Insights:** Understand system or component behavior under various conditions to inform future enhancements.
+- **Automated Actions:** Trigger alerts or specific actions when events occur or thresholds are exceeded.
+
+### Characteristics of Stream Processing Solutions
+- **Unbounded Data Streams:** Data is continuously added, with no defined end.
+- **Temporal Data:** Each record typically includes a timestamp indicating when the event occurred.
+- **Windowed Aggregation:** Data is often aggregated over time windows (e.g., per minute, per hour) to support real-time metrics.
+- **Dual Use:** Results can drive real-time automation/visualization or be persisted for historical analysis—often both.
+
+### Core Components in Microsoft Fabric Real-Time Intelligence
+
+#### 1. Eventstreams
+- **Purpose:** Capture, transform, and ingest real-time data from a wide range of streaming sources.
+- **Supported Sources:**
+  - External services (Azure Event Hubs, IoT Hubs, Kafka, CDC feeds, etc.)
+  - Fabric events (workspace changes, OneLake data changes, job events)
+  - Sample data for exploration and learning
+- **Destinations:**
+  - **Eventhouse:** Store and analyze real-time data using KQL.
+  - **Lakehouse:** Transform and store real-time events in Delta Lake format for further analytics.
+  - **Derived Stream:** Redirect processed data to another eventstream for further transformation.
+  - **Fabric Activator:** Automate actions based on stream values.
+  - **Custom Endpoint:** Route data to external systems or custom applications.
+
+#### 2. Eventhouses
+- **Role:** Store and organize real-time data for analysis.
+- **Components:**
+  - **KQL Databases:** Optimized for real-time data, hosting tables, functions, materialized views, and shortcuts.
+  - **KQL Querysets:** Collections of KQL (Kusto Query Language) queries for analyzing data.
+- **KQL:** A powerful, time-based query language used across Azure Data Explorer, Log Analytics, Sentinel, and Fabric.
+
+#### 3. Real-Time Dashboards
+- **Purpose:** Visualize real-time insights at a glance by pinning KQL query results to dashboard tiles.
+- **Features:**
+  - Each tile displays live data from eventhouse tables.
+  - Dashboards can be created in a workspace or directly from a KQL queryset.
+  - Requires tenant-level feature enablement by an administrator.
+
+#### 4. Activator
+- **Function:** Automate actions in response to streaming data events.
+- **Core Concepts:**
+  - **Events:** Each record in a stream, representing an occurrence at a specific time.
+  - **Objects:** Business entities represented by event data (e.g., sensor, sales order).
+  - **Properties:** Fields in event data mapped to object attributes (e.g., temperature, total_amount).
+  - **Rules:** Define conditions that trigger actions (e.g., send alert if temperature exceeds threshold).
+- **Use Cases:** Send notifications, trigger workflows, or execute Fabric jobs based on real-time data.
+
+### Real-Time Hub in Fabric
+- **Capabilities:**
+  - Discover and connect to real-time data sources.
+  - Create and manage eventstreams and Activator alerts.
+  - Preview and manage real-time data connections and eventhouses.
+  - Build and share real-time dashboards.
+  - Endorse and share real-time data resources across the organization.
+
+### Best Practices
+- **Combine Real-Time and Historical Analytics:** Persist streaming data for later analysis alongside historical data.
+- **Leverage KQL for Advanced Analysis:** Use KQL querysets to extract deep insights from real-time data.
+- **Automate Responsively:** Use Activator to trigger timely actions and alerts, reducing manual intervention.
+- **Visualize for Impact:** Build dashboards to surface key metrics and trends for rapid decision-making.
+
+**Summary:**
+Microsoft Fabric Real-Time Intelligence empowers organizations to act on data as it happens—enabling continuous monitoring, rapid response, and data-driven automation across a wide range of business scenarios.
 
 ## Use real-time eventstreams in Microsoft Fabric
 
+Eventstreams in Microsoft Fabric provide a **no-code, visual way to capture, process, and route real-time events** from a variety of sources to multiple destinations. They enable you to design streaming data pipelines that can filter, aggregate, group, and enrich data before it reaches its destination.
+
+### Key Concepts
+
+- **Eventstream Pipeline:** Think of an eventstream as a **conveyor belt** that moves data from sources to destinations, with the ability to transform data along the way.
+- **Visual Editor:** Use the **drag-and-drop eventstream editor** to design your pipeline, add sources, destinations, and transformations, and monitor data flow in real time.
+
+---
+
+### Supported Event Sources
+
+Microsoft Fabric eventstreams can ingest data from a wide range of internal and external sources, including:
+
+- **Azure Event Hub**
+- **Azure IoT Hub**
+- **Azure SQL CDC (Change Data Capture)**
+- **PostgreSQL CDC**
+- **MySQL CDC**
+- **Azure Cosmos DB CDC**
+- **Google Cloud Pub/Sub**
+- **Amazon Kinesis Data Streams**
+- **Confluent Cloud Kafka**
+- **Fabric workspace events**
+- **Azure Blob Storage events**
+- **Custom endpoints**
+
+---
+
+### Eventstream Destinations
+
+You can route processed events to several types of destinations:
+
+- **Eventhouse:** Store real-time event data in a **KQL database** for advanced analysis using Kusto Query Language (KQL). This enables rich reporting and dashboarding.
+- **Lakehouse:** Preprocess and store events in **Delta Lake format** within lakehouse tables, supporting data warehousing and analytics.
+- **Custom Endpoint:** Send real-time data to external or proprietary applications for immediate consumption or integration with other systems.
+- **Derived Stream:** Create a new stream after applying transformations (like filter or manage fields) to the original eventstream. This processed stream can be routed to any supported destination and monitored in the Real-Time hub.
+- **Fabric Activator:** Trigger **automated actions** (such as alerts or workflows) based on streaming data values.
+
+---
+
+### Transformations and Windowing
+
+**Transformations** allow you to shape and enrich your streaming data before it reaches its destination. Common transformations include:
+
+- **Filter**
+- **Manage Fields**
+- **Aggregate**
+- **Group By**
+- **Union**
+- **Expand**
+- **Join**
+
+#### Windowing Functions
+
+**Windowing functions** enable operations over time-based segments of streaming data, which is essential for analyzing trends and patterns in real time. They are especially useful for scenarios like sensor monitoring, web analytics, and transaction processing.
+
+- **Group By Transformation Parameters:**
+  - **Window Type:** Defines how events are grouped (see below).
+  - **Window Duration:** The length of each window.
+  - **Window Offset:** (Optional) Shifts the start/end time of the window.
+  - **Grouping Key:** One or more columns to group by.
+
+**Types of Windows:**
+
+- **Tumbling Windows:** Fixed, non-overlapping intervals (e.g., every 5 minutes).
+- **Sliding Windows:** Fixed, overlapping intervals (e.g., every 5 minutes, sliding every 1 minute).
+- **Session Windows:** Variable, non-overlapping intervals based on periods of activity separated by inactivity.
+- **Hopping Windows:** Overlapping windows that "hop" forward by a set interval, allowing events to appear in multiple windows.
+- **Snapshot Windows:** Group events with the same timestamp. Use `System.Timestamp()` in the `GROUP BY` clause.
+
+---
+
+### Best Practices
+
+- **Design for Flexibility:** Use transformations and windowing to adapt to changing data patterns and business needs.
+- **Monitor in Real Time:** Leverage the visual editor to observe data flow and troubleshoot issues as they occur.
+- **Automate Actions:** Integrate with Fabric Activator to trigger alerts or workflows based on streaming data.
+
+---
+
+**Summary:**  
+Microsoft Fabric eventstreams empower you to build robust, real-time data pipelines—enabling immediate insights, automation, and integration across your analytics ecosystem.
+
 ## Work with real-time data in a Microsoft Fabric eventhouse
 
+An **eventhouse** in Microsoft Fabric is a specialized data store designed for efficiently handling large volumes of **time-based event data**. It is optimized for real-time analytics scenarios, enabling organizations to ingest, store, query, and analyze streaming data in near real-time.
+
+### Key Features of an Eventhouse
+
+- **Optimized for Real-Time Data:** Built to manage and analyze continuous streams of events, such as telemetry, logs, or IoT sensor data.
+- **KQL Databases:** Each eventhouse contains one or more **KQL (Kusto Query Language) databases** that support:
+  - **Tables** for storing event data
+  - **Materialized Views** for pre-aggregated, summarized data
+  - **Stored Functions** for reusable query logic
+  - **Stored Procedures** and other advanced objects
+- **OneLake Integration:** You can enable the **OneLake** option for a database or for individual tables, making eventhouse data available across the Microsoft Fabric ecosystem.
+
+---
+
+### Working with KQL Databases
+
+After creating an eventhouse, you can use the default KQL database or create new ones as needed. KQL databases provide a rich set of features for managing and analyzing real-time data.
+
+#### Materialized Views
+
+- **Purpose:** Materialized views provide a **precomputed summary** of data from a source table or another materialized view, improving query performance for common aggregations.
+- **Types:**
+  - **For New Data Ingestion:** Only summarizes new incoming data.
+  - **With Backfill:** Summarizes both historical and new data.
+
+**Example: Create a Materialized View for New Data**
+```kql
+.create materialized-view TripsByVendor on table Automotive
+{
+    Automotive
+    | summarize trips = count() by vendor_id, pickup_date = format_datetime(pickup_datetime, "yyyy-MM-dd")
+}
+```
+
+**Example: Create a Materialized View with Backfill**
+```kql
+.create async materialized-view with (backfill=true)
+TripsByVendor on table Automotive
+{
+    Automotive
+    | summarize trips = count() by vendor_id, pickup_date = format_datetime(pickup_datetime, "yyyy-MM-dd")
+}
+```
+
+#### Stored Functions
+
+- **Purpose:** Stored functions encapsulate reusable query logic, making it easy to apply complex filters or calculations across multiple queries.
+
+**Example: Create a KQL Stored Function**
+```kql
+.create-or-alter function trips_by_min_passenger_count(num_passengers:long)
+{
+    Automotive
+    | where passenger_count >= num_passengers 
+    | project trip_id, pickup_datetime
+}
+```
+
+- **Usage:** Both materialized views and stored functions can be queried just like regular tables, enabling modular and maintainable analytics workflows.
+
+---
+
+### Best Practices
+
+- **Leverage Materialized Views:** Use materialized views to accelerate queries on large, frequently accessed datasets.
+- **Encapsulate Logic in Functions:** Store complex or commonly used logic in KQL functions for reusability and clarity.
+- **Enable OneLake Integration:** Make your eventhouse data broadly accessible by enabling OneLake for relevant tables or databases.
+- **Monitor and Optimize:** Regularly review query performance and optimize materialized views and functions as data patterns evolve.
+
+---
+
+**Summary:**  
+A Microsoft Fabric eventhouse, powered by KQL databases, provides a robust platform for real-time analytics—enabling efficient storage, transformation, and querying of streaming event data at scale.
+
 ## Create Real-Time Dashboards with Microsoft Fabric
+
+Real-Time Dashboards in Microsoft Fabric allow you to visualize and monitor streaming data as it arrives, providing actionable insights for rapid decision-making. Below are key concepts, configuration options, and best practices for implementing effective real-time dashboards.
+
+### Authorization Schemes
+
+When connecting a dashboard to its data source, you can specify one of two **authorization schemes**:
+
+- **Pass-through Identity:** The dashboard accesses data using the identity of the user viewing the dashboard. This ensures data security and compliance with user-level permissions.
+- **Dashboard Editor's Identity:** The dashboard accesses data using the identity of the user who created (edited) the dashboard. This can simplify access but may expose more data than intended if not managed carefully.
+
+### Dashboard Structure
+
+- A dashboard consists of one or more **tiles**, each displaying the results of a **KQL query**.
+- Tiles can be configured for interactivity, filtering, and real-time updates.
+
+### Best Practices for Real-Time Dashboards
+
+#### 1. Clarity and Simplicity
+- **Keep dashboards simple and uncluttered.**
+- Use clear, descriptive labels for tiles and visuals.
+- Organize content using multiple pages for different subject areas or navigation when necessary.
+
+#### 2. Relevance
+- **Display only data that is relevant** to the dashboard's purpose and the audience's needs.
+- Regularly review dashboard content to ensure continued alignment with business goals.
+
+#### 3. Refresh Rate
+- **Set an appropriate refresh rate** to keep data up to date without overloading the system.
+- Consult with users to determine acceptable refresh intervals.
+
+#### 4. Accessibility
+- **Design dashboards for all users,** including those with viewer permissions.
+- Ensure visuals and navigation are accessible and intuitive.
+
+#### 5. Interactivity
+- Include features such as **filters, drill-downs, and parameters** to allow users to explore data.
+- Elicit regular feedback to ensure dashboards remain valuable and user-friendly.
+- As users become more familiar, introduce new features to enhance productivity.
+- **Leverage Copilot** where possible to increase productivity and automate insights.
+
+#### 6. Performance
+- **Optimize queries and visuals** for fast loading and smooth user experience.
+- Use parameters to filter data at the query level, reducing unnecessary data transfer.
+- Avoid querying more data than is needed for the visualization.
+
+#### 7. Security
+- **Implement robust security measures:**
+  - Protect sensitive data in dashboards and underlying data sources.
+  - Manage authentication (who can access the system) and authorization (what they can access) carefully.
+  - Remember, Fabric is a **Software as a Service (SaaS)** solution—properly manage user roles and permissions.
+
+#### 8. Testing
+- **Regularly test dashboards** for functionality and performance.
+- Include user-acceptance testing and feedback loops to ensure dashboards meet user needs and expectations.
+
+---
+
+**Summary:**  
+A well-designed real-time dashboard in Microsoft Fabric delivers timely, relevant, and actionable insights—empowering users to make informed decisions and respond quickly to changing business conditions.
 
 ## Monitor activities in Microsoft Fabric
 

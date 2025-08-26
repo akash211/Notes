@@ -1,7 +1,8 @@
-# Microsoft Fabric Notes
+# Microsoft Fabric Notes for DP-700 Certification
 
 ## Table of Contents
 
+### Core Concepts and Architecture
 1. [Introduction to end-to-end analytics using Microsoft Fabric](#introduction-to-end-to-end-analytics-using-microsoft-fabric)
 2. [Get started with lakehouses in Microsoft Fabric](#get-started-with-lakehouses-in-microsoft-fabric)
 3. [Organize a Fabric lakehouse using medallion architecture design](#organize-a-fabric-lakehouse-using-medallion-architecture-design)
@@ -31,11 +32,45 @@
 
 ## Introduction to end-to-end analytics using Microsoft Fabric
 
-### Overview of Microsoft Fabric
-- **Fabric** is a unified software-as-a-service (SaaS) platform where all data is stored in a single open format in **OneLake**.
-- **OneLake** ensures scalability, cost-effectiveness, and accessibility from anywhere with an internet connection.
+### Overview of Microsoft Fabric (Key Certification Concepts)
+- **Microsoft Fabric** is an all-in-one analytics solution that combines:
+  - **Data Integration:** ETL/ELT capabilities
+  - **Data Engineering:** Apache Spark processing
+  - **Data Warehousing:** Enterprise-scale analytics
+  - **Real-Time Analytics:** Streaming and event processing
+  - **Data Science:** Machine learning and AI
+  - **Business Intelligence:** Power BI reporting
 
-### OneLake: Centralized Data Storage
+### OneLake: The Foundation of Fabric
+- **OneLake** is the unified storage layer that:
+  - Stores all data in an open file format (Delta Lake)
+  - Provides built-in data governance and security
+  - Enables cross-platform data access
+  - Supports both structured and unstructured data
+  - Eliminates data movement between services
+
+### Key Certification Focus Areas
+
+#### Exam DP-700 Skills Measured
+1. **Design and Implement Data Storage (25-30%)**
+   - Work with lakehouses and warehouses
+   - Implement medallion architecture
+   - Manage data security and governance
+
+2. **Design and Develop Data Integration Solutions (20-25%)**
+   - Implement data ingestion strategies
+   - Transform data using Dataflows Gen2
+   - Develop data pipelines
+
+3. **Design and Develop Data Queries (25-30%)**
+   - Write and optimize KQL queries
+   - Develop T-SQL queries for warehouses
+   - Implement real-time analytics
+
+4. **Manage and Monitor Data Solutions (20-25%)**
+   - Monitor performance and costs
+   - Implement security and compliance
+   - Manage workspaces and capacity
 - **OneLake** is Fabric's centralized data storage architecture that eliminates the need to move or copy data between systems.
 - It unifies data across regions and clouds into a single logical lake without moving or duplicating data.
 - Built on **Azure Data Lake Storage (ADLS)**, it supports various formats, including:

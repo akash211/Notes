@@ -1,0 +1,1840 @@
+<!DOCTYPE html><html><head>
+      <title>Azure_Dp700_Notes</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      
+      <link rel="stylesheet" href="file:///c:\Users\Asus\.vscode\extensions\shd101wyy.markdown-preview-enhanced-0.8.19\crossnote\dependencies\katex\katex.min.css">
+      
+      
+      
+      
+      
+      <style>
+      code[class*=language-],pre[class*=language-]{color:#333;background:0 0;font-family:Consolas,"Liberation Mono",Menlo,Courier,monospace;text-align:left;white-space:pre;word-spacing:normal;word-break:normal;word-wrap:normal;line-height:1.4;-moz-tab-size:8;-o-tab-size:8;tab-size:8;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none}pre[class*=language-]{padding:.8em;overflow:auto;border-radius:3px;background:#f5f5f5}:not(pre)>code[class*=language-]{padding:.1em;border-radius:.3em;white-space:normal;background:#f5f5f5}.token.blockquote,.token.comment{color:#969896}.token.cdata{color:#183691}.token.doctype,.token.macro.property,.token.punctuation,.token.variable{color:#333}.token.builtin,.token.important,.token.keyword,.token.operator,.token.rule{color:#a71d5d}.token.attr-value,.token.regex,.token.string,.token.url{color:#183691}.token.atrule,.token.boolean,.token.code,.token.command,.token.constant,.token.entity,.token.number,.token.property,.token.symbol{color:#0086b3}.token.prolog,.token.selector,.token.tag{color:#63a35c}.token.attr-name,.token.class,.token.class-name,.token.function,.token.id,.token.namespace,.token.pseudo-class,.token.pseudo-element,.token.url-reference .token.variable{color:#795da3}.token.entity{cursor:help}.token.title,.token.title .token.punctuation{font-weight:700;color:#1d3e81}.token.list{color:#ed6a43}.token.inserted{background-color:#eaffea;color:#55a532}.token.deleted{background-color:#ffecec;color:#bd2c00}.token.bold{font-weight:700}.token.italic{font-style:italic}.language-json .token.property{color:#183691}.language-markup .token.tag .token.punctuation{color:#333}.language-css .token.function,code.language-css{color:#0086b3}.language-yaml .token.atrule{color:#63a35c}code.language-yaml{color:#183691}.language-ruby .token.function{color:#333}.language-markdown .token.url{color:#795da3}.language-makefile .token.symbol{color:#795da3}.language-makefile .token.variable{color:#183691}.language-makefile .token.builtin{color:#0086b3}.language-bash .token.keyword{color:#0086b3}pre[data-line]{position:relative;padding:1em 0 1em 3em}pre[data-line] .line-highlight-wrapper{position:absolute;top:0;left:0;background-color:transparent;display:block;width:100%}pre[data-line] .line-highlight{position:absolute;left:0;right:0;padding:inherit 0;margin-top:1em;background:hsla(24,20%,50%,.08);background:linear-gradient(to right,hsla(24,20%,50%,.1) 70%,hsla(24,20%,50%,0));pointer-events:none;line-height:inherit;white-space:pre}pre[data-line] .line-highlight:before,pre[data-line] .line-highlight[data-end]:after{content:attr(data-start);position:absolute;top:.4em;left:.6em;min-width:1em;padding:0 .5em;background-color:hsla(24,20%,50%,.4);color:#f4f1ef;font:bold 65%/1.5 sans-serif;text-align:center;vertical-align:.3em;border-radius:999px;text-shadow:none;box-shadow:0 1px #fff}pre[data-line] .line-highlight[data-end]:after{content:attr(data-end);top:auto;bottom:.4em}html body{font-family:'Helvetica Neue',Helvetica,'Segoe UI',Arial,freesans,sans-serif;font-size:16px;line-height:1.6;color:#333;background-color:#fff;overflow:initial;box-sizing:border-box;word-wrap:break-word}html body>:first-child{margin-top:0}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{line-height:1.2;margin-top:1em;margin-bottom:16px;color:#000}html body h1{font-size:2.25em;font-weight:300;padding-bottom:.3em}html body h2{font-size:1.75em;font-weight:400;padding-bottom:.3em}html body h3{font-size:1.5em;font-weight:500}html body h4{font-size:1.25em;font-weight:600}html body h5{font-size:1.1em;font-weight:600}html body h6{font-size:1em;font-weight:600}html body h1,html body h2,html body h3,html body h4,html body h5{font-weight:600}html body h5{font-size:1em}html body h6{color:#5c5c5c}html body strong{color:#000}html body del{color:#5c5c5c}html body a:not([href]){color:inherit;text-decoration:none}html body a{color:#08c;text-decoration:none}html body a:hover{color:#00a3f5;text-decoration:none}html body img{max-width:100%}html body>p{margin-top:0;margin-bottom:16px;word-wrap:break-word}html body>ol,html body>ul{margin-bottom:16px}html body ol,html body ul{padding-left:2em}html body ol.no-list,html body ul.no-list{padding:0;list-style-type:none}html body ol ol,html body ol ul,html body ul ol,html body ul ul{margin-top:0;margin-bottom:0}html body li{margin-bottom:0}html body li.task-list-item{list-style:none}html body li>p{margin-top:0;margin-bottom:0}html body .task-list-item-checkbox{margin:0 .2em .25em -1.8em;vertical-align:middle}html body .task-list-item-checkbox:hover{cursor:pointer}html body blockquote{margin:16px 0;font-size:inherit;padding:0 15px;color:#5c5c5c;background-color:#f0f0f0;border-left:4px solid #d6d6d6}html body blockquote>:first-child{margin-top:0}html body blockquote>:last-child{margin-bottom:0}html body hr{height:4px;margin:32px 0;background-color:#d6d6d6;border:0 none}html body table{margin:10px 0 15px 0;border-collapse:collapse;border-spacing:0;display:block;width:100%;overflow:auto;word-break:normal;word-break:keep-all}html body table th{font-weight:700;color:#000}html body table td,html body table th{border:1px solid #d6d6d6;padding:6px 13px}html body dl{padding:0}html body dl dt{padding:0;margin-top:16px;font-size:1em;font-style:italic;font-weight:700}html body dl dd{padding:0 16px;margin-bottom:16px}html body code{font-family:Menlo,Monaco,Consolas,'Courier New',monospace;font-size:.85em;color:#000;background-color:#f0f0f0;border-radius:3px;padding:.2em 0}html body code::after,html body code::before{letter-spacing:-.2em;content:'\00a0'}html body pre>code{padding:0;margin:0;word-break:normal;white-space:pre;background:0 0;border:0}html body .highlight{margin-bottom:16px}html body .highlight pre,html body pre{padding:1em;overflow:auto;line-height:1.45;border:#d6d6d6;border-radius:3px}html body .highlight pre{margin-bottom:0;word-break:normal}html body pre code,html body pre tt{display:inline;max-width:initial;padding:0;margin:0;overflow:initial;line-height:inherit;word-wrap:normal;background-color:transparent;border:0}html body pre code:after,html body pre code:before,html body pre tt:after,html body pre tt:before{content:normal}html body blockquote,html body dl,html body ol,html body p,html body pre,html body ul{margin-top:0;margin-bottom:16px}html body kbd{color:#000;border:1px solid #d6d6d6;border-bottom:2px solid #c7c7c7;padding:2px 4px;background-color:#f0f0f0;border-radius:3px}@media print{html body{background-color:#fff}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{color:#000;page-break-after:avoid}html body blockquote{color:#5c5c5c}html body pre{page-break-inside:avoid}html body table{display:table}html body img{display:block;max-width:100%;max-height:100%}html body code,html body pre{word-wrap:break-word;white-space:pre}}.markdown-preview{width:100%;height:100%;box-sizing:border-box}.markdown-preview ul{list-style:disc}.markdown-preview ul ul{list-style:circle}.markdown-preview ul ul ul{list-style:square}.markdown-preview ol{list-style:decimal}.markdown-preview ol ol,.markdown-preview ul ol{list-style-type:lower-roman}.markdown-preview ol ol ol,.markdown-preview ol ul ol,.markdown-preview ul ol ol,.markdown-preview ul ul ol{list-style-type:lower-alpha}.markdown-preview .newpage,.markdown-preview .pagebreak{page-break-before:always}.markdown-preview pre.line-numbers{position:relative;padding-left:3.8em;counter-reset:linenumber}.markdown-preview pre.line-numbers>code{position:relative}.markdown-preview pre.line-numbers .line-numbers-rows{position:absolute;pointer-events:none;top:1em;font-size:100%;left:0;width:3em;letter-spacing:-1px;border-right:1px solid #999;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.markdown-preview pre.line-numbers .line-numbers-rows>span{pointer-events:none;display:block;counter-increment:linenumber}.markdown-preview pre.line-numbers .line-numbers-rows>span:before{content:counter(linenumber);color:#999;display:block;padding-right:.8em;text-align:right}.markdown-preview .mathjax-exps .MathJax_Display{text-align:center!important}.markdown-preview:not([data-for=preview]) .code-chunk .code-chunk-btn-group{display:none}.markdown-preview:not([data-for=preview]) .code-chunk .status{display:none}.markdown-preview:not([data-for=preview]) .code-chunk .output-div{margin-bottom:16px}.markdown-preview .md-toc{padding:0}.markdown-preview .md-toc .md-toc-link-wrapper .md-toc-link{display:inline;padding:.25rem 0}.markdown-preview .md-toc .md-toc-link-wrapper .md-toc-link div,.markdown-preview .md-toc .md-toc-link-wrapper .md-toc-link p{display:inline}.markdown-preview .md-toc .md-toc-link-wrapper.highlighted .md-toc-link{font-weight:800}.scrollbar-style::-webkit-scrollbar{width:8px}.scrollbar-style::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}.scrollbar-style::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,.66);border:4px solid rgba(150,150,150,.66);background-clip:content-box}html body[for=html-export]:not([data-presentation-mode]){position:relative;width:100%;height:100%;top:0;left:0;margin:0;padding:0;overflow:auto}html body[for=html-export]:not([data-presentation-mode]) .markdown-preview{position:relative;top:0;min-height:100vh}@media screen and (min-width:914px){html body[for=html-export]:not([data-presentation-mode]) .markdown-preview{padding:2em calc(50% - 457px + 2em)}}@media screen and (max-width:914px){html body[for=html-export]:not([data-presentation-mode]) .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for=html-export]:not([data-presentation-mode]) .markdown-preview{font-size:14px!important;padding:1em}}@media print{html body[for=html-export]:not([data-presentation-mode]) #sidebar-toc-btn{display:none}}html body[for=html-export]:not([data-presentation-mode]) #sidebar-toc-btn{position:fixed;bottom:8px;left:8px;font-size:28px;cursor:pointer;color:inherit;z-index:99;width:32px;text-align:center;opacity:.4}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] #sidebar-toc-btn{opacity:1}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc{position:fixed;top:0;left:0;width:300px;height:100%;padding:32px 0 48px 0;font-size:14px;box-shadow:0 0 4px rgba(150,150,150,.33);box-sizing:border-box;overflow:auto;background-color:inherit}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar{width:8px}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,.66);border:4px solid rgba(150,150,150,.66);background-clip:content-box}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc a{text-decoration:none}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc{padding:0 16px}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc .md-toc-link-wrapper .md-toc-link{display:inline;padding:.25rem 0}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc .md-toc-link-wrapper .md-toc-link div,html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc .md-toc-link-wrapper .md-toc-link p{display:inline}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc .md-toc-link-wrapper.highlighted .md-toc-link{font-weight:800}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{left:300px;width:calc(100% - 300px);padding:2em calc(50% - 457px - 300px / 2);margin:0;box-sizing:border-box}@media screen and (max-width:1274px){html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{width:100%}}html body[for=html-export]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .markdown-preview{left:50%;transform:translateX(-50%)}html body[for=html-export]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .md-sidebar-toc{display:none}
+/* Please visit the URL below for more information: */
+/*   https://shd101wyy.github.io/markdown-preview-enhanced/#/customize-css */
+
+      </style>
+      <!-- The content below will be included at the end of the <head> element. --><script type="text/javascript">
+  document.addEventListener("DOMContentLoaded", function () {
+    // your code here
+  });
+</script></head><body for="html-export">
+    
+    
+      <div class="crossnote markdown-preview  ">
+      
+<h1 id="microsoft-fabric-notes">Microsoft Fabric Notes </h1>
+<h2 id="table-of-contents">Table of Contents </h2>
+<ol>
+<li><a href="#introduction-to-end-to-end-analytics-using-microsoft-fabric">Introduction to end-to-end analytics using Microsoft Fabric</a></li>
+<li><a href="#get-started-with-lakehouses-in-microsoft-fabric">Get started with lakehouses in Microsoft Fabric</a></li>
+<li><a href="#organize-a-fabric-lakehouse-using-medallion-architecture-design">Organize a Fabric lakehouse using medallion architecture design</a></li>
+<li><a href="#use-apache-spark-in-microsoft-fabric">Use Apache Spark in Microsoft Fabric</a></li>
+<li><a href="#work-with-delta-lake-tables-in-microsoft-fabric">Work with Delta Lake tables in Microsoft Fabric</a></li>
+<li><a href="#ingest-data-with-dataflows-gen2-in-microsoft-fabric">Ingest Data with Dataflows Gen2 in Microsoft Fabric</a></li>
+<li><a href="#Govern-data-in-Microsoft-Fabric-with-Purview">Govern data in Microsoft Fabric with Purview</a></li>
+<li><a href="#get-started-with-data-warehouses-in-microsoft-fabric">Get started with data warehouses in Microsoft Fabric</a></li>
+<li><a href="#get-started-with-sql-database-in-microsoft-fabric">Get started with SQL Database in Microsoft Fabric</a></li>
+<li><a href="#load-data-into-a-microsoft-fabric-data-warehouse">Load data into a Microsoft Fabric data warehouse</a></li>
+<li><a href="#query-a-data-warehouse-in-microsoft-fabric">Query a data warehouse in Microsoft Fabric</a></li>
+<li><a href="#monitor-a-microsoft-fabric-data-warehouse">Monitor a Microsoft Fabric data warehouse</a></li>
+<li><a href="#secure-a-microsoft-fabric-data-warehouse">Secure a Microsoft Fabric data warehouse</a></li>
+<li><a href="#get-started-with-data-science-in-microsoft-fabric">Get started with data science in Microsoft Fabric</a></li>
+<li><a href="#get-started-with-real-time-intelligence-in-microsoft-fabric">Get started with Real-Time Intelligence in Microsoft Fabric</a></li>
+<li><a href="#use-real-time-eventstreams-in-microsoft-fabric">Use real-time eventstreams in Microsoft Fabric</a></li>
+<li><a href="#work-with-real-time-data-in-a-microsoft-fabric-eventhouse">Work with real-time data in a Microsoft Fabric eventhouse</a></li>
+<li><a href="#create-real-time-dashboards-with-microsoft-fabric">Create Real-Time Dashboards with Microsoft Fabric</a></li>
+<li><a href="#monitor-activities-in-microsoft-fabric">Monitor activities in Microsoft Fabric</a></li>
+<li><a href="#secure-data-access-in-microsoft-fabric">Secure data access in Microsoft Fabric</a></li>
+<li><a href="#implement-continuous-integration-and-continuous-delivery-cicd-in-microsoft-fabric">Implement continuous integration and continuous delivery (CI/CD) in Microsoft Fabric</a></li>
+<li><a href="#govern-data-in-microsoft-fabric-with-purview">Govern data in Microsoft Fabric with Purview</a></li>
+<li><a href="#administer-a-microsoft-fabric-environment">Administer a Microsoft Fabric environment</a></li>
+<li><a href="#pysparksparksql-cheatsheet">PySpark/SparkSQL Cheatsheet</a></li>
+</ol>
+<hr>
+<h2 id="introduction-to-end-to-end-analytics-using-microsoft-fabric">Introduction to end-to-end analytics using Microsoft Fabric </h2>
+<h3 id="overview-of-microsoft-fabric">Overview of Microsoft Fabric </h3>
+<ul>
+<li><strong>Fabric</strong> is a unified software-as-a-service (SaaS) platform where all data is stored in a single open format in <strong>OneLake</strong>.</li>
+<li><strong>OneLake</strong> ensures scalability, cost-effectiveness, and accessibility from anywhere with an internet connection.</li>
+</ul>
+<h3 id="onelake-centralized-data-storage">OneLake: Centralized Data Storage </h3>
+<ul>
+<li><strong>OneLake</strong> is Fabric's centralized data storage architecture that eliminates the need to move or copy data between systems.</li>
+<li>It unifies data across regions and clouds into a single logical lake without moving or duplicating data.</li>
+<li>Built on <strong>Azure Data Lake Storage (ADLS)</strong>, it supports various formats, including:
+<ul>
+<li><strong>Delta</strong></li>
+<li><strong>Parquet</strong></li>
+<li><strong>CSV</strong></li>
+<li><strong>JSON</strong></li>
+</ul>
+</li>
+<li>All compute engines in Fabric automatically store their data in OneLake, making it directly accessible without movement or duplication.</li>
+<li>For tabular data, analytical engines write data in <strong>delta-parquet format</strong>, ensuring seamless interaction across engines.</li>
+</ul>
+<h4 id="shortcuts-in-onelake">Shortcuts in OneLake </h4>
+<ul>
+<li>Shortcuts are references to files or storage locations external to OneLake.</li>
+<li>They allow access to existing cloud data without copying it, ensuring data consistency and synchronization with the source.</li>
+</ul>
+<h3 id="workspaces-in-microsoft-fabric">Workspaces in Microsoft Fabric </h3>
+<ul>
+<li><strong>Workspaces</strong> serve as logical containers to organize and manage data, reports, and other assets.</li>
+<li>They provide clear separation of resources, making it easier to control access and maintain security.</li>
+<li>Key features of workspaces:
+<ul>
+<li>Each workspace has its own set of permissions to ensure authorized access.</li>
+<li>Manage compute resources and integrate with <strong>Git</strong> for version control.</li>
+<li>Support for <strong>data lineage view</strong>, providing a visual representation of data flow and dependencies.</li>
+</ul>
+</li>
+</ul>
+<h4 id="workspace-settings">Workspace Settings </h4>
+<ul>
+<li>Configure the following in workspace settings:
+<ul>
+<li><strong>License type</strong> to use Fabric features.</li>
+<li><strong>OneDrive access</strong> for the workspace.</li>
+<li><strong>Azure Data Lake Gen2 Storage</strong> connection.</li>
+<li><strong>Git integration</strong> for version control.</li>
+<li><strong>Spark workload settings</strong> for performance optimization.</li>
+</ul>
+</li>
+<li>Manage workspace access through four roles:
+<ul>
+<li><strong>Admin</strong></li>
+<li><strong>Contributor</strong></li>
+<li><strong>Member</strong></li>
+<li><strong>Viewer</strong></li>
+</ul>
+</li>
+<li>For granular access control, use <strong>item-level permissions</strong> based on business needs.</li>
+</ul>
+<h4 id="onelake-catalog">OneLake Catalog </h4>
+<ul>
+<li>The <strong>OneLake catalog</strong> helps analyze, monitor, and maintain data governance by providing:
+<ul>
+<li>Guidance on sensitivity labels.</li>
+<li>Item metadata.</li>
+<li>Data refresh status.</li>
+</ul>
+</li>
+<li>The <strong>OneLake catalog</strong> helps users find and access various data sources within their organization.</li>
+<li>Users can explore and connect to data sources, ensuring they have the right data for their needs.</li>
+<li>Offers insights into governance status and actions for improvement.</li>
+<li>Users only see items shared with them.</li>
+</ul>
+<h3 id="administration-and-governance">Administration and Governance </h3>
+<ul>
+<li>Fabric's <strong>OneLake</strong> is centrally governed and open for collaboration.</li>
+<li>Administration is centralized in the <strong>Admin portal</strong>, where you can:
+<ul>
+<li>Manage groups and permissions.</li>
+<li>Configure data sources and gateways.</li>
+<li>Monitor usage and performance.</li>
+<li>Access Fabric admin APIs and SDKs to automate tasks and integrate with other systems.</li>
+</ul>
+</li>
+</ul>
+<h4 id="admin-roles">Admin Roles </h4>
+<ul>
+<li><strong>Fabric admin (formerly Power BI admin):</strong> Manages Fabric settings and configurations.</li>
+<li><strong>Power Platform admin:</strong> Oversees Power Platform services, including Fabric.</li>
+<li><strong>Microsoft 365 admin:</strong> Manages organization-wide Microsoft services, including Fabric.</li>
+<li>Admins can enable Fabric in the <strong>Admin portal &gt; Tenant settings</strong> in the Power BI service.</li>
+<li>Fabric can be enabled for The entire organization or Specific Microsoft 365 or Microsoft Entra security groups.</li>
+<li>Admins can delegate this ability to other users at the capacity level.</li>
+</ul>
+<h2 id="get-started-with-lakehouses-in-microsoft-fabric">Get started with lakehouses in Microsoft Fabric </h2>
+<h3 id="overview-of-lakehouses">Overview of Lakehouses </h3>
+<ul>
+<li>A <strong>lakehouse</strong> is the foundation of Microsoft Fabric, built on top of the <strong>OneLake</strong> scalable storage layer.</li>
+<li>Combines the flexibility and scalability of a <strong>data lake</strong> with the query and analytical capabilities of a <strong>data warehouse</strong>.</li>
+<li>Built using <strong>Delta format tables</strong>, lakehouses unify:
+<ul>
+<li>SQL-based analytical capabilities of a relational data warehouse.</li>
+<li>Flexibility and scalability of a data lake.</li>
+</ul>
+</li>
+</ul>
+<h3 id="key-features-of-lakehouses">Key Features of Lakehouses </h3>
+<ul>
+<li><strong>Unified Platform:</strong>
+<ul>
+<li>Supports all data formats and integrates with various analytics tools and programming languages.</li>
+<li>Provides a single location for data engineers, data scientists, and analysts to access and use data.</li>
+</ul>
+</li>
+<li><strong>Scalability and Availability:</strong>
+<ul>
+<li>Cloud-based solutions that scale automatically.</li>
+<li>High availability and disaster recovery.</li>
+</ul>
+</li>
+<li><strong>Data Processing Engines:</strong>
+<ul>
+<li>Uses <strong>Apache Spark</strong> and <strong>SQL compute engines</strong> for big data processing.</li>
+<li>Supports machine learning and predictive modeling analytics.</li>
+</ul>
+</li>
+<li><strong>Schema-on-Read:</strong>
+<ul>
+<li>Data is organized in a schema-on-read format, allowing schema definition as needed.</li>
+</ul>
+</li>
+<li><strong>ACID Transactions:</strong>
+<ul>
+<li>Ensures data consistency and integrity through <strong>Delta Lake</strong> formatted tables.</li>
+</ul>
+</li>
+</ul>
+<h3 id="benefits-of-lakehouses">Benefits of Lakehouses </h3>
+<ul>
+<li>Centralized data storage and processing.</li>
+<li>Seamless integration with Microsoft Fabric tools.</li>
+<li>Enhanced data consistency and governance.</li>
+</ul>
+<h3 id="data-ingestion-and-transformation">Data Ingestion and Transformation </h3>
+<ul>
+<li><strong>ETL Process:</strong>
+<ul>
+<li>Follow the <strong>Extract, Transform, Load (ETL)</strong> process to ingest and transform data before loading it into the lakehouse.</li>
+</ul>
+</li>
+<li><strong>Data Ingestion Methods:</strong>
+<ul>
+<li><strong>Upload:</strong> Upload local files directly.</li>
+<li><strong>Dataflows Gen2:</strong> Import and transform data using Power Query.</li>
+<li><strong>Notebooks:</strong> Use Apache Spark to ingest, transform, and load data.</li>
+<li><strong>Data Factory Pipelines:</strong> Use the Copy Data activity to orchestrate ETL activities.</li>
+</ul>
+</li>
+<li><strong>Shortcuts:</strong>
+<ul>
+<li>Create shortcuts to access external data sources like <strong>Azure Data Lake Store Gen2</strong> or <strong>OneLake</strong> without copying data.</li>
+</ul>
+</li>
+</ul>
+<h3 id="working-with-lakehouses">Working with Lakehouses </h3>
+<ul>
+<li><strong>Lakehouse Explorer:</strong>
+<ul>
+<li>Browse files, folders, shortcuts, and tables within the Fabric platform.</li>
+<li>View and manage contents easily.</li>
+</ul>
+</li>
+<li><strong>Data Transformation:</strong>
+<ul>
+<li>Use <strong>Apache Spark notebooks</strong> or <strong>Dataflows Gen2</strong> for data transformation.</li>
+<li><strong>Dataflows Gen2</strong> provides a visual representation of transformations using Power Query.</li>
+<li>Use <strong>Data Factory Pipelines</strong> for orchestrating complex ETL processes.</li>
+</ul>
+</li>
+</ul>
+<h3 id="components-of-a-lakehouse">Components of a Lakehouse </h3>
+<ul>
+<li><strong>Lakehouse:</strong>
+<ul>
+<li>Contains shortcuts, folders, files, and tables.</li>
+</ul>
+</li>
+<li><strong>Semantic Model:</strong>
+<ul>
+<li>Provides an easy data source for Power BI report developers.</li>
+</ul>
+</li>
+<li><strong>SQL Analytics Endpoint:</strong>
+<ul>
+<li>Allows read-only access to query data with SQL.</li>
+</ul>
+</li>
+</ul>
+<h3 id="modes-of-interaction">Modes of Interaction </h3>
+<ul>
+<li><strong>Lakehouse Mode:</strong>
+<ul>
+<li>Add and interact with tables, files, and folders.</li>
+</ul>
+</li>
+<li><strong>SQL Analytics Endpoint Mode:</strong>
+<ul>
+<li>Use SQL to query tables and manage the relational semantic model.</li>
+</ul>
+</li>
+</ul>
+<h3 id="tools-for-data-engineers">Tools for Data Engineers </h3>
+<ul>
+<li><strong>Notebooks:</strong>
+<ul>
+<li>Ideal for engineers familiar with programming languages like <strong>PySpark</strong>, <strong>SQL</strong>, and <strong>Scala</strong>.</li>
+</ul>
+</li>
+<li><strong>Dataflows Gen2:</strong>
+<ul>
+<li>Suitable for developers familiar with Power BI or Excel, leveraging the Power Query interface.</li>
+</ul>
+</li>
+<li><strong>Pipelines:</strong>
+<ul>
+<li>Provide a visual interface for performing and orchestrating ETL processes, ranging from simple to complex workflows.</li>
+</ul>
+</li>
+</ul>
+<h2 id="organize-a-fabric-lakehouse-using-medallion-architecture-design">Organize a Fabric lakehouse using medallion architecture design </h2>
+<h3 id="overview-of-medallion-architecture">Overview of Medallion Architecture </h3>
+<ul>
+<li><strong>Medallion architecture</strong> is a recommended data design pattern for organizing data in a lakehouse logically. Built on the <strong>Delta Lake format</strong>, it natively supports <strong>ACID (Atomicity, Consistency, Isolation, Durability)</strong> transactions. It aims to improve data quality as it moves through different layers.</li>
+<li>Typically consists of three layers: <strong>Bronze (Raw)</strong>, <strong>Silver (Validated)</strong>, and <strong>Gold (Enriched)</strong>. Also referred to as a "multi-hop" architecture, allowing data to move between layers as needed.</li>
+<li>Flexible design: Use the same lakehouse for multiple medallion architectures or different lakehouses across workspaces based on use cases.</li>
+</ul>
+<h3 id="bronze-layer-raw-data">Bronze Layer: Raw Data </h3>
+<ul>
+<li>The <strong>bronze layer</strong> is the landing zone for all data, whether structured, semi-structured, or unstructured. Data is stored in its original format without any modifications.</li>
+<li>Tools used: <strong>Pipelines</strong>, <strong>Dataflows</strong>, <strong>Notebooks</strong>.</li>
+</ul>
+<h3 id="silver-layer-validated-data">Silver Layer: Validated Data </h3>
+<ul>
+<li>The <strong>silver layer</strong> is where data is validated and refined. Activities include combining and merging data, enforcing data validation rules (e.g., removing nulls, deduplication).</li>
+<li>Acts as a central repository for consistent data accessible by multiple teams.</li>
+<li>Tools used: <strong>Dataflows</strong>, <strong>Notebooks</strong>.</li>
+</ul>
+<h3 id="gold-layer-enriched-data">Gold Layer: Enriched Data </h3>
+<ul>
+<li>The <strong>gold layer</strong> is where data is further refined to meet specific business and analytics needs. Activities include aggregating data to specific granularities (e.g., daily, hourly) and enriching data with external information.</li>
+<li>Data in the gold layer is ready for use by downstream teams, including analytics, data science, and MLOps. Recommended to model the gold layer in a <strong>star schema</strong>.</li>
+<li>Tools used: <strong>SQL Analytics Endpoint</strong>, <strong>Semantic Model</strong>.</li>
+</ul>
+<h3 id="customizing-the-medallion-architecture">Customizing the Medallion Architecture </h3>
+<ul>
+<li>The medallion architecture is flexible and can be tailored to meet specific organizational needs. Examples of customization:
+<ul>
+<li>Adding a "raw" layer for landing data in a specific format before transforming it into the bronze layer.</li>
+<li>Adding a "platinum" layer for further refined and enriched data for specific use cases.</li>
+</ul>
+</li>
+<li>Regardless of the number of layers, the architecture can adapt to your organization's requirements.</li>
+</ul>
+<h3 id="querying-data-in-the-medallion-architecture">Querying Data in the Medallion Architecture </h3>
+<ul>
+<li>Use either the <strong>SQL Analytics Endpoint</strong> or <strong>Power BI Semantic Model</strong> in <strong>Direct Lake Mode</strong> to query data.</li>
+<li><strong>SQL Analytics Endpoint</strong> works in read-only mode.</li>
+<li><strong>Semantic Model</strong> is created automatically when a lakehouse is created. It provides metrics on top of lakehouse data and connects to data using <strong>Direct Lake Mode</strong>, which caches frequently used data, refreshes data as required, and combines the speed of a semantic model with up-to-date lakehouse data.</li>
+</ul>
+<h2 id="use-apache-spark-in-microsoft-fabric">Use Apache Spark in Microsoft Fabric </h2>
+<h3 id="overview-of-apache-spark">Overview of Apache Spark </h3>
+<ul>
+<li><strong>Apache Spark</strong> is a distributed data processing framework that enables large-scale data analytics by coordinating work across multiple processing nodes in a cluster, known in Microsoft Fabric as a <strong>Spark pool</strong>.</li>
+<li>Spark supports multiple programming languages, including:
+<ul>
+<li><strong>Java</strong></li>
+<li><strong>Scala</strong> (a Java-based scripting language)</li>
+<li><strong>Spark R</strong></li>
+<li><strong>Spark SQL</strong></li>
+<li><strong>PySpark</strong> (a Spark-specific variant of Python).</li>
+</ul>
+</li>
+</ul>
+<h3 id="spark-pool-architecture">Spark Pool Architecture </h3>
+<ul>
+<li>A <strong>Spark pool</strong> contains two types of nodes:
+<ul>
+<li><strong>Head Node:</strong> Coordinates distributed processes through a driver program.</li>
+<li><strong>Worker Nodes:</strong> Perform actual data processing tasks through executor processes.</li>
+</ul>
+</li>
+<li>Microsoft Fabric provides a <strong>starter pool</strong> in each workspace, enabling quick setup and execution of Spark jobs with minimal configuration.</li>
+</ul>
+<h3 id="configuring-spark-pools">Configuring Spark Pools </h3>
+<ul>
+<li>Key configuration settings for Spark pools include:
+<ul>
+<li><strong>Node Family:</strong> Type of virtual machines used for the Spark cluster nodes (e.g., memory-optimized nodes for better performance).</li>
+<li><strong>Autoscale:</strong> Automatically provisions nodes as needed, with options to set initial and maximum node counts.</li>
+<li><strong>Dynamic Allocation:</strong> Dynamically allocates executor processes on worker nodes based on data volumes.</li>
+</ul>
+</li>
+<li>Multiple pools can be created, and one can be configured as the default.</li>
+</ul>
+<h3 id="spark-runtime-and-libraries">Spark Runtime and Libraries </h3>
+<ul>
+<li>The <strong>Spark runtime</strong> determines the versions of Apache Spark, Delta Lake, Python, and other core components installed.</li>
+<li>The current default runtime version is <strong>1.3</strong>.</li>
+<li>Within a runtime, you can install and use a wide selection of libraries for common or specialized tasks.</li>
+<li>Custom environments can be created in a Fabric workspace to use specific Spark runtimes, libraries, and configurations for different operations.</li>
+</ul>
+<h3 id="native-execution-engine">Native Execution Engine </h3>
+<ul>
+<li>The <strong>native execution engine</strong> in Microsoft Fabric is a vectorized processing engine that runs Spark operations directly on lakehouse infrastructure.</li>
+<li>Benefits of the native execution engine:
+<ul>
+<li>Significantly improves query performance for large datasets in <strong>Parquet</strong> or <strong>Delta</strong> file formats.</li>
+</ul>
+</li>
+<li>To enable the native execution engine, set the following Spark properties:
+<ul>
+<li><code>spark.native.enabled: true</code></li>
+<li><code>spark.shuffle.manager: org.apache.spark.shuffle.sort.ColumnarShuffleManager</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="optimizing-spark-sessions">Optimizing Spark Sessions </h3>
+<ul>
+<li>When running Spark code in Microsoft Fabric, a <strong>Spark session</strong> is initiated.</li>
+<li><strong>High Concurrency Mode:</strong>
+<ul>
+<li>Shares Spark sessions across multiple concurrent users or processes.</li>
+<li>Ensures isolation of code to avoid variable conflicts between notebooks.</li>
+<li>Can also be enabled for Spark jobs to optimize non-interactive script execution.</li>
+</ul>
+</li>
+</ul>
+<h3 id="machine-learning-with-mlflow">Machine Learning with MLFlow </h3>
+<ul>
+<li><strong>MLFlow</strong> is an open-source library used to manage machine learning training and model deployment.</li>
+<li>Key capabilities of MLFlow in Microsoft Fabric:
+<ul>
+<li>Implicitly logs machine learning experiment activity without requiring explicit code.</li>
+<li>This functionality can be disabled in workspace settings if needed.</li>
+</ul>
+</li>
+</ul>
+<h3 id="schema-management">Schema Management </h3>
+<ul>
+<li>While Spark can infer schemas, explicitly providing schemas improves performance.</li>
+</ul>
+<h2 id="work-with-delta-lake-tables-in-microsoft-fabric">Work with Delta Lake tables in Microsoft Fabric </h2>
+<h3 id="overview-of-delta-lake-tables">Overview of Delta Lake Tables </h3>
+<ul>
+<li>Tables in a Microsoft Fabric lakehouse are based on the <strong>Linux Foundation Delta Lake table format</strong>, commonly used in Apache Spark.</li>
+<li><strong>Delta Lake</strong> is an open-source storage layer that adds relational database semantics to Spark-based data lake processing.</li>
+<li>The underlying data for Delta tables is stored in <strong>Parquet format</strong>.</li>
+</ul>
+<h3 id="table-types-in-delta-lake">Table Types in Delta Lake </h3>
+<ul>
+<li><strong>Managed Table:</strong> Fully managed by the lakehouse.</li>
+<li><strong>External Table:</strong> Created by specifying a path to external storage.</li>
+<li><strong>Metadata-Only Table:</strong> Created using <code>DeltaTableBuilder</code> to define table metadata without data.</li>
+</ul>
+<h3 id="file-management-and-optimization">File Management and Optimization </h3>
+<ul>
+<li><strong>Parquet Files:</strong>
+<ul>
+<li>Parquet files are immutable, so updates create new files, leading to the <strong>small file problem</strong>, which impacts performance.</li>
+</ul>
+</li>
+<li><strong>OptimizeWrite:</strong>
+<ul>
+<li>Enabled by default in Fabric to reduce the number of files written.</li>
+<li>Consolidates small files into fewer, larger files for better performance.</li>
+</ul>
+</li>
+<li><strong>Optimize Feature:</strong>
+<ul>
+<li>Can be run under maintenance in <strong>Lakehouse Explorer</strong> to further consolidate files.</li>
+</ul>
+</li>
+</ul>
+<h3 id="v-order-optimization">V-Order Optimization </h3>
+<ul>
+<li><strong>V-Order</strong> (enabled by default in Fabric):
+<ul>
+<li>Enables lightning-fast reads with in-memory-like data access times.</li>
+<li>Improves cost efficiency by reducing network, disk, and CPU resources during reads.</li>
+<li>Adds ~15% overhead during writes but significantly speeds up reads.</li>
+</ul>
+</li>
+<li><strong>Microsoft Verti-Scan Technology:</strong>
+<ul>
+<li>Used by Power BI and SQL engines to fully leverage V-Order optimization for faster reads.</li>
+<li>Spark and other engines benefit from V-Order optimization with ~10% faster reads, sometimes up to 50%.</li>
+</ul>
+</li>
+<li><strong>How V-Order Works:</strong>
+<ul>
+<li>Applies special sorting, row group distribution, dictionary encoding, and compression on Parquet files.</li>
+</ul>
+</li>
+</ul>
+<h3 id="maintenance-with-vacuum">Maintenance with VACUUM </h3>
+<ul>
+<li>The <strong>VACUUM</strong> command removes old Parquet data files but retains transaction logs.</li>
+<li><strong>Time Travel:</strong>
+<ul>
+<li>Old Parquet files are retained to enable time travel.</li>
+<li>Running VACUUM prevents time travel earlier than the retention period.</li>
+</ul>
+</li>
+<li>Example Command:<pre data-role="codeBlock" data-info="sql" class="language-sql sql"><code><span class="token keyword keyword-DESCRIBE">DESCRIBE</span> HISTORY products
+</code></pre><ul>
+<li>Shows the history of the <code>products</code> table.</li>
+</ul>
+</li>
+</ul>
+<h3 id="streaming-data-with-delta-lake">Streaming Data with Delta Lake </h3>
+<ul>
+<li><strong>Spark Structured Streaming:</strong>
+<ul>
+<li>Native support for streaming data through an API based on a boundless DataFrame.</li>
+<li>Captures streaming data for processing efficiently.</li>
+</ul>
+</li>
+</ul>
+<h2 id="ingest-data-with-dataflows-gen2-in-microsoft-fabric">Ingest Data with Dataflows Gen2 in Microsoft Fabric </h2>
+<p>Dataflows are a type of cloud-based ETL (Extract, Transform, Load) tool for building and executing scalable data transformation processes. Dataflows Gen2 allow you to extract data from various sources, transform it using a wide range of transformation operations, and load it into a destination. Using Power Query Online also allows for a visual interface to perform these tasks.<br>
+In Microsoft Fabric, you can create a Dataflow Gen2 in the Data Factory workload or Power BI workspace, or directly in the lakehouse.<br>
+Dataflow Gen2 does not support row level security.</p>
+<p>Data pipelines are a common concept in data engineering and offer a wide variety of activities to orchestrate. Some common activities include:</p>
+<p>Copy data<br>
+Incorporate Dataflow<br>
+Add Notebook<br>
+Get metadata<br>
+Execute a script or stored procedure<br>
+Pipelines provide a visual way to complete activities in a specific order</p>
+<p>Pipelines can also be scheduled or activated by a trigger to run your dataflow.</p>
+<h2 id="govern-data-in-microsoft-fabric-with-purview">Govern data in Microsoft Fabric with Purview </h2>
+<p>Microsoft Fabric brings together features from Power BI, Azure Synapse Analytics, and Azure Data Factory, along with new capabilities, to deliver a unified platform for data governance and management. Below is a structured overview of how governance is achieved in Fabric, with a focus on Microsoft Purview integration.</p>
+<h3 id="key-data-experiences-in-fabric">Key Data Experiences in Fabric </h3>
+<ul>
+<li><strong>Data Factory:</strong> Ingest, prepare, and transform data from diverse sources using a wide range of connectors.</li>
+<li><strong>Synapse Data Engineering:</strong> Use Spark for large-scale data collection, storage, processing, and analysis via jobs and notebooks.</li>
+<li><strong>Synapse Data Warehouse:</strong> Separate compute from storage, scale independently, and store data in Data Lake format for high-performance SQL analytics.</li>
+<li><strong>Synapse Data Science:</strong> Train, deploy, and use machine learning models.</li>
+<li><strong>Real-Time Intelligence:</strong> Manage event-driven data such as telemetry, logs, and streaming data.</li>
+<li><strong>Power BI:</strong> Visualize, analyze, and share insights to support decision-making.</li>
+<li><strong>Data Activator:</strong> Automate actions (emails, workflows) triggered by data conditions—no code required.</li>
+</ul>
+<h3 id="unified-storage-and-data-lake">Unified Storage and Data Lake </h3>
+<ul>
+<li>All data in Fabric is stored in <strong>OneLake</strong>, built on Azure Data Lake Storage (ADLS) Gen2.</li>
+<li><strong>OneLake</strong> supports both structured and unstructured data, eliminating silos and reducing costs.</li>
+<li>Universal policies and security are applied across all data assets.</li>
+</ul>
+<h3 id="built-in-data-governance-tools">Built-in Data Governance Tools </h3>
+<ul>
+<li><strong>No extra subscription required:</strong> Many governance features are available out-of-the-box in Fabric.</li>
+<li><strong>Fabric Admin Portal:</strong> Centralized control for tenant settings, capacities, domains, and more (admin access required).</li>
+<li><strong>Tenants, Domains, and Workspaces:</strong>
+<ul>
+<li><strong>Tenants:</strong> Organization-wide boundary for governance.</li>
+<li><strong>Domains:</strong> Group data by business area or subject.</li>
+<li><strong>Workspaces:</strong> Organize Fabric items for teams or departments.</li>
+</ul>
+</li>
+<li><strong>Capacities:</strong> Limit compute resource usage for all workloads.</li>
+<li><strong>Metadata Scanning:</strong> Extracts metadata (names, identities, sensitivities, endorsements, etc.) from data lakes to support governance and policy enforcement.</li>
+</ul>
+<h3 id="microsoft-purview-integration">Microsoft Purview Integration </h3>
+<ul>
+<li><strong>Microsoft Purview</strong> is a comprehensive data governance and compliance platform for managing and protecting data assets.</li>
+<li><strong>Key Capabilities:</strong>
+<ul>
+<li><strong>Data Discovery, Classification, and Cataloging:</strong> Automates identification of sensitive data and centralizes metadata.</li>
+<li><strong>Compliance &amp; Risk Management:</strong> Monitors regulatory adherence and assesses vulnerabilities.</li>
+<li><strong>Information Protection:</strong>
+<ul>
+<li>Classify, label, and protect sensitive data with customizable sensitivity labels.</li>
+<li>Policies define access controls and enforce encryption.</li>
+<li>Labels persist with data across emails, documents, and cloud storage.</li>
+<li>Integrates with Data Loss Prevention (DLP) to prevent unauthorized sharing.</li>
+</ul>
+</li>
+<li><strong>Data Loss Prevention (DLP):</strong>
+<ul>
+<li>Automatically detect, monitor, and control sharing/movement of sensitive data.</li>
+<li>Customizable rules to block, restrict, or alert on sensitive data transfers.</li>
+<li>Currently, DLP policies are only supported for Power BI semantic models.</li>
+</ul>
+</li>
+<li><strong>Audit Logging:</strong>
+<ul>
+<li>User activities (file creation, item access) are logged and available in the Purview audit log.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="connecting-purview-to-fabric">Connecting Purview to Fabric </h3>
+<ul>
+<li>Register your Fabric tenant in Purview to enable discovery and management of all Fabric items.</li>
+<li>Once connected, the <strong>Microsoft Purview hub</strong> appears in Fabric, providing rich analysis and reporting.</li>
+<li><strong>Cross-Tenant Considerations:</strong>
+<ul>
+<li>If Fabric and Purview are in different tenants, all features are supported except live view for Fabric items.</li>
+<li>Manual entry of tenant ID is required; managed identity authentication is not supported for cross-tenant connections (use service principal or delegated authentication).</li>
+</ul>
+</li>
+</ul>
+<h3 id="microsoft-purview-hub-in-fabric">Microsoft Purview Hub in Fabric </h3>
+<ul>
+<li>The main section is <strong>Microsoft Fabric data</strong>, with two displays: <strong>Items</strong> and <strong>Sensitivity</strong>.</li>
+<li><strong>Open full report</strong> for detailed analysis, including:
+<ul>
+<li><strong>Overview Report:</strong> Summary of endorsements, labels, and workspaces for a broad view of data usage.</li>
+<li><strong>Endorsement Report:</strong> Analyze item endorsements and user confidence in data quality.</li>
+<li><strong>Sensitivity Report:</strong> Review sensitivity label usage and ensure correct application for compliance.</li>
+<li><strong>Inventory Report:</strong> Drill down by date, item type, and other filters to identify specific items.</li>
+<li><strong>Items Page:</strong> Insights into item distribution and endorsement coverage across the organization.</li>
+<li><strong>Sensitivity Page:</strong> Analyze sensitivity labeling by department and geography to identify gaps or best practices.</li>
+</ul>
+</li>
+</ul>
+<h3 id="best-practices-for-data-governance-in-fabric">Best Practices for Data Governance in Fabric </h3>
+<ul>
+<li><strong>Centralize governance</strong> using the Fabric Admin portal and Purview integration.</li>
+<li><strong>Classify and label</strong> sensitive data with Information Protection and sensitivity labels.</li>
+<li><strong>Monitor and audit</strong> user activities and data movement with Purview audit logs.</li>
+<li><strong>Leverage reports</strong> in the Purview hub to identify gaps in endorsements, labeling, and compliance.</li>
+<li><strong>Apply DLP policies</strong> where supported to prevent data leaks and unauthorized sharing.</li>
+</ul>
+<p><strong>Summary:</strong><br>
+Microsoft Fabric, with Microsoft Purview, provides a robust, unified approach to data governance—enabling organizations to discover, classify, protect, and monitor their data estate efficiently and securely.</p>
+<h2 id="get-started-with-data-warehouses-in-microsoft-fabric">Get started with data warehouses in Microsoft Fabric </h2>
+<h3 id="overview-of-data-warehouses">Overview of Data Warehouses </h3>
+<ul>
+<li>Fabric's data warehouse contains <strong>tables</strong> to store data for analytics, organized in schemas optimized for <strong>multidimensional modeling</strong>.</li>
+<li>Tables are structured into:
+<ul>
+<li><strong>Fact Tables:</strong> Contain numerical data for analysis (e.g., total sales amount).</li>
+<li><strong>Dimension Tables:</strong> Contain descriptive information to provide context for fact tables (e.g., customer details).</li>
+</ul>
+</li>
+</ul>
+<h3 id="keys-in-dimension-tables">Keys in Dimension Tables </h3>
+<ul>
+<li><strong>Surrogate Key:</strong> A unique identifier for each row in the dimension table, often an auto-generated integer.</li>
+<li><strong>Alternate Key:</strong> A natural or business key (e.g., product code) that identifies specific entities in the source system.</li>
+<li>Both keys are essential for maintaining consistency and traceability between the data warehouse and source systems.</li>
+</ul>
+<h3 id="special-types-of-dimensions">Special Types of Dimensions </h3>
+<ul>
+<li><strong>Time Dimensions:</strong> Provide temporal context (e.g., year, quarter, month) for aggregating data.</li>
+<li><strong>Slowly Changing Dimensions:</strong> Track changes to attributes over time (e.g., customer address changes).</li>
+</ul>
+<h3 id="schema-design">Schema Design </h3>
+<ul>
+<li><strong>Star Schema:</strong> Fact tables are directly related to dimension tables, enabling grouping and aggregation.</li>
+<li><strong>Snowflake Schema:</strong> Used when there are many levels or shared information across dimensions.</li>
+</ul>
+<h3 id="transition-from-lakehouse-to-data-warehouse">Transition from Lakehouse to Data Warehouse </h3>
+<ul>
+<li>Fabric's <strong>Lakehouse</strong> acts as a database over a data lake, supporting big data processing with Spark and SQL engines.</li>
+<li>The <strong>data warehouse experience</strong> enables:
+<ul>
+<li>Modeling data using tables and views.</li>
+<li>Running T-SQL queries across the data warehouse and Lakehouse.</li>
+<li>Performing DML operations and serving reporting layers like Power BI.</li>
+</ul>
+</li>
+</ul>
+<h3 id="data-ingestion-methods">Data Ingestion Methods </h3>
+<ul>
+<li><strong>Pipelines:</strong> Automate data workflows.</li>
+<li><strong>Dataflows:</strong> Import and transform data visually.</li>
+<li><strong>Cross-Database Querying:</strong> Query data across databases.</li>
+<li><strong>COPY INTO Command:</strong> Load data efficiently into tables.</li>
+</ul>
+<h3 id="table-clones">Table Clones </h3>
+<ul>
+<li><strong>Zero-Copy Clones:</strong> Create replicas of tables by copying metadata without duplicating data files.</li>
+<li><strong>Use Cases:</strong>
+<ul>
+<li>Development and testing.</li>
+<li>Data recovery.</li>
+<li>Historical reporting.</li>
+</ul>
+</li>
+<li><strong>Command Example:</strong><pre data-role="codeBlock" data-info="sql" class="language-sql sql"><code><span class="token keyword keyword-CREATE">CREATE</span> <span class="token keyword keyword-TABLE">TABLE</span> new_table <span class="token keyword keyword-AS">AS</span> CLONE <span class="token keyword keyword-OF">OF</span> existing_table<span class="token punctuation">;</span>
+</code></pre></li>
+</ul>
+<h3 id="data-warehouse-load-process">Data Warehouse Load Process </h3>
+<ol>
+<li><strong>Ingest Data:</strong> Load new data into a data lake with pre-load cleansing.</li>
+<li><strong>Load Staging Tables:</strong> Transfer data into staging tables in the warehouse.</li>
+<li><strong>Load Dimension Tables:</strong> Update or insert rows, generating surrogate keys as needed.</li>
+<li><strong>Load Fact Tables:</strong> Populate fact tables, looking up surrogate keys for dimensions.</li>
+<li><strong>Post-Load Optimization:</strong> Update indexes and table distribution statistics.</li>
+</ol>
+<h3 id="cross-database-querying">Cross-Database Querying </h3>
+<ul>
+<li>Query data in the Lakehouse directly from the data warehouse without copying it.</li>
+<li><strong>Query Tools:</strong>
+<ul>
+<li><strong>Visual Query Editor:</strong> Drag-and-drop interface for no-code queries.</li>
+<li><strong>SQL Query Editor:</strong> Write T-SQL queries for advanced operations.</li>
+</ul>
+</li>
+</ul>
+<h3 id="sql-analytics-endpoint">SQL Analytics Endpoint </h3>
+<ul>
+<li>Connect to the data warehouse from any tool using the <strong>SQL analytics endpoint</strong>.</li>
+</ul>
+<h3 id="semantic-models-in-power-bi">Semantic Models in Power BI </h3>
+<ul>
+<li><strong>Semantic Models:</strong> Define relationships, calculations, and structure in data for meaningful analysis.</li>
+<li><strong>Default Model:</strong> Auto-created with a Fabric data warehouse and updates with new tables.</li>
+<li><strong>Features:</strong>
+<ul>
+<li>Create relationships between tables.</li>
+<li>Hide fields to simplify views.</li>
+<li>Use DAX for calculated measures.</li>
+</ul>
+</li>
+<li>Enable easy creation and sharing of visual reports in Power BI.</li>
+</ul>
+<h3 id="dynamic-management-views-dmvs">Dynamic Management Views (DMVs) </h3>
+<ul>
+<li><strong>Available DMVs:</strong>
+<ul>
+<li><code>sys.dm_exec_connections</code>: Information about connections.</li>
+<li><code>sys.dm_exec_sessions</code>: Information about authenticated sessions.</li>
+<li><code>sys.dm_exec_requests</code>: Information about active requests.</li>
+</ul>
+</li>
+<li><strong>KILL Command:</strong> Terminate sessions with long-running queries (requires Workspace Admin role).</li>
+</ul>
+<h2 id="load-data-into-a-microsoft-fabric-data-warehouse">Load data into a Microsoft Fabric data warehouse </h2>
+<h3 id="overview-of-microsoft-fabric-data-warehouse">Overview of Microsoft Fabric Data Warehouse </h3>
+<ul>
+<li>A <strong>Microsoft Fabric Data Warehouse</strong> is a unified platform for data, analytics, and AI, designed to store, organize, and manage large volumes of structured and semi-structured data.</li>
+<li>Powered by <strong>Synapse Analytics</strong>, it offers advanced query processing and supports full transactional T-SQL capabilities, similar to an enterprise data warehouse.</li>
+<li>Unlike dedicated SQL pools in Synapse Analytics, Fabric warehouses are built around a single data lake, with all data stored in <strong>Parquet</strong> file format in <strong>Microsoft OneLake</strong>.</li>
+<li>Data is automatically stored in <strong>Delta Parquet format</strong> for both warehouses and lakehouses, enabling seamless integration and analytics.</li>
+</ul>
+<h3 id="data-ingestion-and-loading-concepts">Data Ingestion and Loading Concepts </h3>
+<ul>
+<li><strong>Data Ingestion/Extract:</strong> Moving raw data from various sources into a central repository (staging area).</li>
+<li><strong>Data Loading:</strong> Transferring transformed or processed data into the final storage destination (warehouse tables) for analysis and reporting.</li>
+<li><strong>Staging Area:</strong>
+<ul>
+<li>Acts as an abstraction layer to simplify and buffer the load operation.</li>
+<li>Minimizes performance impact on the main warehouse during data loads.</li>
+</ul>
+</li>
+</ul>
+<h3 id="keys-and-dimension-management">Keys and Dimension Management </h3>
+<ul>
+<li><strong>Surrogate Key:</strong>
+<ul>
+<li>System-generated unique identifier (usually integer or GUID) for each record in a warehouse table.</li>
+<li>No business meaning; used for internal data integration and consistency.</li>
+</ul>
+</li>
+<li><strong>Business Key (Natural Key):</strong>
+<ul>
+<li>Identifier from the source system with business meaning (e.g., customer ID).</li>
+<li>Used to uniquely identify records in the source and for data integration.</li>
+</ul>
+</li>
+<li>Both key types are essential for effective data warehousing and integration.</li>
+</ul>
+<h3 id="slowly-changing-dimensions-scd">Slowly Changing Dimensions (SCD) </h3>
+<ul>
+<li><strong>Slowly Changing Dimensions</strong> track attribute changes over time. Common SCD types:
+<ul>
+<li><strong>Type 0:</strong> Attributes never change.</li>
+<li><strong>Type 1:</strong> Overwrites existing data; no history kept.</li>
+<li><strong>Type 2:</strong> Adds new records for changes, keeping full history (active/inactive flags).</li>
+<li><strong>Type 3:</strong> Adds new columns for previous values (limited history).</li>
+<li><strong>Type 4:</strong> Uses a separate historical dimension table.</li>
+<li><strong>Type 5:</strong> Mini-dimension for large dimensions with changing attributes.</li>
+<li><strong>Type 6:</strong> Combines Type 2 and Type 3.</li>
+</ul>
+</li>
+<li>SCD management is crucial for accurate historical analysis.</li>
+</ul>
+<h3 id="change-detection-and-data-tracking">Change Detection and Data Tracking </h3>
+<ul>
+<li>Mechanisms for detecting changes in source systems include:
+<ul>
+<li><strong>Change Data Capture (CDC)</strong></li>
+<li><strong>Change Tracking</strong></li>
+<li><strong>Database Triggers</strong></li>
+</ul>
+</li>
+<li>These features help identify inserts, updates, and deletes for accurate data synchronization.</li>
+</ul>
+<h3 id="data-pipelines-and-integration">Data Pipelines and Integration </h3>
+<ul>
+<li><strong>Data Pipelines:</strong>
+<ul>
+<li>Cloud-based service for data integration, enabling creation of workflows for data movement and transformation at scale.</li>
+<li>Supports complex ETL/ELT processes, scheduling, and orchestration.</li>
+<li>Most pipeline functionality in Fabric is based on <strong>Azure Data Factory</strong>.</li>
+</ul>
+</li>
+<li><strong>Pipeline Creation Options:</strong>
+<ol>
+<li><strong>Add pipeline activity:</strong> Launches the editor to build custom pipelines.</li>
+<li><strong>Copy data:</strong> Wizard to copy data from various sources; generates a preconfigured Copy Data task.</li>
+<li><strong>Choose a task to start:</strong> Use predefined templates for common scenarios.</li>
+</ol>
+</li>
+<li><strong>Scheduling:</strong> Configure pipeline schedules in the pipeline editor's settings.</li>
+<li><strong>Recommendation:</strong> Use pipelines for code-free or low-code data workflows, especially for scheduled or multi-source integration.</li>
+</ul>
+<h3 id="data-loading-with-the-copy-statement">Data Loading with the COPY Statement </h3>
+<ul>
+<li>The <strong>COPY</strong> statement is the primary method for importing data into a Fabric warehouse.</li>
+<li>Key features:
+<ul>
+<li>Efficiently ingests data from external Azure storage accounts.</li>
+<li>Supports specifying file format, error file location, skipping headers, and more.</li>
+<li>Allows wildcards and multiple file paths for bulk loading (must be from the same storage account/container).</li>
+<li>Rejected rows can be stored separately for data quality control (ERRORFILE applies to CSV only).</li>
+<li>Supports authentication via Shared Access Signature (SAS) or Storage Account Key (SAK).</li>
+</ul>
+</li>
+<li><strong>Example:</strong><pre data-role="codeBlock" data-info="sql" class="language-sql sql"><code>COPY <span class="token keyword keyword-INTO">INTO</span> my_table
+<span class="token keyword keyword-FROM">FROM</span> <span class="token string">'https://myaccount.blob.core.windows.net/myblobcontainer/folder0/*.csv, 
+    https://myaccount.blob.core.windows.net/myblobcontainer/folder1/'</span>
+<span class="token keyword keyword-WITH">WITH</span> <span class="token punctuation">(</span>
+    FILE_TYPE <span class="token operator">=</span> <span class="token string">'CSV'</span><span class="token punctuation">,</span>
+    CREDENTIAL<span class="token operator">=</span><span class="token punctuation">(</span><span class="token keyword keyword-IDENTITY">IDENTITY</span><span class="token operator">=</span> <span class="token string">'Shared Access Signature'</span><span class="token punctuation">,</span> SECRET<span class="token operator">=</span><span class="token string">'&lt;Your_SAS_Token&gt;'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    FIELDTERMINATOR <span class="token operator">=</span> <span class="token string">'|'</span>
+<span class="token punctuation">)</span>
+</code></pre></li>
+<li>The option to use a different storage account for the error file location (REJECTED_ROW_LOCATION) improves error handling and debugging.</li>
+</ul>
+<h3 id="loading-data-from-workspace-assets">Loading Data from Workspace Assets </h3>
+<ul>
+<li>Data can be loaded from other warehouses and lakehouses within the same workspace.</li>
+<li><strong>Three-part naming</strong> is used to reference data assets accurately.</li>
+</ul>
+<h3 id="dataflow-gen2-for-data-loading">Dataflow Gen2 for Data Loading </h3>
+<ul>
+<li><strong>Dataflow Gen2</strong> provides a modern Power Query experience for importing and transforming data.</li>
+<li>Simplifies the process of creating dataflows and reduces the number of steps.</li>
+<li>Dataflows can be used in pipelines to ingest data into lakehouses or warehouses, or to define datasets for Power BI reports.</li>
+</ul>
+<hr>
+<h2 id="query-a-data-warehouse-in-microsoft-fabric">Query a data warehouse in Microsoft Fabric </h2>
+<h3 id="querying-tools">Querying Tools </h3>
+<ul>
+<li><strong>SQL Query Editor:</strong> Write and execute T-SQL queries directly in the Fabric portal.</li>
+<li><strong>Visual Query Editor:</strong> Design queries using a graphical interface; SQL code is generated automatically.</li>
+<li><strong>SQL Server Management Studio (SSMS):</strong> Connect using Microsoft Entra ID user principals, user identities, or service principals. SQL authentication is not supported.</li>
+<li><strong>Other Tools:</strong> Any tool that supports SQL connection strings using ODBC or OLE DB drivers with Microsoft Entra ID can be used to connect and query the data warehouse.</li>
+</ul>
+<h3 id="query-functions">Query Functions </h3>
+<ul>
+<li><strong>APPROX_COUNT_DISTINCT:</strong>
+<ul>
+<li>Uses the HyperLogLog algorithm to retrieve an approximate count of distinct values.</li>
+<li>The result is guaranteed to have a maximum error rate of 2% with 97% probability.</li>
+</ul>
+</li>
+</ul>
+<h3 id="additional-notes">Additional Notes </h3>
+<ul>
+<li>Visual Query Editor provides a no-code, drag-and-drop experience for building queries, making it accessible for users who prefer not to write SQL manually.</li>
+<li>SSMS connections require Microsoft Entra ID authentication; SQL authentication is not available for Fabric data warehouses.</li>
+</ul>
+<h2 id="monitor-a-microsoft-fabric-data-warehouse">Monitor a Microsoft Fabric data warehouse </h2>
+<h3 id="capacity-and-cost-monitoring">Capacity and Cost Monitoring </h3>
+<ul>
+<li>
+<p><strong>Capacity Units (CUs):</strong></p>
+<ul>
+<li>Microsoft Fabric resources are provisioned based on the license purchased, which determines the available capacity (pool of resources).</li>
+<li>The cost of using Fabric is based on <strong>capacity units (CUs)</strong>. Every action in a Fabric resource (such as data reads/writes, queries, and file operations) consumes CUs.</li>
+<li>Monitoring CU consumption is essential for cost management and planning, especially for data warehouse workloads where queries and file operations to OneLake are significant cost drivers.</li>
+</ul>
+</li>
+<li>
+<p><strong>Fabric Capacity Metrics App:</strong></p>
+<ul>
+<li>An administrator can install the <strong>Microsoft Fabric Capacity Metrics app</strong> to monitor capacity utilization in the Fabric environment.</li>
+<li>The app provides:
+<ul>
+<li>Trends in capacity usage.</li>
+<li>Insights into which processes are consuming CUs.</li>
+<li>Detection of throttling events (when resource limits are reached).</li>
+</ul>
+</li>
+<li>Use these insights to optimize workloads and manage costs effectively.</li>
+</ul>
+</li>
+</ul>
+<h3 id="monitoring-data-warehouse-activity">Monitoring Data Warehouse Activity </h3>
+<ul>
+<li><strong>Dynamic Management Views (DMVs):</strong>
+<ul>
+<li>DMVs provide real-time information about the current state of the data warehouse.</li>
+<li>Common DMVs include:
+<ul>
+<li><code>sys.dm_exec_connections</code>: Returns information about data warehouse connections.</li>
+<li><code>sys.dm_exec_sessions</code>: Returns information about authenticated sessions.</li>
+<li><code>sys.dm_exec_requests</code>: Returns information about active requests.</li>
+</ul>
+</li>
+<li>Use DMVs to monitor connections, sessions, and running queries for troubleshooting and performance analysis.</li>
+</ul>
+</li>
+</ul>
+<h3 id="query-insights-and-performance-tuning">Query Insights and Performance Tuning </h3>
+<ul>
+<li>
+<p><strong>Query Insights Feature:</strong></p>
+<ul>
+<li>Microsoft Fabric data warehouses include a <strong>query insights</strong> feature that provides historical and aggregated information about executed queries.</li>
+<li>Enables identification of:
+<ul>
+<li>Frequently used queries.</li>
+<li>Long-running queries.</li>
+<li>Query performance trends for tuning and optimization.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Query Insights Views:</strong></p>
+<ul>
+<li><code>queryinsights.exec_requests_history</code>: Details of each completed SQL query.</li>
+<li><code>queryinsights.long_running_queries</code>: Details of query execution times for long-running queries.</li>
+<li><code>queryinsights.frequently_run_queries</code>: Details of frequently executed queries.</li>
+<li>Use these views to analyze workload patterns and optimize query performance.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="secure-a-microsoft-fabric-data-warehouse">Secure a Microsoft Fabric data warehouse </h2>
+<h3 id="role-based-access-control-rbac-and-permissions">Role-Based Access Control (RBAC) and Permissions </h3>
+<ul>
+<li><strong>Roles:</strong>
+<ul>
+<li>Security in Microsoft Fabric data warehouses is managed through built-in roles: <strong>Admin</strong>, <strong>Member</strong>, <strong>Contributor</strong>, and <strong>Viewer</strong>.</li>
+<li>Each role has specific permissions for managing, editing, or viewing data and resources.</li>
+</ul>
+</li>
+<li><strong>Item-Level Permissions:</strong>
+<ul>
+<li>Granular access can be set at the item level (e.g., specific tables, views, or reports) to restrict or allow access based on business needs.</li>
+</ul>
+</li>
+<li><strong>Other Data Protection:</strong>
+<ul>
+<li>Additional security features include workspace-level settings, integration with Microsoft Entra ID (Azure AD), and audit logging.</li>
+</ul>
+</li>
+</ul>
+<h3 id="dynamic-data-masking-ddm">Dynamic Data Masking (DDM) </h3>
+<ul>
+<li><strong>Purpose:</strong>
+<ul>
+<li>DDM limits data exposure by masking sensitive information in query results for nonprivileged users, without altering the underlying data.</li>
+</ul>
+</li>
+<li><strong>Implementation:</strong>
+<ul>
+<li>Masking is applied at the column level and is easy to configure—no complex coding required.</li>
+<li>Masking rules are enforced in real time when queries are executed.</li>
+</ul>
+</li>
+<li><strong>Masking Types:</strong>
+<table>
+<thead>
+<tr>
+<th>Masking Type</th>
+<th>Description</th>
+<th>Use Case</th>
+<th>Limitations</th>
+<th>Masking Rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Default</td>
+<td>Full masking based on data type</td>
+<td>Completely hide data</td>
+<td>No information visible</td>
+<td><code>default()</code></td>
+</tr>
+<tr>
+<td>Email</td>
+<td>Shows first letter and '.com'</td>
+<td>Indicate email field without revealing address</td>
+<td>Only for email fields</td>
+<td><code>email()</code></td>
+</tr>
+<tr>
+<td>Custom Text</td>
+<td>Shows first/last n chars, pads middle</td>
+<td>Partially hide data</td>
+<td>Not for numeric/date/time</td>
+<td><code>partial(prefix, pad, suffix)</code></td>
+</tr>
+<tr>
+<td>Random</td>
+<td>Replaces numeric/binary with random value</td>
+<td>Hide numeric/binary data</td>
+<td>Only for numeric/binary</td>
+<td><code>random(low, high)</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><strong>Example:</strong><pre data-role="codeBlock" data-info="sql" class="language-sql sql"><code><span class="token keyword keyword-ALTER">ALTER</span> <span class="token keyword keyword-TABLE">TABLE</span> Customers
+<span class="token keyword keyword-ALTER">ALTER</span> <span class="token keyword keyword-COLUMN">COLUMN</span> CreditCardNumber <span class="token keyword keyword-ADD">ADD</span> MASKED <span class="token keyword keyword-WITH">WITH</span> <span class="token punctuation">(</span><span class="token keyword keyword-FUNCTION">FUNCTION</span> <span class="token operator">=</span> <span class="token string">'partial(0,"XXXX-XXXX-XXXX-",4)'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></li>
+<li><strong>Benefits:</strong>
+<ul>
+<li>Data remains intact and secure; only query results are masked for nonprivileged users.</li>
+</ul>
+</li>
+</ul>
+<h3 id="row-level-security-rls">Row-Level Security (RLS) </h3>
+<ul>
+<li><strong>Purpose:</strong>
+<ul>
+<li>RLS restricts access to rows in a table based on user identity, group membership, or execution context.</li>
+</ul>
+</li>
+<li><strong>How It Works:</strong>
+<ul>
+<li>A security predicate (function) is associated with a table. It returns true/false to determine row visibility.</li>
+<li>Enforced automatically by SQL Server, transparent to users.</li>
+</ul>
+</li>
+<li><strong>Implementation Steps:</strong>
+<ol>
+<li><strong>Filter Predicate:</strong> Inline table-valued function filters rows for SELECT, UPDATE, DELETE.</li>
+<li><strong>Security Policy:</strong> Associates the predicate with the table.</li>
+</ol>
+<ul>
+<li>Example: Disabling a policy with <code>WITH (STATE = OFF)</code> exposes all rows.</li>
+</ul>
+</li>
+<li><strong>Security Considerations:</strong>
+<ul>
+<li>Be aware of side-channel attacks (e.g., using divide-by-zero errors in WHERE clauses to infer data).</li>
+</ul>
+</li>
+<li><strong>Best Practices:</strong>
+<ul>
+<li>Use a separate schema for predicate functions and policies.</li>
+<li>Avoid type conversions and excessive joins/recursion in predicates for performance.</li>
+</ul>
+</li>
+</ul>
+<h3 id="column-level-security-cls-and-views">Column-Level Security (CLS) and Views </h3>
+<ul>
+<li><strong>Column-Level Security (CLS):</strong>
+<ul>
+<li>Restricts access to specific columns, providing granular protection for sensitive data.</li>
+<li>Permissions are tied to columns and adapt automatically to table changes.</li>
+</ul>
+</li>
+<li><strong>Views:</strong>
+<ul>
+<li>Restrict access by exposing only selected columns or rows.</li>
+<li>Can provide both column- and row-level security, and transform data (e.g., calculated columns).</li>
+</ul>
+</li>
+<li><strong>Comparison Table:</strong>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Column-Level Security</th>
+<th>Views</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Granularity</td>
+<td>Fine-grained, per column</td>
+<td>Requires separate views per permission set</td>
+</tr>
+<tr>
+<td>Maintenance</td>
+<td>Adapts to table changes</td>
+<td>Views must be updated if table changes</td>
+</tr>
+<tr>
+<td>Performance</td>
+<td>Efficient, direct on table</td>
+<td>May add overhead for complex/large tables</td>
+</tr>
+<tr>
+<td>Transparency</td>
+<td>Transparent to user</td>
+<td>User queries a different object</td>
+</tr>
+<tr>
+<td>Flexibility</td>
+<td>Less flexible</td>
+<td>Highly flexible, supports transformations</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<h3 id="permissions-and-dynamic-sql">Permissions and Dynamic SQL </h3>
+<ul>
+<li><strong>Permissions:</strong>
+<ul>
+<li>Use <code>GRANT</code>, <code>DENY</code>, <code>ALTER</code>, and <code>GRANT</code> statements to manage access to tables, columns, functions, and stored procedures.</li>
+</ul>
+</li>
+<li><strong>Dynamic SQL:</strong>
+<ul>
+<li>Allows programmatic construction and execution of SQL statements within stored procedures.</li>
+<li>Example:<pre data-role="codeBlock" data-info="sql" class="language-sql sql"><code><span class="token keyword keyword-CREATE">CREATE</span> <span class="token keyword keyword-PROCEDURE">PROCEDURE</span> sp_TopTenRows <span class="token variable">@tableName</span> NVARCHAR<span class="token punctuation">(</span><span class="token number">128</span><span class="token punctuation">)</span>
+<span class="token keyword keyword-AS">AS</span>
+<span class="token keyword keyword-BEGIN">BEGIN</span>
+    <span class="token keyword keyword-DECLARE">DECLARE</span> <span class="token variable">@query</span> NVARCHAR<span class="token punctuation">(</span>MAX<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword keyword-SET">SET</span> <span class="token variable">@query</span> <span class="token operator">=</span> N<span class="token string">'SELECT TOP 10 * FROM '</span> <span class="token operator">+</span> QUOTENAME<span class="token punctuation">(</span><span class="token variable">@tableName</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword keyword-EXEC">EXEC</span> sp_executesql <span class="token variable">@query</span><span class="token punctuation">;</span>
+<span class="token keyword keyword-END">END</span><span class="token punctuation">;</span>
+</code></pre></li>
+<li>Use <code>QUOTENAME</code> to prevent SQL injection and <code>sp_executesql</code> to execute dynamic queries securely.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="get-started-with-data-science-in-microsoft-fabric">Get started with data science in Microsoft Fabric </h2>
+<h3 id="data-exploration-with-data-wrangler">Data Exploration with Data Wrangler </h3>
+<p>Microsoft Fabric provides the <strong>Data Wrangler</strong>—an intuitive tool to help you explore and transform your data efficiently.</p>
+<ul>
+<li><strong>Descriptive Overview:</strong> Instantly view summary statistics and visualizations of your dataset.</li>
+<li><strong>Data Quality:</strong> Quickly identify issues such as missing values or outliers.</li>
+<li><strong>Transformation:</strong> Apply common data cleaning and transformation steps with a user-friendly interface.</li>
+</ul>
+<h3 id="experiment-tracking">Experiment Tracking </h3>
+<p>When training machine learning models in notebooks, you can <strong>track your work using experiments</strong> in Microsoft Fabric.</p>
+<ul>
+<li><strong>Experiment:</strong> A logical container for tracking related model training runs.</li>
+<li><strong>Run:</strong> Each execution (e.g., training a model with a specific dataset or parameters) is recorded as a separate run within an experiment.</li>
+<li><strong>Comparison:</strong> Easily compare runs to evaluate which model or configuration performs best.</li>
+</ul>
+<p><strong>Example:</strong><br>
+If you're building a sales forecasting model, you might try different algorithms or datasets. Each attempt is a new run under the same experiment, allowing you to compare results side by side.</p>
+<h3 id="model-management-and-versioning">Model Management and Versioning </h3>
+<p>After training, you typically want to use your model for predictions (scoring).</p>
+<ul>
+<li><strong>MLflow Integration:</strong> When you track models with MLflow, all relevant artifacts (model files, metadata) are stored with the experiment run.</li>
+<li><strong>Model Registration:</strong> Save your trained model as a registered model in Microsoft Fabric for easy management.</li>
+<li><strong>Versioning:</strong> Each time you save a model with the same name, a new version is created, enabling robust model lifecycle management.</li>
+</ul>
+<h3 id="generating-predictions">Generating Predictions </h3>
+<p>To use a trained model for batch predictions:</p>
+<ul>
+<li><strong>PREDICT Function:</strong> Microsoft Fabric provides the <code>PREDICT</code> function, which seamlessly integrates with MLflow models.</li>
+<li><strong>Batch Scoring:</strong> Apply your registered model to new data to generate predictions or insights at scale.</li>
+</ul>
+<p><strong>Key Benefits:</strong></p>
+<ul>
+<li>Centralized tracking and comparison of experiments.</li>
+<li>Simple model registration and versioning.</li>
+<li>Streamlined batch prediction workflows.</li>
+</ul>
+<h2 id="get-started-with-real-time-intelligence-in-microsoft-fabric">Get started with Real-Time Intelligence in Microsoft Fabric </h2>
+<p>Real-Time Intelligence in Microsoft Fabric enables organizations to capture, analyze, and act on streaming data as it arrives. This capability is essential for scenarios where immediate insights or automated actions are required.</p>
+<h3 id="goals-of-real-time-analytics">Goals of Real-Time Analytics </h3>
+<ul>
+<li><strong>Continuous Analysis:</strong> Monitor data streams to detect issues or trends as they emerge.</li>
+<li><strong>Behavioral Insights:</strong> Understand system or component behavior under various conditions to inform future enhancements.</li>
+<li><strong>Automated Actions:</strong> Trigger alerts or specific actions when events occur or thresholds are exceeded.</li>
+</ul>
+<h3 id="characteristics-of-stream-processing-solutions">Characteristics of Stream Processing Solutions </h3>
+<ul>
+<li><strong>Unbounded Data Streams:</strong> Data is continuously added, with no defined end.</li>
+<li><strong>Temporal Data:</strong> Each record typically includes a timestamp indicating when the event occurred.</li>
+<li><strong>Windowed Aggregation:</strong> Data is often aggregated over time windows (e.g., per minute, per hour) to support real-time metrics.</li>
+<li><strong>Dual Use:</strong> Results can drive real-time automation/visualization or be persisted for historical analysis—often both.</li>
+</ul>
+<h3 id="core-components-in-microsoft-fabric-real-time-intelligence">Core Components in Microsoft Fabric Real-Time Intelligence </h3>
+<h4 id="1-eventstreams">1. Eventstreams </h4>
+<ul>
+<li><strong>Purpose:</strong> Capture, transform, and ingest real-time data from a wide range of streaming sources.</li>
+<li><strong>Supported Sources:</strong>
+<ul>
+<li>External services (Azure Event Hubs, IoT Hubs, Kafka, CDC feeds, etc.)</li>
+<li>Fabric events (workspace changes, OneLake data changes, job events)</li>
+<li>Sample data for exploration and learning</li>
+</ul>
+</li>
+<li><strong>Destinations:</strong>
+<ul>
+<li><strong>Eventhouse:</strong> Store and analyze real-time data using KQL.</li>
+<li><strong>Lakehouse:</strong> Transform and store real-time events in Delta Lake format for further analytics.</li>
+<li><strong>Derived Stream:</strong> Redirect processed data to another eventstream for further transformation.</li>
+<li><strong>Fabric Activator:</strong> Automate actions based on stream values.</li>
+<li><strong>Custom Endpoint:</strong> Route data to external systems or custom applications.</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-eventhouses">2. Eventhouses </h4>
+<ul>
+<li><strong>Role:</strong> Store and organize real-time data for analysis.</li>
+<li><strong>Components:</strong>
+<ul>
+<li><strong>KQL Databases:</strong> Optimized for real-time data, hosting tables, functions, materialized views, and shortcuts.</li>
+<li><strong>KQL Querysets:</strong> Collections of KQL (Kusto Query Language) queries for analyzing data.</li>
+</ul>
+</li>
+<li><strong>KQL:</strong> A powerful, time-based query language used across Azure Data Explorer, Log Analytics, Sentinel, and Fabric.</li>
+</ul>
+<h4 id="3-real-time-dashboards">3. Real-Time Dashboards </h4>
+<ul>
+<li><strong>Purpose:</strong> Visualize real-time insights at a glance by pinning KQL query results to dashboard tiles.</li>
+<li><strong>Features:</strong>
+<ul>
+<li>Each tile displays live data from eventhouse tables.</li>
+<li>Dashboards can be created in a workspace or directly from a KQL queryset.</li>
+<li>Requires tenant-level feature enablement by an administrator.</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-activator">4. Activator </h4>
+<ul>
+<li><strong>Function:</strong> Automate actions in response to streaming data events.</li>
+<li><strong>Core Concepts:</strong>
+<ul>
+<li><strong>Events:</strong> Each record in a stream, representing an occurrence at a specific time.</li>
+<li><strong>Objects:</strong> Business entities represented by event data (e.g., sensor, sales order).</li>
+<li><strong>Properties:</strong> Fields in event data mapped to object attributes (e.g., temperature, total_amount).</li>
+<li><strong>Rules:</strong> Define conditions that trigger actions (e.g., send alert if temperature exceeds threshold).</li>
+</ul>
+</li>
+<li><strong>Use Cases:</strong> Send notifications, trigger workflows, or execute Fabric jobs based on real-time data.</li>
+</ul>
+<h3 id="real-time-hub-in-fabric">Real-Time Hub in Fabric </h3>
+<ul>
+<li><strong>Capabilities:</strong>
+<ul>
+<li>Discover and connect to real-time data sources.</li>
+<li>Create and manage eventstreams and Activator alerts.</li>
+<li>Preview and manage real-time data connections and eventhouses.</li>
+<li>Build and share real-time dashboards.</li>
+<li>Endorse and share real-time data resources across the organization.</li>
+</ul>
+</li>
+</ul>
+<h3 id="best-practices">Best Practices </h3>
+<ul>
+<li><strong>Combine Real-Time and Historical Analytics:</strong> Persist streaming data for later analysis alongside historical data.</li>
+<li><strong>Leverage KQL for Advanced Analysis:</strong> Use KQL querysets to extract deep insights from real-time data.</li>
+<li><strong>Automate Responsively:</strong> Use Activator to trigger timely actions and alerts, reducing manual intervention.</li>
+<li><strong>Visualize for Impact:</strong> Build dashboards to surface key metrics and trends for rapid decision-making.</li>
+</ul>
+<p><strong>Summary:</strong><br>
+Microsoft Fabric Real-Time Intelligence empowers organizations to act on data as it happens—enabling continuous monitoring, rapid response, and data-driven automation across a wide range of business scenarios.</p>
+<h2 id="use-real-time-eventstreams-in-microsoft-fabric">Use real-time eventstreams in Microsoft Fabric </h2>
+<p>Eventstreams in Microsoft Fabric provide a <strong>no-code, visual way to capture, process, and route real-time events</strong> from a variety of sources to multiple destinations. They enable you to design streaming data pipelines that can filter, aggregate, group, and enrich data before it reaches its destination.</p>
+<h3 id="key-concepts">Key Concepts </h3>
+<ul>
+<li><strong>Eventstream Pipeline:</strong> Think of an eventstream as a <strong>conveyor belt</strong> that moves data from sources to destinations, with the ability to transform data along the way.</li>
+<li><strong>Visual Editor:</strong> Use the <strong>drag-and-drop eventstream editor</strong> to design your pipeline, add sources, destinations, and transformations, and monitor data flow in real time.</li>
+</ul>
+<hr>
+<h3 id="supported-event-sources">Supported Event Sources </h3>
+<p>Microsoft Fabric eventstreams can ingest data from a wide range of internal and external sources, including:</p>
+<ul>
+<li><strong>Azure Event Hub</strong></li>
+<li><strong>Azure IoT Hub</strong></li>
+<li><strong>Azure SQL CDC (Change Data Capture)</strong></li>
+<li><strong>PostgreSQL CDC</strong></li>
+<li><strong>MySQL CDC</strong></li>
+<li><strong>Azure Cosmos DB CDC</strong></li>
+<li><strong>Google Cloud Pub/Sub</strong></li>
+<li><strong>Amazon Kinesis Data Streams</strong></li>
+<li><strong>Confluent Cloud Kafka</strong></li>
+<li><strong>Fabric workspace events</strong></li>
+<li><strong>Azure Blob Storage events</strong></li>
+<li><strong>Custom endpoints</strong></li>
+</ul>
+<hr>
+<h3 id="eventstream-destinations">Eventstream Destinations </h3>
+<p>You can route processed events to several types of destinations:</p>
+<ul>
+<li><strong>Eventhouse:</strong> Store real-time event data in a <strong>KQL database</strong> for advanced analysis using Kusto Query Language (KQL). This enables rich reporting and dashboarding.</li>
+<li><strong>Lakehouse:</strong> Preprocess and store events in <strong>Delta Lake format</strong> within lakehouse tables, supporting data warehousing and analytics.</li>
+<li><strong>Custom Endpoint:</strong> Send real-time data to external or proprietary applications for immediate consumption or integration with other systems.</li>
+<li><strong>Derived Stream:</strong> Create a new stream after applying transformations (like filter or manage fields) to the original eventstream. This processed stream can be routed to any supported destination and monitored in the Real-Time hub.</li>
+<li><strong>Fabric Activator:</strong> Trigger <strong>automated actions</strong> (such as alerts or workflows) based on streaming data values.</li>
+</ul>
+<hr>
+<h3 id="transformations-and-windowing">Transformations and Windowing </h3>
+<p><strong>Transformations</strong> allow you to shape and enrich your streaming data before it reaches its destination. Common transformations include:</p>
+<ul>
+<li><strong>Filter</strong></li>
+<li><strong>Manage Fields</strong></li>
+<li><strong>Aggregate</strong></li>
+<li><strong>Group By</strong></li>
+<li><strong>Union</strong></li>
+<li><strong>Expand</strong></li>
+<li><strong>Join</strong></li>
+</ul>
+<h4 id="windowing-functions">Windowing Functions </h4>
+<p><strong>Windowing functions</strong> enable operations over time-based segments of streaming data, which is essential for analyzing trends and patterns in real time. They are especially useful for scenarios like sensor monitoring, web analytics, and transaction processing.</p>
+<ul>
+<li><strong>Group By Transformation Parameters:</strong>
+<ul>
+<li><strong>Window Type:</strong> Defines how events are grouped (see below).</li>
+<li><strong>Window Duration:</strong> The length of each window.</li>
+<li><strong>Window Offset:</strong> (Optional) Shifts the start/end time of the window.</li>
+<li><strong>Grouping Key:</strong> One or more columns to group by.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Types of Windows:</strong></p>
+<ul>
+<li><strong>Tumbling Windows:</strong> Fixed, non-overlapping intervals (e.g., every 5 minutes).</li>
+<li><strong>Sliding Windows:</strong> Fixed, overlapping intervals (e.g., every 5 minutes, sliding every 1 minute).</li>
+<li><strong>Session Windows:</strong> Variable, non-overlapping intervals based on periods of activity separated by inactivity.</li>
+<li><strong>Hopping Windows:</strong> Overlapping windows that "hop" forward by a set interval, allowing events to appear in multiple windows.</li>
+<li><strong>Snapshot Windows:</strong> Group events with the same timestamp. Use <code>System.Timestamp()</code> in the <code>GROUP BY</code> clause.</li>
+</ul>
+<hr>
+<h3 id="best-practices-1">Best Practices </h3>
+<ul>
+<li><strong>Design for Flexibility:</strong> Use transformations and windowing to adapt to changing data patterns and business needs.</li>
+<li><strong>Monitor in Real Time:</strong> Leverage the visual editor to observe data flow and troubleshoot issues as they occur.</li>
+<li><strong>Automate Actions:</strong> Integrate with Fabric Activator to trigger alerts or workflows based on streaming data.</li>
+</ul>
+<hr>
+<p><strong>Summary:</strong><br>
+Microsoft Fabric eventstreams empower you to build robust, real-time data pipelines—enabling immediate insights, automation, and integration across your analytics ecosystem.</p>
+<h2 id="work-with-real-time-data-in-a-microsoft-fabric-eventhouse">Work with real-time data in a Microsoft Fabric eventhouse </h2>
+<p>An <strong>eventhouse</strong> in Microsoft Fabric is a specialized data store designed for efficiently handling large volumes of <strong>time-based event data</strong>. It is optimized for real-time analytics scenarios, enabling organizations to ingest, store, query, and analyze streaming data in near real-time.</p>
+<h3 id="key-features-of-an-eventhouse">Key Features of an Eventhouse </h3>
+<ul>
+<li><strong>Optimized for Real-Time Data:</strong> Built to manage and analyze continuous streams of events, such as telemetry, logs, or IoT sensor data.</li>
+<li><strong>KQL Databases:</strong> Each eventhouse contains one or more <strong>KQL (Kusto Query Language) databases</strong> that support:
+<ul>
+<li><strong>Tables</strong> for storing event data</li>
+<li><strong>Materialized Views</strong> for pre-aggregated, summarized data</li>
+<li><strong>Stored Functions</strong> for reusable query logic</li>
+<li><strong>Stored Procedures</strong> and other advanced objects</li>
+</ul>
+</li>
+<li><strong>OneLake Integration:</strong> You can enable the <strong>OneLake</strong> option for a database or for individual tables, making eventhouse data available across the Microsoft Fabric ecosystem.</li>
+</ul>
+<hr>
+<h3 id="working-with-kql-databases">Working with KQL Databases </h3>
+<p>After creating an eventhouse, you can use the default KQL database or create new ones as needed. KQL databases provide a rich set of features for managing and analyzing real-time data.</p>
+<h4 id="materialized-views">Materialized Views </h4>
+<ul>
+<li><strong>Purpose:</strong> Materialized views provide a <strong>precomputed summary</strong> of data from a source table or another materialized view, improving query performance for common aggregations.</li>
+<li><strong>Types:</strong>
+<ul>
+<li><strong>For New Data Ingestion:</strong> Only summarizes new incoming data.</li>
+<li><strong>With Backfill:</strong> Summarizes both historical and new data.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Example: Create a Materialized View for New Data</strong></p>
+<pre data-role="codeBlock" data-info="kql" class="language-kql kql"><code>.create materialized-view TripsByVendor on table Automotive
+{
+    Automotive
+    | summarize trips = count() by vendor_id, pickup_date = format_datetime(pickup_datetime, "yyyy-MM-dd")
+}
+</code></pre><p><strong>Example: Create a Materialized View with Backfill</strong></p>
+<pre data-role="codeBlock" data-info="kql" class="language-kql kql"><code>.create async materialized-view with (backfill=true)
+TripsByVendor on table Automotive
+{
+    Automotive
+    | summarize trips = count() by vendor_id, pickup_date = format_datetime(pickup_datetime, "yyyy-MM-dd")
+}
+</code></pre><h4 id="stored-functions">Stored Functions </h4>
+<ul>
+<li><strong>Purpose:</strong> Stored functions encapsulate reusable query logic, making it easy to apply complex filters or calculations across multiple queries.</li>
+</ul>
+<p><strong>Example: Create a KQL Stored Function</strong></p>
+<pre data-role="codeBlock" data-info="kql" class="language-kql kql"><code>.create-or-alter function trips_by_min_passenger_count(num_passengers:long)
+{
+    Automotive
+    | where passenger_count &gt;= num_passengers 
+    | project trip_id, pickup_datetime
+}
+</code></pre><ul>
+<li><strong>Usage:</strong> Both materialized views and stored functions can be queried just like regular tables, enabling modular and maintainable analytics workflows.</li>
+</ul>
+<hr>
+<h3 id="best-practices-2">Best Practices </h3>
+<ul>
+<li><strong>Leverage Materialized Views:</strong> Use materialized views to accelerate queries on large, frequently accessed datasets.</li>
+<li><strong>Encapsulate Logic in Functions:</strong> Store complex or commonly used logic in KQL functions for reusability and clarity.</li>
+<li><strong>Enable OneLake Integration:</strong> Make your eventhouse data broadly accessible by enabling OneLake for relevant tables or databases.</li>
+<li><strong>Monitor and Optimize:</strong> Regularly review query performance and optimize materialized views and functions as data patterns evolve.</li>
+</ul>
+<hr>
+<p><strong>Summary:</strong><br>
+A Microsoft Fabric eventhouse, powered by KQL databases, provides a robust platform for real-time analytics—enabling efficient storage, transformation, and querying of streaming event data at scale.</p>
+<h2 id="create-real-time-dashboards-with-microsoft-fabric">Create Real-Time Dashboards with Microsoft Fabric </h2>
+<p>Real-Time Dashboards in Microsoft Fabric allow you to visualize and monitor streaming data as it arrives, providing actionable insights for rapid decision-making. Below are key concepts, configuration options, and best practices for implementing effective real-time dashboards.</p>
+<h3 id="authorization-schemes">Authorization Schemes </h3>
+<p>When connecting a dashboard to its data source, you can specify one of two <strong>authorization schemes</strong>:</p>
+<ul>
+<li><strong>Pass-through Identity:</strong> The dashboard accesses data using the identity of the user viewing the dashboard. This ensures data security and compliance with user-level permissions.</li>
+<li><strong>Dashboard Editor's Identity:</strong> The dashboard accesses data using the identity of the user who created (edited) the dashboard. This can simplify access but may expose more data than intended if not managed carefully.</li>
+</ul>
+<h3 id="dashboard-structure">Dashboard Structure </h3>
+<ul>
+<li>A dashboard consists of one or more <strong>tiles</strong>, each displaying the results of a <strong>KQL query</strong>.</li>
+<li>Tiles can be configured for interactivity, filtering, and real-time updates.</li>
+</ul>
+<h3 id="best-practices-for-real-time-dashboards">Best Practices for Real-Time Dashboards </h3>
+<h4 id="1-clarity-and-simplicity">1. Clarity and Simplicity </h4>
+<ul>
+<li><strong>Keep dashboards simple and uncluttered.</strong></li>
+<li>Use clear, descriptive labels for tiles and visuals.</li>
+<li>Organize content using multiple pages for different subject areas or navigation when necessary.</li>
+</ul>
+<h4 id="2-relevance">2. Relevance </h4>
+<ul>
+<li><strong>Display only data that is relevant</strong> to the dashboard's purpose and the audience's needs.</li>
+<li>Regularly review dashboard content to ensure continued alignment with business goals.</li>
+</ul>
+<h4 id="3-refresh-rate">3. Refresh Rate </h4>
+<ul>
+<li><strong>Set an appropriate refresh rate</strong> to keep data up to date without overloading the system.</li>
+<li>Consult with users to determine acceptable refresh intervals.</li>
+</ul>
+<h4 id="4-accessibility">4. Accessibility </h4>
+<ul>
+<li><strong>Design dashboards for all users,</strong> including those with viewer permissions.</li>
+<li>Ensure visuals and navigation are accessible and intuitive.</li>
+</ul>
+<h4 id="5-interactivity">5. Interactivity </h4>
+<ul>
+<li>Include features such as <strong>filters, drill-downs, and parameters</strong> to allow users to explore data.</li>
+<li>Elicit regular feedback to ensure dashboards remain valuable and user-friendly.</li>
+<li>As users become more familiar, introduce new features to enhance productivity.</li>
+<li><strong>Leverage Copilot</strong> where possible to increase productivity and automate insights.</li>
+</ul>
+<h4 id="6-performance">6. Performance </h4>
+<ul>
+<li><strong>Optimize queries and visuals</strong> for fast loading and smooth user experience.</li>
+<li>Use parameters to filter data at the query level, reducing unnecessary data transfer.</li>
+<li>Avoid querying more data than is needed for the visualization.</li>
+</ul>
+<h4 id="7-security">7. Security </h4>
+<ul>
+<li><strong>Implement robust security measures:</strong>
+<ul>
+<li>Protect sensitive data in dashboards and underlying data sources.</li>
+<li>Manage authentication (who can access the system) and authorization (what they can access) carefully.</li>
+<li>Remember, Fabric is a <strong>Software as a Service (SaaS)</strong> solution—properly manage user roles and permissions.</li>
+</ul>
+</li>
+</ul>
+<h4 id="8-testing">8. Testing </h4>
+<ul>
+<li><strong>Regularly test dashboards</strong> for functionality and performance.</li>
+<li>Include user-acceptance testing and feedback loops to ensure dashboards meet user needs and expectations.</li>
+</ul>
+<hr>
+<p><strong>Summary:</strong><br>
+A well-designed real-time dashboard in Microsoft Fabric delivers timely, relevant, and actionable insights—empowering users to make informed decisions and respond quickly to changing business conditions.</p>
+<h2 id="monitor-activities-in-microsoft-fabric">Monitor activities in Microsoft Fabric </h2>
+<p>Monitoring activities in Microsoft Fabric is essential to ensure data delivery, reliability, and performance across your analytics solutions. Below are key activities and tools to monitor, along with best practices and important concepts.</p>
+<h3 id="1-data-pipeline-activity">1. Data Pipeline Activity </h3>
+<ul>
+<li><strong>Data pipelines</strong> are collections of activities that perform data ingestion, transformation, and loading (ETL) as a unified process.</li>
+<li><strong>Monitoring Tips:</strong>
+<ul>
+<li>Track the <strong>success or failure</strong> of jobs and individual pipeline activities.</li>
+<li>Review <strong>job history</strong> to compare current and past performance, helping to identify when errors were introduced.</li>
+<li>Investigate errors and failures promptly to maintain data quality and reliability.</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-dataflows">2. Dataflows </h3>
+<ul>
+<li><strong>Dataflows</strong> provide a low-code interface for ingesting, loading, and transforming data.</li>
+<li>Can be run <strong>manually, on a schedule, or as part of pipeline orchestration</strong>.</li>
+<li><strong>Monitoring Tips:</strong>
+<ul>
+<li>Monitor <strong>start/end times, status, duration, and table load activities</strong>.</li>
+<li>Drill down into specific activities to view error details and troubleshoot issues.</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-semantic-model-refreshes">3. Semantic Model Refreshes </h3>
+<ul>
+<li>A <strong>semantic model</strong> is a visual, ready-for-reporting data model containing transformations, calculations, and relationships.</li>
+<li><strong>Refreshes</strong> are required when the underlying data or model changes.</li>
+<li><strong>Monitoring Tips:</strong>
+<ul>
+<li>Track <strong>refresh status, retries, and failures</strong> to identify transient or persistent issues.</li>
+<li>Use pipeline-triggered refresh activities for automation and monitoring.</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-spark-jobs-notebooks-and-lakehouses">4. Spark Jobs, Notebooks, and Lakehouses </h3>
+<ul>
+<li><strong>Notebooks</strong> are used to develop and execute Apache Spark jobs for data loading and transformation in lakehouses.</li>
+<li><strong>Monitoring Tips:</strong>
+<ul>
+<li>Monitor <strong>job progress, task execution, resource usage, and Spark logs</strong>.</li>
+<li>Review logs for errors, bottlenecks, and performance optimization opportunities.</li>
+</ul>
+</li>
+</ul>
+<h3 id="5-microsoft-fabric-eventstreams">5. Microsoft Fabric Eventstreams </h3>
+<ul>
+<li><strong>Eventstreams</strong> ingest and process real-time or streaming data for analytics and routing to destinations.</li>
+<li><strong>Monitoring Tips:</strong>
+<ul>
+<li>Track <strong>streaming data ingestion status and performance</strong>.</li>
+<li>Monitor for data lags, dropped events, or ingestion bottlenecks.</li>
+</ul>
+</li>
+</ul>
+<h3 id="6-monitor-hub">6. Monitor Hub </h3>
+<ul>
+<li>The <strong>Monitor hub</strong> is the central visualization tool for monitoring activities in Microsoft Fabric.</li>
+<li><strong>Key Features:</strong>
+<ul>
+<li>Aggregates data from multiple Fabric items and processes into a single interface.</li>
+<li>Allows you to view the <strong>status, start/end time, duration, and statistics</strong> for each activity.</li>
+<li>Supports actions such as <strong>opening activities, retrying, viewing details, and historical runs</strong>.</li>
+</ul>
+</li>
+<li><strong>Best Practice:</strong> Use Monitor hub to gain a holistic view of your data integration, transformation, movement, and analysis activities.</li>
+</ul>
+<h3 id="7-real-time-intelligence-and-activator">7. Real-Time Intelligence and Activator </h3>
+<ul>
+<li><strong>Activator</strong> is a tool for triggering actions on streaming data in real time.</li>
+<li><strong>How It Works:</strong>
+<ul>
+<li>Define <strong>rules</strong> based on event properties, thresholds, patterns, or Kusto Query Language (KQL) queries.</li>
+<li>When a rule condition is met, Activator can <strong>alert users, execute Fabric jobs (like pipelines), or trigger Power Automate workflows</strong>.</li>
+</ul>
+</li>
+<li><strong>Core Concepts:</strong>
+<ul>
+<li><strong>Events:</strong> Each record in a data stream, representing an occurrence at a specific time.</li>
+<li><strong>Objects:</strong> Business entities represented by event data (e.g., sales order, sensor).</li>
+<li><strong>Properties:</strong> Fields in event data mapped to object attributes (e.g., temperature, total_amount).</li>
+<li><strong>Rules:</strong> Conditions that trigger actions based on property values (e.g., send alert if temperature exceeds threshold).</li>
+</ul>
+</li>
+</ul>
+<p><strong>Summary:</strong></p>
+<ul>
+<li>Proactive monitoring of these activities ensures data reliability, timely delivery, and rapid troubleshooting in Microsoft Fabric.</li>
+<li>Leverage the Monitor hub and built-in monitoring features to maintain operational excellence across your analytics environment.</li>
+</ul>
+<h2 id="secure-data-access-in-microsoft-fabric">Secure data access in Microsoft Fabric </h2>
+<p>Securing data access in Microsoft Fabric involves multiple layers and granular controls to ensure only authorized users can access sensitive data. Below is a structured overview of the security model and best practices.</p>
+<h3 id="security-levels-in-fabric">Security Levels in Fabric </h3>
+<p>Microsoft Fabric evaluates access through <strong>three sequential security levels</strong>:</p>
+<ol>
+<li><strong>Microsoft Entra ID Authentication</strong>
+<ul>
+<li>Verifies if the user can authenticate with Azure's identity and access management service (<strong>Microsoft Entra ID</strong>).</li>
+</ul>
+</li>
+<li><strong>Fabric Access</strong>
+<ul>
+<li>Checks if the user has access to the Fabric environment itself.</li>
+</ul>
+</li>
+<li><strong>Data Security</strong>
+<ul>
+<li>Determines if the user can perform the requested action (e.g., read, write) on a specific table or file.</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p><strong>All three levels must be satisfied for access to be granted.</strong></p>
+</blockquote>
+<h3 id="data-security-building-blocks">Data Security Building Blocks </h3>
+<p>The third level, <strong>data security</strong>, is highly configurable and consists of several building blocks that can be used individually or together:</p>
+<h4 id="1-workspace-roles">1. Workspace Roles </h4>
+<ul>
+<li>Assign users to roles (Admin, Member, Contributor, Viewer) that define their access within a workspace.</li>
+<li>Controls broad access to all items within the workspace.</li>
+</ul>
+<h4 id="2-item-permissions">2. Item Permissions </h4>
+<ul>
+<li>Permissions can be inherited from workspace roles or set individually by sharing specific items (lakehouses, warehouses, semantic models, etc.).</li>
+<li>Use item permissions to restrict access when workspace roles are too permissive.</li>
+</ul>
+<h4 id="3-compute-or-granular-permissions">3. Compute or Granular Permissions </h4>
+<ul>
+<li>Apply fine-grained permissions within a specific compute engine (e.g., SQL Endpoint, semantic model).</li>
+<li>Examples: <strong>Read</strong>, <strong>ReadData</strong>, <strong>ReadAll</strong> permissions on tables or views.</li>
+</ul>
+<h4 id="4-onelake-data-access-controls-preview">4. OneLake Data Access Controls (Preview) </h4>
+<ul>
+<li>Restrict access to specific files or folders in OneLake using <strong>role-based access control (RBAC)</strong>.</li>
+<li>Enables secure, granular access to data at the storage layer.</li>
+</ul>
+<h3 id="applying-granular-security">Applying Granular Security </h3>
+<p>When workspace roles or item permissions are not sufficient, use granular security controls such as:</p>
+<ul>
+<li><strong>Table and Row-Level Security:</strong> Enforce access at the table or row level using SQL analytics endpoints or warehouse features.</li>
+<li><strong>File and Folder Access:</strong> Restrict access to specific files/folders in OneLake using data access roles (preview).</li>
+<li><strong>Semantic Model Security:</strong> Apply security at the semantic model level for Power BI and analytics scenarios.</li>
+</ul>
+<h3 id="summary-table-access-control-mechanisms">Summary Table: Access Control Mechanisms </h3>
+<table>
+<thead>
+<tr>
+<th>Security Layer</th>
+<th>Example Controls</th>
+<th>Where Applied</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Workspace Roles</td>
+<td>Admin, Member, Contributor</td>
+<td>Workspace</td>
+</tr>
+<tr>
+<td>Item Permissions</td>
+<td>Share, View, Edit</td>
+<td>Individual Fabric items</td>
+</tr>
+<tr>
+<td>Granular Permissions</td>
+<td>Read, ReadData, Row-level</td>
+<td>SQL Endpoint, Warehouse</td>
+</tr>
+<tr>
+<td>OneLake Data Access</td>
+<td>RBAC for files/folders (preview)</td>
+<td>OneLake storage</td>
+</tr>
+</tbody>
+</table>
+<h3 id="best-practices-3">Best Practices </h3>
+<ul>
+<li><strong>Principle of Least Privilege:</strong> Always grant users the minimum permissions required for their role.</li>
+<li><strong>Review Inheritance:</strong> Be aware of inherited permissions from workspace roles and override with item permissions as needed.</li>
+<li><strong>Combine Controls:</strong> Use a combination of workspace, item, and granular permissions to meet complex security requirements.</li>
+<li><strong>Monitor and Audit:</strong> Regularly review access logs and permissions to ensure compliance and detect unauthorized access.</li>
+</ul>
+<p><strong>In summary:</strong> Microsoft Fabric provides a layered, flexible approach to securing data access, allowing organizations to tailor security to their specific needs—from broad workspace roles to granular file, table, and row-level controls.</p>
+<h2 id="implement-continuous-integration-and-continuous-delivery-cicd-in-microsoft-fabric">Implement continuous integration and continuous delivery (CI/CD) in Microsoft Fabric </h2>
+<p>Implementing <strong>CI/CD</strong> in Microsoft Fabric ensures that your analytics solutions are robust, reliable, and delivered efficiently. Below is a structured overview of CI/CD concepts and their application in Fabric.</p>
+<h3 id="what-is-cicd">What is CI/CD? </h3>
+<ul>
+<li><strong>Continuous Integration (CI):</strong>
+<ul>
+<li>Developers frequently commit code to a shared branch in a version control system (e.g., Git).</li>
+<li>Each commit triggers automated builds and tests, catching bugs and integration issues early.</li>
+<li><strong>Benefits:</strong> Early conflict detection, faster bug resolution, and improved code quality.</li>
+</ul>
+</li>
+<li><strong>Continuous Delivery (CD):</strong>
+<ul>
+<li>After CI, code is automatically deployed to a staging environment for further automated testing.</li>
+<li>Ensures that code is always in a deployable state.</li>
+</ul>
+</li>
+<li><strong>Continuous Deployment:</strong>
+<ul>
+<li>Extends CD by automatically releasing updates to production after passing all tests.</li>
+<li>Enables rapid, reliable delivery of new features and fixes.</li>
+</ul>
+</li>
+</ul>
+<h3 id="cicd-in-microsoft-fabric">CI/CD in Microsoft Fabric </h3>
+<p>Managing the lifecycle of Fabric items with CI/CD involves two main parts:</p>
+<h4 id="1-integration-source-control-with-git">1. Integration (Source Control with Git) </h4>
+<ul>
+<li><strong>Git Integration:</strong>
+<ul>
+<li>Fabric supports integration with <strong>GitHub</strong> and <strong>Azure DevOps</strong> at the workspace level.</li>
+<li>Teams collaborate using branches, manage incremental changes, and track code history.</li>
+<li>When a workspace is connected to Git, you can sync items with a repository branch and view their sync status directly in Fabric.</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-deployment-deployment-pipelines">2. Deployment (Deployment Pipelines) </h4>
+<ul>
+<li><strong>Deployment Pipelines:</strong>
+<ul>
+<li>Automate the promotion of content through <strong>development</strong>, <strong>test</strong>, and <strong>production</strong> environments.</li>
+<li>Pipelines ensure content is updated, tested, and regularly refreshed.</li>
+<li>Can be used in conjunction with Git branches to promote content between environments, even when each environment uses different repositories or branches.</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-automation-fabric-rest-apis">3. Automation (Fabric REST APIs) </h4>
+<ul>
+<li><strong>Fabric REST APIs:</strong>
+<ul>
+<li>Enable programmatic management and automation of CI/CD processes.</li>
+<li>APIs are available for both deployment pipelines and Git integration.</li>
+<li>Use these APIs to automate repetitive tasks, trigger deployments, or integrate with external systems.</li>
+</ul>
+</li>
+</ul>
+<h3 id="supported-version-control-systems">Supported Version Control Systems </h3>
+<ul>
+<li><strong>GitHub</strong></li>
+<li><strong>Azure DevOps</strong></li>
+</ul>
+<blockquote>
+<p><strong>Note:</strong> Version control integration is at the workspace level. You can version and manage all items developed within a workspace.</p>
+</blockquote>
+<h3 id="best-practices-for-cicd-in-fabric">Best Practices for CI/CD in Fabric </h3>
+<ul>
+<li><strong>Use branches</strong> for feature development and bug fixes to isolate changes.</li>
+<li><strong>Automate builds and tests</strong> to catch issues early and ensure code quality.</li>
+<li><strong>Promote content</strong> through deployment pipelines to maintain environment consistency.</li>
+<li><strong>Monitor sync status</strong> in Fabric to ensure your workspace is up-to-date with the remote repository.</li>
+<li><strong>Leverage REST APIs</strong> for advanced automation and integration with other tools.</li>
+</ul>
+<p><strong>Summary:</strong><br>
+Microsoft Fabric's CI/CD capabilities—powered by Git integration, deployment pipelines, and REST APIs—enable teams to deliver high-quality analytics solutions efficiently, with confidence in code quality and deployment reliability.</p>
+<h2 id="administer-a-microsoft-fabric-environment">Administer a Microsoft Fabric environment </h2>
+<h3 id="onelake-and-fabric-hierarchy">OneLake and Fabric Hierarchy </h3>
+<ul>
+<li><strong>OneLake</strong> is the unified storage layer for all data in Fabric, built on Azure Data Lake Storage (ADLS) Gen2.
+<ul>
+<li><strong>Single OneLake per tenant:</strong> Provides a global, hierarchical namespace across users, regions, and clouds.</li>
+<li><strong>Tenant:</strong> The top-level organizational boundary, mapped to Microsoft Entra ID, and aligns with the root of OneLake.</li>
+<li><strong>Capacity:</strong> Dedicated compute resources assigned to a tenant. Multiple capacities can be associated with a tenant, and are managed via Fabric SKUs or trials.</li>
+<li><strong>Domain:</strong> Logical grouping of workspaces (e.g., Sales, Marketing, Finance) for easier management and access control.</li>
+<li><strong>Workspace:</strong> A container for Fabric items (data warehouses, pipelines, datasets, reports, dashboards) and access management.</li>
+<li><strong>Items:</strong> The core objects you create and manage in Fabric.</li>
+</ul>
+</li>
+</ul>
+<h3 id="administrative-roles">Administrative Roles </h3>
+<ul>
+<li><strong>Fabric Admin (formerly Power BI Admin):</strong> Central role for managing Fabric settings and configurations.</li>
+<li><strong>Microsoft 365 Admin, Power Platform Admin, Capacity Admin:</strong> Also play key roles in administration.</li>
+<li><strong>Role-based access:</strong> Controls who can manage, configure, and monitor Fabric resources.</li>
+</ul>
+<h3 id="admin-portal">Admin Portal </h3>
+<ul>
+<li><strong>Web-based portal</strong> for centralized management of Fabric.
+<ul>
+<li>Manage tenant and capacity settings.</li>
+<li>Control user, admin, and group access.</li>
+<li>Access audit logs and monitor usage/performance.</li>
+<li><strong>Fabric On/Off Switch:</strong> Enable or disable Fabric at the tenant or capacity level.</li>
+</ul>
+</li>
+</ul>
+<h3 id="automation-and-apis">Automation and APIs </h3>
+<ul>
+<li><strong>PowerShell Cmdlets:</strong> Automate common admin tasks (e.g., group management, data source configuration, monitoring).</li>
+<li><strong>Admin APIs &amp; SDKs:</strong> Programmatically interact with Fabric for automation and integration with other systems.
+<ul>
+<li><strong>API:</strong> Set of protocols for communication between applications.</li>
+<li><strong>SDK:</strong> Tools and libraries for building integrations and automations.</li>
+</ul>
+</li>
+</ul>
+<h3 id="monitoring-and-insights">Monitoring and Insights </h3>
+<ul>
+<li><strong>Admin Monitoring Workspace:</strong> Provides access to usage and performance insights.
+<ul>
+<li>Share workspace or specific items with others.</li>
+<li>Includes the Feature Usage and Adoption dataset/report for analytics.</li>
+</ul>
+</li>
+</ul>
+<h3 id="license-management">License Management </h3>
+<ul>
+<li><strong>User licenses</strong> determine access and functionality within Fabric.
+<ul>
+<li>Admins allocate and monitor licenses via the Microsoft 365 admin center.</li>
+<li>Efficient license management helps control costs and ensures compliance.</li>
+</ul>
+</li>
+</ul>
+<h3 id="content-sharing-and-security">Content Sharing and Security </h3>
+<ul>
+<li><strong>Workspace Apps:</strong> Preferred method for distributing content (read-only access).</li>
+<li><strong>Workspace Access:</strong> For collaboration and development.</li>
+<li><strong>Least Privilege Principle:</strong> Grant only necessary permissions to users.</li>
+</ul>
+<h3 id="governance-and-endorsement">Governance and Endorsement </h3>
+<ul>
+<li><strong>Endorsement:</strong> Mark items as Promoted (workspace-level) or Certified (org-wide, after review).
+<ul>
+<li><strong>Promoted:</strong> Visible badge, can be set by workspace contributors/admins.</li>
+<li><strong>Certified:</strong> Requires formal review, managed by admins.</li>
+</ul>
+</li>
+<li><strong>Scanner API:</strong> Scan Fabric items (warehouses, pipelines, datasets, reports, dashboards) for sensitive data.</li>
+<li><strong>Metadata Scanning:</strong> Catalog and report on all metadata for governance.</li>
+<li><strong>Data Lineage:</strong> Track data flow and transformations for impact analysis and compliance.
+<ul>
+<li><strong>Lineage View:</strong> Visualize data movement and dependencies in workspaces.</li>
+<li><strong>Microsoft Purview Hub (preview):</strong> Centralized governance for Fabric data estate.</li>
+</ul>
+</li>
+</ul>
+<h2 id="pysparksparksql-cheatsheet">PySpark/SparkSQL Cheatsheet </h2>
+<h3 id="pyspark-basics">PySpark Basics </h3>
+<ul>
+<li><strong>Create a SparkSession:</strong><pre data-role="codeBlock" data-info="python" class="language-python python"><code><span class="token keyword keyword-from">from</span> pyspark<span class="token punctuation">.</span>sql <span class="token keyword keyword-import">import</span> SparkSession
+spark <span class="token operator">=</span> SparkSession<span class="token punctuation">.</span>builder<span class="token punctuation">.</span>appName<span class="token punctuation">(</span><span class="token string">"AppName"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>getOrCreate<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre></li>
+<li><strong>Read a DataFrame:</strong><pre data-role="codeBlock" data-info="python" class="language-python python"><code>df <span class="token operator">=</span> spark<span class="token punctuation">.</span>read<span class="token punctuation">.</span>csv<span class="token punctuation">(</span><span class="token string">"path/to/file.csv"</span><span class="token punctuation">,</span> header<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> inferSchema<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+</code></pre></li>
+<li><strong>Show DataFrame:</strong><pre data-role="codeBlock" data-info="python" class="language-python python"><code>df<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre></li>
+<li><strong>Write a DataFrame:</strong><pre data-role="codeBlock" data-info="python" class="language-python python"><code>df<span class="token punctuation">.</span>write<span class="token punctuation">.</span>csv<span class="token punctuation">(</span><span class="token string">"path/to/output.csv"</span><span class="token punctuation">,</span> header<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+</code></pre></li>
+</ul>
+<h3 id="common-dataframe-operations">Common DataFrame Operations </h3>
+<ul>
+<li><strong>Select Columns:</strong><pre data-role="codeBlock" data-info="python" class="language-python python"><code>df<span class="token punctuation">.</span>select<span class="token punctuation">(</span><span class="token string">"column1"</span><span class="token punctuation">,</span> <span class="token string">"column2"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre></li>
+<li><strong>Filter Rows:</strong><pre data-role="codeBlock" data-info="python" class="language-python python"><code>df<span class="token punctuation">.</span><span class="token builtin">filter</span><span class="token punctuation">(</span>df<span class="token punctuation">[</span><span class="token string">"column"</span><span class="token punctuation">]</span> <span class="token operator">&gt;</span> <span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre></li>
+<li><strong>Group By and Aggregate:</strong><pre data-role="codeBlock" data-info="python" class="language-python python"><code>df<span class="token punctuation">.</span>groupBy<span class="token punctuation">(</span><span class="token string">"column"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>agg<span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token string">"column2"</span><span class="token punctuation">:</span> <span class="token string">"sum"</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre></li>
+<li><strong>Add a New Column:</strong><pre data-role="codeBlock" data-info="python" class="language-python python"><code><span class="token keyword keyword-from">from</span> pyspark<span class="token punctuation">.</span>sql<span class="token punctuation">.</span>functions <span class="token keyword keyword-import">import</span> col
+df <span class="token operator">=</span> df<span class="token punctuation">.</span>withColumn<span class="token punctuation">(</span><span class="token string">"new_column"</span><span class="token punctuation">,</span> col<span class="token punctuation">(</span><span class="token string">"existing_column"</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">2</span><span class="token punctuation">)</span>
+</code></pre></li>
+<li><strong>Drop a Column:</strong><pre data-role="codeBlock" data-info="python" class="language-python python"><code>df <span class="token operator">=</span> df<span class="token punctuation">.</span>drop<span class="token punctuation">(</span><span class="token string">"column_to_drop"</span><span class="token punctuation">)</span>
+</code></pre></li>
+</ul>
+<h3 id="sparksql-basics">SparkSQL Basics </h3>
+<ul>
+<li><strong>Create a Temporary View:</strong><pre data-role="codeBlock" data-info="python" class="language-python python"><code>df<span class="token punctuation">.</span>createOrReplaceTempView<span class="token punctuation">(</span><span class="token string">"table_name"</span><span class="token punctuation">)</span>
+</code></pre></li>
+<li><strong>Run SQL Queries:</strong><pre data-role="codeBlock" data-info="python" class="language-python python"><code>result <span class="token operator">=</span> spark<span class="token punctuation">.</span>sql<span class="token punctuation">(</span><span class="token string">"SELECT * FROM table_name WHERE column &gt; 10"</span><span class="token punctuation">)</span>
+result<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre></li>
+</ul>
+<h3 id="advanced-pyspark-operations">Advanced PySpark Operations </h3>
+<ul>
+<li><strong>Join DataFrames:</strong><pre data-role="codeBlock" data-info="python" class="language-python python"><code>df1<span class="token punctuation">.</span>join<span class="token punctuation">(</span>df2<span class="token punctuation">,</span> df1<span class="token punctuation">[</span><span class="token string">"key"</span><span class="token punctuation">]</span> <span class="token operator">==</span> df2<span class="token punctuation">[</span><span class="token string">"key"</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token string">"inner"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre></li>
+<li><strong>Window Functions:</strong><pre data-role="codeBlock" data-info="python" class="language-python python"><code><span class="token keyword keyword-from">from</span> pyspark<span class="token punctuation">.</span>sql<span class="token punctuation">.</span>window <span class="token keyword keyword-import">import</span> Window
+<span class="token keyword keyword-from">from</span> pyspark<span class="token punctuation">.</span>sql<span class="token punctuation">.</span>functions <span class="token keyword keyword-import">import</span> row_number
+windowSpec <span class="token operator">=</span> Window<span class="token punctuation">.</span>partitionBy<span class="token punctuation">(</span><span class="token string">"column"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>orderBy<span class="token punctuation">(</span><span class="token string">"column2"</span><span class="token punctuation">)</span>
+df <span class="token operator">=</span> df<span class="token punctuation">.</span>withColumn<span class="token punctuation">(</span><span class="token string">"row_number"</span><span class="token punctuation">,</span> row_number<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>over<span class="token punctuation">(</span>windowSpec<span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre></li>
+<li><strong>Pivot Table:</strong><pre data-role="codeBlock" data-info="python" class="language-python python"><code>df<span class="token punctuation">.</span>groupBy<span class="token punctuation">(</span><span class="token string">"column1"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>pivot<span class="token punctuation">(</span><span class="token string">"column2"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token builtin">sum</span><span class="token punctuation">(</span><span class="token string">"value_column"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre></li>
+</ul>
+<h3 id="performance-tips">Performance Tips </h3>
+<ul>
+<li><strong>Cache DataFrame:</strong><pre data-role="codeBlock" data-info="python" class="language-python python"><code>df<span class="token punctuation">.</span>cache<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre></li>
+<li><strong>Repartition DataFrame:</strong><pre data-role="codeBlock" data-info="python" class="language-python python"><code>df <span class="token operator">=</span> df<span class="token punctuation">.</span>repartition<span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span>
+</code></pre></li>
+<li><strong>Broadcast Join:</strong><pre data-role="codeBlock" data-info="python" class="language-python python"><code><span class="token keyword keyword-from">from</span> pyspark<span class="token punctuation">.</span>sql<span class="token punctuation">.</span>functions <span class="token keyword keyword-import">import</span> broadcast
+df1<span class="token punctuation">.</span>join<span class="token punctuation">(</span>broadcast<span class="token punctuation">(</span>df2<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"key"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre></li>
+</ul>
+
+      </div>
+      
+      
+    
+    
+    
+    
+    
+    
+  
+    </body></html>
